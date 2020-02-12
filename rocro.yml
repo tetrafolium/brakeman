@@ -7,27 +7,34 @@ inspecode:
     thresholds: { num-issues: 999 }
 
   cpd:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 51 }
 
   grep:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 15 }
 
   jscpd:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 82 }
 
   misspell:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 7 }
 
   rails_best_practices:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 21 }
 
   reek:
+    ignore:
+    - test/
     thresholds: { num-issues: 999 }
 
   rubocop:
+    ignore:
+    - test/
     auto-fix: true
     thresholds: { num-issues: 999 }
 
   unused:
+    ignore:
+    - test/
+    options: [ --single-occurrence, --all-likelihoods ]
     thresholds: { num-issues: 999 }
