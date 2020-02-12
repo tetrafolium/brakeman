@@ -1,40 +1,34 @@
 inspecode:
 
-  brakeman:
-    thresholds: { num-issues: 999 }
-
-  bundler-audit:
-    thresholds: { num-issues: 999 }
-
-  cpd:
-    thresholds: { num-issues: 51 }
-
-  grep:
-    thresholds: { num-issues: 15 }
-
-  jscpd:
-    thresholds: { num-issues: 82 }
-
-  misspell:
-    auto-fix: true
-    thresholds: { num-issues: 7 }
-
-  rails_best_practices:
-    thresholds: { num-issues: 21 }
-
-  reek:
+  experimental:
     ignore:
     - test/
-    thresholds: { num-issues: 999 }
 
   rubocop:
-    ignore:
-    - test/
+  - options: { --only: [ Bundler ] }
     auto-fix: true
     thresholds: { num-issues: 999 }
-
-  unused:
-    ignore:
-    - test/
-    options: [ --single-occurrence, --all-likelihoods ]
+  - options: { --only: [ Gemspec ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Layout ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Lint ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Migration ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Metrics ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Naming ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Security ] }
+    auto-fix: true
+    thresholds: { num-issues: 999 }
+  - options: { --only: [ Style ] }
+    auto-fix: true
     thresholds: { num-issues: 999 }
