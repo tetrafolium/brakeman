@@ -6,29 +6,51 @@ inspecode:
 
   rubocop:
   - options: { --only: [ Bundler ] }
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+    auto-fix: false
+    thresholds: { num-issues: 0 }
   - options: { --only: [ Gemspec ] }
+    auto-fix: false
+    thresholds: { num-issues: 0 }
+  - options:
+      --only:
+      - Layout                          # 2122 issues
+      --except:
+      - Layout/AlignHash                #  570 issues
+      - Layout/LeadingCommentSpace      #  994 issues
     auto-fix: true
-    thresholds: { num-issues: 999 }
-  - options: { --only: [ Layout ] }
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 558 }
   - options: { --only: [ Lint ] }
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+    auto-fix: false
+    thresholds: { num-issues: 217 }
   - options: { --only: [ Migration ] }
+    auto-fix: false
+    thresholds: { num-issues: 0 }
+  - options:
+      --only:
+      - Metrics                         # 1343 issues
+      --except:
+      - Metrics/LineLength              #  572 issues
     auto-fix: true
-    thresholds: { num-issues: 999 }
-  - options: { --only: [ Metrics ] }
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 771 }
   - options: { --only: [ Naming ] }
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+    auto-fix: false
+    thresholds: { num-issues: 40 }
   - options: { --only: [ Security ] }
+    auto-fix: false
+    thresholds: { num-issues: 1 }
+  - options:
+      --only:
+      - Style                           # 5938 issues
+      --except:
+      - Style/StringLiterals            # 1687 issues
+      - Style/HashSyntax                # 1166 issues
+      - Style/MethodDefParentheses      #  866 issues
+      - Style/AndOr                     #  728 issues
+      - Style/IfUnlessModifier          #  188 issues
+      - Style/FrozenStringLiteralComment # 164 issues
+      - Style/RedundantSelf             #  162 issues
+      - Style/ClassAndModuleChildren    #  143 issues
+      - Style/GuardClause               #  127 issues
+      - Style/Not                       #  104 issues
     auto-fix: true
-    thresholds: { num-issues: 999 }
-  - options: { --only: [ Style ] }
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 673 }
