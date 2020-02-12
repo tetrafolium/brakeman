@@ -18,7 +18,7 @@ detectors:
     max_copies: 2
     min_clump_size: 2
   DuplicateMethodCall:
-    enabled: true
+    enabled: false      # disabled ... 799 issues
     exclude: []
     max_calls: 1
     allow_calls: []
@@ -80,7 +80,7 @@ detectors:
     exclude: []
     max_methods: 15
   TooManyStatements:
-    enabled: true
+    enabled: false      # disabled ... 336 issues
     exclude:
     - initialize
     max_statements: 5
@@ -109,7 +109,7 @@ detectors:
     - "/^_/"
     accept: []
   UncommunicativeVariableName:
-    enabled: true
+    enabled: false      # disabled ... 203 issues
     exclude: []
     reject:
     - "/^.$/"

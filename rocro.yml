@@ -1,10 +1,21 @@
 inspecode:
 
-  brakeman:
-    thresholds: { num-issues: 999 }
+  ##--------------------------------------------------
+  ##  $ brakeman --no-exit-on-warn --no-exit-on-error --absolute-paths -f json --output "${OUTPUT}" .
+  ##  Loading scanner...
+  ##  Please supply the path to a Rails application (looking in /home/rocro/src/github.com/tetrafolium/brakeman).
+  ##  Brakeman finished with errors.
+  ##--------------------------------------------------
+  #brakeman:
+  #  thresholds: { num-issues: 999 }
 
-  bundler-audit:
-    thresholds: { num-issues: 999 }
+  ##--------------------------------------------------
+  ##  $ bundler-audit check --update --quiet --verbose
+  ##  /usr/local/bundle/gems/bundler-audit-0.6.1/lib/bundler/audit/scanner.rb:46:in `read': No such file or directory @ rb_sysopen - /home/rocro/src/github.com/tetrafolium/brakeman/Gemfile.lock (Errno::ENOENT)
+  ##  bundler-audit finished with errors.
+  ##--------------------------------------------------
+  #bundler-audit:
+  #  thresholds: { num-issues: 999 }
 
   cpd:
     thresholds: { num-issues: 51 }
@@ -23,18 +34,58 @@ inspecode:
     thresholds: { num-issues: 21 }
 
   reek:
-    ignore:
-    - test/
-    thresholds: { num-issues: 999 }
+    ignore: [ test/ ]
+    #config-file: .reek.yml             # (auto-detect)
+    thresholds: { num-issues: 761 }
 
   rubocop:
-    ignore:
-    - test/
+  - ignore: [ test/ ]
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    options:
+      --only:
+      - Bundler                         #    0 issues
+      - Gemspec                         #    0 issues
+      - Lint                            #  217 issues
+      - Migration                       #    0 issues
+      - Naming                          #   40 issues
+      - Security                        #    1 issues
+    thresholds: { num-issues: 258 }
+  - ignore: [ test/ ]
+    auto-fix: true
+    options:
+      --only:
+      - Layout                          # 2122 issues
+      --except:
+      - Layout/AlignHash                #  570 issues
+      - Layout/LeadingCommentSpace      #  994 issues
+    thresholds: { num-issues: 558 }
+  - ignore: [ test/ ]
+    auto-fix: true
+    options:
+      --only:
+      - Metrics                         # 1343 issues
+      --except:
+      - Metrics/LineLength              #  572 issues
+    thresholds: { num-issues: 771 }
+  - ignore: [ test/ ]
+    auto-fix: true
+    options:
+      --only:
+      - Style                           # 5938 issues
+      --except:
+      - Style/StringLiterals            # 1687 issues
+      - Style/HashSyntax                # 1166 issues
+      - Style/MethodDefParentheses      #  866 issues
+      - Style/AndOr                     #  728 issues
+      - Style/IfUnlessModifier          #  188 issues
+      - Style/FrozenStringLiteralComment # 164 issues
+      - Style/RedundantSelf             #  162 issues
+      - Style/ClassAndModuleChildren    #  143 issues
+      - Style/GuardClause               #  127 issues
+      - Style/Not                       #  104 issues
+    thresholds: { num-issues: 603 }
 
   unused:
-    ignore:
-    - test/
+    ignore: [ test/ ]
     options: [ --single-occurrence, --all-likelihoods ]
     thresholds: { num-issues: 999 }
