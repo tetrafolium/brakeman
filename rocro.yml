@@ -1,19 +1,21 @@
 inspecode:
 
-  ##--------------------------------------------------
+  ##----------------------------------------------------------------------------
+  ##  not a Ruby on Rails repository ...
+  ##  ----------------------------------------------------------------
   ##  $ brakeman --no-exit-on-warn --no-exit-on-error --absolute-paths -f json --output "${OUTPUT}" .
   ##  Loading scanner...
   ##  Please supply the path to a Rails application (looking in /home/rocro/src/github.com/tetrafolium/brakeman).
   ##  Brakeman finished with errors.
-  ##--------------------------------------------------
+  ##----------------------------------------------------------------------------
   #brakeman:
   #  thresholds: { num-issues: 999 }
 
-  ##--------------------------------------------------
+  ##----------------------------------------------------------------------------
   ##  $ bundler-audit check --update --quiet --verbose
   ##  /usr/local/bundle/gems/bundler-audit-0.6.1/lib/bundler/audit/scanner.rb:46:in `read': No such file or directory @ rb_sysopen - /home/rocro/src/github.com/tetrafolium/brakeman/Gemfile.lock (Errno::ENOENT)
   ##  bundler-audit finished with errors.
-  ##--------------------------------------------------
+  ##----------------------------------------------------------------------------
   #bundler-audit:
   #  thresholds: { num-issues: 999 }
 
@@ -22,6 +24,9 @@ inspecode:
 
   grep:
     thresholds: { num-issues: 15 }
+
+  fossology:
+    thresholds: { num-issues: 999 }
 
   jscpd:
     thresholds: { num-issues: 82 }
@@ -88,4 +93,4 @@ inspecode:
   unused:
     ignore: [ test/ ]
     options: [ --single-occurrence, --all-likelihoods ]
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 35 }
