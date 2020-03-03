@@ -22,11 +22,11 @@ inspecode:
   cpd:
     thresholds: { num-issues: 51 }
 
-  grep:
+  fossology:
     thresholds: { num-issues: 15 }
 
-  fossology:
-    thresholds: { num-issues: 999 }
+  grep:
+    thresholds: { num-issues: 15 }
 
   jscpd:
     thresholds: { num-issues: 82 }
