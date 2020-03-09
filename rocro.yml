@@ -9,6 +9,8 @@ inspecode:
   ##  Brakeman finished with errors.
   ##----------------------------------------------------------------------------
   brakeman:
+    options:
+      --path: test/apps/rails6
     thresholds: { num-issues: 999 }
 
   ##----------------------------------------------------------------------------
