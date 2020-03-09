@@ -1,15 +1,9 @@
 inspecode:
 
-  ##----------------------------------------------------------------------------
-  ##  not a Ruby on Rails repository ...
-  ##  ----------------------------------------------------------------
-  ##  $ brakeman --no-exit-on-warn --no-exit-on-error --absolute-paths -f json --output "${OUTPUT}" .
-  ##  Loading scanner...
-  ##  Please supply the path to a Rails application (looking in /home/rocro/src/github.com/tetrafolium/brakeman).
-  ##  Brakeman finished with errors.
-  ##----------------------------------------------------------------------------
-  #brakeman:
-  #  thresholds: { num-issues: 999 }
+  brakeman:
+    options:
+      --path: test/apps/rails6
+    thresholds: { num-issues: 4 }
 
   ##----------------------------------------------------------------------------
   ##  $ bundler-audit check --update --quiet --verbose
