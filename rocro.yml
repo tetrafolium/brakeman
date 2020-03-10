@@ -3,7 +3,10 @@ inspecode:
   brakeman:
     options:
       --path: test/apps/rails6
-    thresholds: { num-issues: 4 }
+    thresholds: { num-issues: 13 }
+      # 13 issues on SaaS/Staging (Brakeman 4.7.2)
+      # 13 issues on SaaS/Prod    (Brakeman 4.7.2)
+      #  4 issues on Enterprise   (Brakeman 4.4.0)
 
   ##----------------------------------------------------------------------------
   ##  $ bundler-audit check --update --quiet --verbose
