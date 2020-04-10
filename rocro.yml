@@ -8,13 +8,9 @@ inspecode:
       # 13 issues on SaaS/Prod    (Brakeman 4.7.2)
       #  4 issues on Enterprise   (Brakeman 4.4.0)
 
-  ##----------------------------------------------------------------------------
-  ##  $ bundler-audit check --update --quiet --verbose
-  ##  /usr/local/bundle/gems/bundler-audit-0.6.1/lib/bundler/audit/scanner.rb:46:in `read': No such file or directory @ rb_sysopen - /home/rocro/src/github.com/tetrafolium/brakeman/Gemfile.lock (Errno::ENOENT)
-  ##  bundler-audit finished with errors.
-  ##----------------------------------------------------------------------------
-  #bundler-audit:
-  #  thresholds: { num-issues: 999 }
+  #### -> codelift#1727
+  bundler-audit:
+    thresholds: { num-issues: 0 }   # found no input files
 
   cpd:
     thresholds: { num-issues: 51 }
