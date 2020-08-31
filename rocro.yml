@@ -8,7 +8,6 @@ inspecode:
       # 13 issues on SaaS/Prod    (Brakeman 4.7.2)
       #  4 issues on Enterprise   (Brakeman 4.4.0)
 
-  #### -> codelift#1727
   bundler-audit:
     thresholds: { num-issues: 0 }   # found no input files
 
@@ -22,7 +21,7 @@ inspecode:
     thresholds: { num-issues: 15 }
 
   jscpd:
-    thresholds: { num-issues: 82 }
+    thresholds: { num-issues: 83 }
 
   misspell:
     auto-fix: true
