@@ -13,7 +13,7 @@ ENV GOBIN="$GOROOT/bin" \
 RUN npm install -g dockerfilelint && \
     echo "+++ dockerfilelint $(dockerfilelint --version)"
 
-ENV REPOPATH="github.com/tetrafolium/CotEditor" \
+ENV REPOPATH="github.com/tetrafolium/brakeman" \
     TOOLPATH="github.com/tetrafolium/inspecode-tasks"
 ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
     TOOLDIR="${GOPATH}/src/${TOOLPATH}"

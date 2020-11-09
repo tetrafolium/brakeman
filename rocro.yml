@@ -1,3 +1,4 @@
+---
 inspecode:
 
   global:
@@ -54,7 +55,7 @@ inspecode:
           format:
             type: example
             path: inspecode-examples/yamllint.issues.example
-      thresholds: {num-issues: 910}
+      thresholds: {num-issues: 84}
 
     - name: yamllint_SARIF
       type: docker-build
@@ -72,6 +73,6 @@ inspecode:
           path: "/.reports/yamllint.sarif"
           format:
             type: SARIF
-      thresholds: {num-issues: 910}
+      thresholds: {num-issues: 84}
 
   tools:
