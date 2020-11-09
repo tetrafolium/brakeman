@@ -1,9 +1,9 @@
-{{file:./.swiftlint.yml}}:{{startLine:1}}:{{startColumn:1}}: [{{level:warning}}] {{message:missing document start "---" (document-start)}}
-{{file:./.swiftlint.yml}}:{{startLine:84}}:{{startColumn:5}}: [{{level:error}}] {{message:wrong indentation: expected 2 but found 4 (indentation)}}
-{{file:./.swiftlint.yml}}:{{startLine:151}}:{{startColumn:81}}: [{{level:error}}] {{message:line too long (98 > 80 characters) (line-length)}}
-{{file:./.github/workflows/Test.yml}}:{{startLine:3}}:{{startColumn:1}}: [{{level:warning}}] {{message:truthy value should be one of [false|true] (truthy)}}
-{{file:./CotEditor/Syntaxes/C++.yaml}}:{{startLine:127}}:{{startColumn:1}}: [{{level:error}}] {{message:duplication of key "attributes" in mapping (key-duplicates)}}
-{{file:./rocro.yaml}}:{{startLine:61}}:{{startColumn:5}}: [{{level:warning}}] {{message:comment not indented like content (comments-indentation)}}
+{{file:./.reek.yml}}:{{startLine:59}}:{{startColumn:5}}: [{{level:error}}] {{message:wrong indentation: expected 6 but found 4 (indentation)}}
+{{file:./.circleci/config.yml}}:{{startLine:1}}:{{startColumn:1}}: [{{level:warning}}] {{message:missing document start "---" (document-start)}}
+{{file:./.circleci/config.yml}}:{{startLine:22}}:{{startColumn:17}}: [{{level:error}}] {{message:too many spaces after colon (colons)}}
+{{file:./.circleci/config.yml}}:{{startLine:25}}:{{startColumn:81}}: [{{level:error}}] {{message:line too long (125 > 80 characters) (line-length)}}
+{{file:./test/apps/rails2/config/locales/en.yml}}:{{startLine:5}}:{{startColumn:23}}: [{{level:error}}] {{message:no new line character at the end of file (new-line-at-end-of-file)}}
+{{file:./test/apps/rails5/config/secrets.yml}}:{{startLine:25}}:{{startColumn:1}}: [{{level:error}}] {{message:syntax error: could not find expected ':' (syntax)}}
 
 {{baseDir=/home/rocro}}
 {{lineOriginZero=false}}
