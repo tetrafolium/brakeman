@@ -80,68 +80,68 @@ inspecode:
     brakeman:
       options:
         --path: test/apps/rails6
-      thresholds: { num-issues: 13 }
+      thresholds: {num-issues: 13}
 
     bundler-audit:
-      thresholds: { num-issues: 0 }   # found no input files
+      thresholds: {num-issues: 0}   # found no input files
 
     cpd:
-      thresholds: { num-issues: 51 }
+      thresholds: {num-issues: 51}
 
     fossology:
-      thresholds: { num-issues: 15 }
+      thresholds: {num-issues: 15}
 
     grep:
-      thresholds: { num-issues: 15 }
+      thresholds: {num-issues: 15}
 
     jscpd:
-      thresholds: { num-issues: 83 }
+      thresholds: {num-issues: 83}
 
     misspell:
       auto-fix: true
-      thresholds: { num-issues: 7 }
+      thresholds: {num-issues: 7}
 
     rails_best_practices:
-      thresholds: { num-issues: 21 }
+      thresholds: {num-issues: 21}
 
     reek:
-      ignore: [ test/ ]
-      #config-file: .reek.yml             # (auto-detect)
-      thresholds: { num-issues: 761 }
+      ignore: test/
+      # config-file: .reek.yml             # (auto-detect)
+      thresholds: {num-issues: 761}
 
     rubocop:
-    - options:
-        --except:
-          - Layout              # 2200 issues
-          - Style               # 4897 issues
-      ignore: [ test/ ]
-      auto-fix: true
-      thresholds: { num-issues: 988 }
-    - options:
-        --only:
-          - Layout                      # 2200 issues
-        --except:
-          - Layout/LeadingCommentSpace  #  994
-          - Layout/HashAlignment        #  570
-      ignore: [ test/ ]
-      auto-fix: true
-      thresholds: { num-issues: 636 }
-    - options:
-        --only:
-          - Style                             # 4897 issues
-        --except:
-          - Style/StringLiterals              # 1687
-          - Style/HashSyntax                  # 1166
-          - Style/AndOr                       #  506
-          - Style/IfUnlessModifier            #  220
-          - Style/FrozenStringLiteralComment  #  164
-          - Style/RedundantSelf               #  162
-          - Style/ClassAndModuleChildren      #  143
-      ignore: [ test/ ]
-      auto-fix: true
-      thresholds: { num-issues: 849 }
+      - options:
+          --except:
+            - Layout              # 2200 issues
+            - Style               # 4897 issues
+        ignore: test/
+        auto-fix: true
+        thresholds: {num-issues: 988}
+      - options:
+          --only:
+            - Layout                      # 2200 issues
+          --except:
+            - Layout/LeadingCommentSpace  #  994
+            - Layout/HashAlignment        #  570
+        ignore: test/
+        auto-fix: true
+        thresholds: {num-issues: 636}
+      - options:
+          --only:
+            - Style                             # 4897 issues
+          --except:
+            - Style/StringLiterals              # 1687
+            - Style/HashSyntax                  # 1166
+            - Style/AndOr                       #  506
+            - Style/IfUnlessModifier            #  220
+            - Style/FrozenStringLiteralComment  #  164
+            - Style/RedundantSelf               #  162
+            - Style/ClassAndModuleChildren      #  143
+        ignore: test/
+        auto-fix: true
+        thresholds: {num-issues: 849}
 
     unused:
-      ignore: [ test/ ]
-      options: [ --single-occurrence, --all-likelihoods ]
-      thresholds: { num-issues: 35 }
+      ignore: test/
+      options: [--single-occurrence, --all-likelihoods]
+      thresholds: {num-issues: 35}
