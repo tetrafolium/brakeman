@@ -99,12 +99,24 @@ inspecode:
     grep:
       thresholds: {num-issues: 15}
 
+    htmlhint:
+      thresholds: {num-issues: 999}
+
     jscpd:
       thresholds: {num-issues: 83}
+
+    jshint:
+      options:
+        --extra-ext: [ '.html' ]
+      thresholds: {num-issues: 999}
 
     misspell:
       auto-fix: true
       thresholds: {num-issues: 7}
+
+    prettier:
+      auto-fix: true
+      thresholds: {num-issues: 999}
 
     rails_best_practices:
       thresholds: {num-issues: 21}
@@ -145,6 +157,14 @@ inspecode:
         ignore: test/
         auto-fix: true
         thresholds: {num-issues: 849}
+
+    stylelint:
+      auto-fix: true
+      thresholds: {num-issues: 999}
+
+    tidy:
+      auto-fix: true
+      thresholds: {num-issues: 999}
 
     unused:
       ignore: test/
