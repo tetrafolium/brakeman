@@ -40,7 +40,7 @@ inspecode:
             type: SARIF
       thresholds: {num-issues: 10}
 
-    - name: yamllint_Example
+    - name: yamllint_example
       type: docker-build
       dockerfile: "inspecode-yamllint.Dockerfile"
       options:
@@ -83,6 +83,7 @@ inspecode:
       thresholds: {num-issues: 13}
 
     bundler-audit:
+      # auto-fix: true
       thresholds: {num-issues: 0}   # found no input files
 
     cpd:
