@@ -1,4 +1,4 @@
-FROM python:3-alpine AS yamllint-task
+FROM python:alpine AS linter-stage
 
 ### Install golang ...
 RUN apk add --update --no-cache go && \
@@ -17,15 +17,15 @@ ENV REPOPATH="github.com/tetrafolium/brakeman" \
 ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
     TOOLDIR="${GOPATH}/src/${TOOLPATH}"
 
-### Get inspecode-tasks tool ...
-RUN go get -u "${TOOLPATH}" || true
-
 ARG OUTDIR
 ENV OUTDIR="${OUTDIR:-"/.reports"}"
 
 RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
 WORKDIR "${REPODIR}"
+
+### Put symlink refers submodule-path at origin-path
+RUN ln -s "${REPODIR}/$(basename "${TOOLPATH}")" "${TOOLDIR}"
 
 ### Run yamllint ...
 RUN yamllint -f parsable . > "${OUTDIR}/yamllint.issues" || true
@@ -34,7 +34,8 @@ RUN ls -la "${OUTDIR}"
 RUN echo "<<< yamllint.issues ---"; cat -v "${OUTDIR}/yamllint.issues"; echo "--- yamllint.issues >>>"
 
 ### Convert yamllint issues to SARIF ...
-RUN go run "${TOOLDIR}/yamllint/cmd/main.go" "${REPOPATH}" \
+RUN GO111MODULE="off" \
+    go run "${TOOLDIR}/yamllint/cmd/main.go" "${REPOPATH}" \
         < "${OUTDIR}/yamllint.issues" \
         > "${OUTDIR}/yamllint.sarif"
 RUN ls -la "${OUTDIR}"

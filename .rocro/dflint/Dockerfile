@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS dockerfilelint-task
+FROM node:lts-alpine AS linter-stage
 
 ### Install golang ...
 RUN apk add --update --no-cache git go && \
@@ -18,9 +18,6 @@ ENV REPOPATH="github.com/tetrafolium/brakeman" \
 ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
     TOOLDIR="${GOPATH}/src/${TOOLPATH}"
 
-### Get inspecode-tasks tool ...
-RUN go get -u "${TOOLPATH}" || true
-
 ARG OUTDIR
 ENV OUTDIR="${OUTDIR:-"/.reports"}"
 
@@ -28,8 +25,12 @@ RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
 WORKDIR "${REPODIR}"
 
+### Put symlink refers submodule-path at origin-path
+RUN ln -s "${REPODIR}/$(basename "${TOOLPATH}")" "${TOOLDIR}"
+
 ### Run dockerfilelint ...
-RUN ( find . -type f -name '*Dockerfile' -print0 | xargs -0 dockerfilelint --output json ) \
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+RUN ( find . -type f -name '*Dockerfile*' -print0 | xargs -0 dockerfilelint --output json ) \
         > "${OUTDIR}/dockerfilelint.json" || true
 RUN ls -la "${OUTDIR}"
 
