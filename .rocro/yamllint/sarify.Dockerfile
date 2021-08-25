@@ -11,11 +11,14 @@ ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
 
 ENV OUTDIR="/.reports"
 ENV OUTFILE="${OUTDIR}/yamllint.sarif"
-ENV INFILE=".rocro/yamllint/yamllint.issues"
 
 RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
 WORKDIR "${REPODIR}"
+
+ENV INFILE=".rocro/yamllint/yamllint.issues"
+RUN ls -l "${INFILE}"
+RUN cat -n "${INFILE}"
 
 ### Put symlink refers submodule-path at origin-path
 RUN ln -s "${REPODIR}/$(basename "${TOOLPATH}")" "${TOOLDIR}"
