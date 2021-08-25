@@ -11,7 +11,7 @@ ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
 
 ENV OUTDIR="/.reports"
 ENV OUTFILE="${OUTDIR}/yamllint.sarif"
-ENV INFILE="/.artifacts/yamllint.issues"
+ENV INFILE=".rocro/yamllint/yamllint.issues"
 
 RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
