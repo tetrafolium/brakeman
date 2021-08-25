@@ -16,15 +16,16 @@ RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
 WORKDIR "${REPODIR}"
 
-ENV INFILE=".rocro/.artifacts/yamllint.issues"
-RUN ls -l "${INFILE}"
-RUN cat -n "${INFILE}"
+ENV INDIR=".rocro/.artifacts/yamllint"
+ENV INFILE="${INDIR}/yamllint.issues"
+ENV VERSION="$(cat "${INDIR}/yamllint.version")"
+RUN ls -l "${INDIR}"
 
 ### Put symlink refers submodule-path at origin-path
 RUN ln -s "${REPODIR}/$(basename "${TOOLPATH}")" "${TOOLDIR}"
 
 ### Convert yamllint issues to SARIF ...
 RUN GO111MODULE="off" \
-    go run "${TOOLDIR}/yamllint/cmd/main.go" "${REPOPATH}" \
+    go run "${TOOLDIR}/yamllint/cmd/main.go" -v "${VERSION}" "${REPOPATH}" \
         < "${INFILE}" > "${OUTFILE}"
 RUN ls -l "${INFILE}" "${OUTFILE}"

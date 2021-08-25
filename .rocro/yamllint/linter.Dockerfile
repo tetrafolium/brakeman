@@ -15,7 +15,8 @@ COPY . "${REPODIR}"
 WORKDIR "${REPODIR}"
 
 ### Run yamllint ...
+RUN yamllint --version > "${OUTDIR}/yamllint.version"
 RUN yamllint -f parsable . > "${OUTDIR}/yamllint.issues" || true
 RUN ls -la "${OUTDIR}"
 
-RUN echo "<<< yamllint.issues ---"; cat -v "${OUTDIR}/yamllint.issues"; echo "--- yamllint.issues >>>"
+RUN echo "<<< yamllint.issues ---"; cat -n "${OUTDIR}/yamllint.issues"; echo "--- yamllint.issues >>>"

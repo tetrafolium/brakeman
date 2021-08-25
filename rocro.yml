@@ -12,6 +12,8 @@ inspecode:
       artifacts:
         uploads:
           - stage: linter-stage
+            path: '/.reports/yamllint.version'
+          - stage: linter-stage
             path: '/.reports/yamllint.issues'
       reports:
         - stage: linter-stage
@@ -30,12 +32,18 @@ inspecode:
         --build-arg: [OUTDIR=/.reports]
       artifacts:
         downloads:
-          source:
-            task: yamllint_linter
-            stage: linter-stage
-            path: '/.reports/yamllint.issues'
-          destination:
-            path: '.rocro/.artifacts/'
+          - source:
+              task: yamllint_linter
+              stage: linter-stage
+              path: '/.reports/yamllint.version'
+            destination:
+              path: '.rocro/.artifacts/yamllint'
+          - source:
+              task: yamllint_linter
+              stage: linter-stage
+              path: '/.reports/yamllint.issues'
+            destination:
+              path: '.rocro/.artifacts/yamllint'
         uploads:
           - stage: sarify-stage
             path: '/.reports/yamllint.sarif'
