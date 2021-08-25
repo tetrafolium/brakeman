@@ -80,6 +80,7 @@ inspecode:
     bundler-audit:
       # auto-fix: true
       thresholds: {num-issues: 0}   # found no input files
+      # Gemfile.lock is not found. Put Gemfile.lock in your repository to run bundler-audit correctly. 
 
     cpd:
       thresholds: {num-issues: 51}
@@ -95,15 +96,15 @@ inspecode:
       thresholds: {num-issues: 15}
 
     htmlhint:
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 0}
 
     jscpd:
-      thresholds: {num-issues: 83}
+      thresholds: {num-issues: 89}
 
     jshint:
       options:
         --extra-ext: [ '.html' ]
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 626}
 
     misspell:
       auto-fix: true
@@ -111,7 +112,7 @@ inspecode:
 
     prettier:
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 75}
 
     rails_best_practices:
       thresholds: {num-issues: 21}
@@ -155,11 +156,11 @@ inspecode:
 
     stylelint:
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 7}
 
     tidy:
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 30}
 
     unused:
       ignore: test/
