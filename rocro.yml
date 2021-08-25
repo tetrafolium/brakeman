@@ -39,14 +39,14 @@ inspecode:
 
     - name: yamllint_example
       type: docker-build
-      dockerfile: '.rocro/yamllint/Dockerfile'
+      dockerfile: '.rocro/yamllint/linter.Dockerfile'
       options:
         --context: .
         --build-arg: [OUTDIR=/.reports]
       artifacts:
         uploads:
           - stage: linter-stage
-            path: '/.reports/'
+            path: '/.reports/yamllint.issues'
       reports:
         - stage: linter-stage
           path: '/.reports/yamllint.issues'
@@ -56,17 +56,25 @@ inspecode:
       thresholds: {num-issues: 87}
 
     - name: yamllint_SARIF
+      pre-tasks: yamllint_example
       type: docker-build
-      dockerfile: '.rocro/yamllint/Dockerfile'
+      dockerfile: '.rocro/yamllint/sarify.Dockerfile'
       options:
         --context: .
         --build-arg: [OUTDIR=/.reports]
       artifacts:
+        downloads:
+          source:
+            task: yamllint_example
+            stage: linter-stage
+            path: '/.reports/yamllint.issues'
+          destination:
+            path: '/.artifacts/yamllint.issues'
         uploads:
-          - stage: linter-stage
-            path: '/.reports/'
+          - stage: sarify-stage
+            path: '/.reports/yamllint.sarif'
       reports:
-        - stage: linter-stage
+        - stage: sarify-stage
           path: '/.reports/yamllint.sarif'
       thresholds: {num-issues: 87}
 

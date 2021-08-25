@@ -1,24 +1,17 @@
-FROM python:alpine AS linter-stage
-
-### Install golang ...
-RUN apk add --update --no-cache go && \
-    echo "+++ $(go version)"
+FROM golang:1.15-alpine AS sarify-stage
 
 ENV GOBIN="$GOROOT/bin" \
     GOPATH="/.go" \
     PATH="${GOPATH}/bin:/usr/local/go/bin:$PATH"
-
-### Install yamllint tool ...
-RUN pip3 install 'yamllint>=1.24.0,<1.25.0' && \
-    echo "+++ $(yamllint --version)"
 
 ENV REPOPATH="github.com/tetrafolium/brakeman" \
     TOOLPATH="github.com/tetrafolium/inspecode-tasks"
 ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
     TOOLDIR="${GOPATH}/src/${TOOLPATH}"
 
-ARG OUTDIR
-ENV OUTDIR="${OUTDIR:-"/.reports"}"
+ENV OUTDIR="/.reports"
+ENV OUTFILE="${OUTDIR}/yamllint.sarif"
+ENV INFILE="/.artifacts/yamllint.issues"
 
 RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
@@ -27,15 +20,8 @@ WORKDIR "${REPODIR}"
 ### Put symlink refers submodule-path at origin-path
 RUN ln -s "${REPODIR}/$(basename "${TOOLPATH}")" "${TOOLDIR}"
 
-### Run yamllint ...
-RUN yamllint -f parsable . > "${OUTDIR}/yamllint.issues" || true
-RUN ls -la "${OUTDIR}"
-
-RUN echo "<<< yamllint.issues ---"; cat -v "${OUTDIR}/yamllint.issues"; echo "--- yamllint.issues >>>"
-
 ### Convert yamllint issues to SARIF ...
 RUN GO111MODULE="off" \
     go run "${TOOLDIR}/yamllint/cmd/main.go" "${REPOPATH}" \
-        < "${OUTDIR}/yamllint.issues" \
-        > "${OUTDIR}/yamllint.sarif"
-RUN ls -la "${OUTDIR}"
+        < "${INFILE}" > "${OUTFILE}"
+RUN ls -l "${INFILE}" "${OUTFILE}"
