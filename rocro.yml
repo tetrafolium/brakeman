@@ -35,7 +35,7 @@ inspecode:
             stage: linter-stage
             path: '/.reports/yamllint.issues'
           destination:
-            path: '.rocro/yamllint/yamllint.issues'
+            path: '.rocro/.artifacts/'
         uploads:
           - stage: sarify-stage
             path: '/.reports/yamllint.sarif'

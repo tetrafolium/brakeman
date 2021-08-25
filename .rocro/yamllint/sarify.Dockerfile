@@ -16,7 +16,7 @@ RUN mkdir -p "${REPODIR}" "${OUTDIR}"
 COPY . "${REPODIR}"
 WORKDIR "${REPODIR}"
 
-ENV INFILE=".rocro/yamllint/yamllint.issues"
+ENV INFILE=".rocro/.artifacts/yamllint.issues"
 RUN ls -l "${INFILE}"
 RUN cat -n "${INFILE}"
 
