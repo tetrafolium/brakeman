@@ -35,7 +35,7 @@ inspecode:
         - stage: linter-stage
           path: '/.reports/hadolint.sarif'
           format: {type: SARIF}
-      thresholds: {num-issues: 10}
+      thresholds: {num-issues: 8}
 
     - name: yamllint_linter
       type: docker-build
@@ -55,7 +55,7 @@ inspecode:
           format:
             type: example
             path: '.rocro/yamllint/issues.example'
-      thresholds: {num-issues: 87}
+      thresholds: {num-issues: 83}
 
     - name: yamllint_sarify
       pre-tasks: yamllint_linter
@@ -84,7 +84,7 @@ inspecode:
       reports:
         - stage: sarify-stage
           path: '/.reports/yamllint.sarif'
-      thresholds: {num-issues: 87}
+      thresholds: {num-issues: 83}
 
   tools:
 
