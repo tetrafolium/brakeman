@@ -53,7 +53,7 @@ inspecode:
           format:
             type: example
             path: '.rocro/yamllint/issues.example'
-      thresholds: {num-issues: 85}
+      thresholds: {num-issues: 87}
 
     - name: yamllint_SARIF
       type: docker-build
@@ -68,7 +68,7 @@ inspecode:
       reports:
         - stage: linter-stage
           path: '/.reports/yamllint.sarif'
-      thresholds: {num-issues: 85}
+      thresholds: {num-issues: 87}
 
   tools:
 
