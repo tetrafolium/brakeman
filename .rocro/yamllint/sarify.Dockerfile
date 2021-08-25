@@ -29,4 +29,4 @@ RUN GO111MODULE="off" \
         -v "$(cat "${VERSIONFILE}")" "${REPOPATH}" \
         < "${INFILE}" > "${OUTFILE}"
 RUN ls -l "${INFILE}" "${OUTFILE}"
-RUN jq '.runs[0].tool.driver' "${OUTFILE}"
+#RUN jq '.runs[0].tool.driver' "${OUTFILE}"
