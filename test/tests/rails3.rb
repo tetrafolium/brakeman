@@ -1150,7 +1150,7 @@ class Rails3Tests < Minitest::Test
   def test_strip_tags_CVE_2012_3465
     assert_warning :type => :warning,
       :warning_type => "Cross-Site Scripting",
-      :message => /^Versions\ before\ 3\.0\.10\ have\ a\ vulnerabil/,
+      :message => /^Versions\ before\ 3\.0\.10\ have\ a\ vulnerable/,
       :confidence => 0,
       :file => /Gemfile/
   end

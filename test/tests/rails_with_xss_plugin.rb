@@ -318,7 +318,7 @@ class RailsWithXssPluginTests < Minitest::Test
   def test_strip_tags_CVE_2012_3465
     assert_warning :type => :warning,
       :warning_type => "Cross-Site Scripting",
-      :message => /^All\ Rails\ 2\.x\ versions\ have\ a\ vulnerabil/,
+      :message => /^All\ Rails\ 2\.x\ versions\ have\ a\ vulnerable/,
       :confidence => 0,
       :file => /Gemfile/
   end

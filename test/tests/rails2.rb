@@ -977,7 +977,7 @@ class Rails2Tests < Minitest::Test
   def test_strip_tags_CVE_2011_2931
     assert_warning :type => :warning,
       :warning_type => "Cross-Site Scripting",
-      :message => /^Versions\ before\ 2\.3\.13\ have\ a\ vulnerabil/,
+      :message => /^Versions\ before\ 2\.3\.13\ have\ a\ vulnerable/,
       :confidence => 0,
       :file => /environment\.rb/,
       :relative_path => "config/environment.rb"

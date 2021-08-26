@@ -555,7 +555,7 @@ class Rails52Tests < Minitest::Test
       :fingerprint => "9ae68e59cfee3e5256c0540dadfeb74e6b72c91997fdb60411063a6e8518144a",
       :warning_type => "Remote Code Execution",
       :line => 5,
-      :message => /^Use\ of\ unsafe\ cookie\ serialization\ strat/,
+      :message => /^Use\ of\ unsafe\ cookie\ serialization\ start/,
       :confidence => 1,
       :relative_path => "config/initializers/cookies_serializer.rb",
       :code => s(:attrasgn, s(:call, s(:call, s(:call, s(:const, :Rails), :application), :config), :action_dispatch), :cookies_serializer=, s(:lit, :hybrid)),

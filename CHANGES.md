@@ -510,7 +510,7 @@
 - Handle symmetric multiple assignment
 - Do not branch for self attribute assignment `x = x.y`
 - Fix CVE for CVE-2011-2932
-- Remove "fake filters" from warning fingerpints
+- Remove "fake filters" from warning fingertips
 - Index calls in `lib/` files
 - Move Symbol DoS to optional checks
 - CVEs report correct line and file name (Gemfile/Gemfile.lock) (Rob Fletcher)

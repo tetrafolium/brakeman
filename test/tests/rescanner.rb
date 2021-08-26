@@ -23,7 +23,7 @@ class RescannerTests < Minitest::Test
     assert_new 0
   end
 
-  def test_irrelavent_new_file
+  def test_irrelevant_new_file
     before_rescan_of "IRRELEVANT" do
       write_file "IRRELEVANT", "Nothing special here"
     end
