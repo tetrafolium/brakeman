@@ -15,7 +15,7 @@ class Brakeman::CheckSSLVerify < Brakeman::BaseCheck
   end
 
   def check_open_ssl_verify_none
-    tracker.find_call(:method => :verify_mode=).each {|call| process_verify_mode_result(call) }
+    tracker.find_call(:method => :verify_mode=).each { |call| process_verify_mode_result(call) }
   end
 
   def process_verify_mode_result result

@@ -27,6 +27,7 @@ class Brakeman::CheckCreateWith < Brakeman::BaseCheck
 
   def process_result result
     return unless original? result
+
     arg = result[:call].first_arg
 
     confidence = danger_level arg
@@ -64,11 +65,11 @@ class Brakeman::CheckCreateWith < Brakeman::BaseCheck
   end
 
   def generic_warning
-      warn :warning_type => "Mass Assignment",
-        :warning_code => :CVE_2014_3514,
-        :message => @message,
-        :gem_info => gemfile_or_environment,
-        :confidence => :medium,
-        :link_path => "https://groups.google.com/d/msg/rubyonrails-security/M4chq5Sb540/CC1Fh0Y_NWwJ"
+    warn :warning_type => "Mass Assignment",
+      :warning_code => :CVE_2014_3514,
+      :message => @message,
+      :gem_info => gemfile_or_environment,
+      :confidence => :medium,
+      :link_path => "https://groups.google.com/d/msg/rubyonrails-security/M4chq5Sb540/CC1Fh0Y_NWwJ"
   end
 end

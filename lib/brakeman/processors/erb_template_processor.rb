@@ -3,7 +3,6 @@ require 'brakeman/processors/template_processor'
 #Processes ERB templates
 #(those ending in .html.erb or .rthml).
 class Brakeman::ErbTemplateProcessor < Brakeman::TemplateProcessor
-  
   #s(:call, TARGET, :method, ARGS)
   def process_call exp
     target = exp.target
@@ -11,7 +10,7 @@ class Brakeman::ErbTemplateProcessor < Brakeman::TemplateProcessor
       target = process target
     end
     method = exp.method
-    
+
     #_erbout is the default output variable for erb
     if node_type? target, :lvar and target.value == :_erbout
       if method == :concat or method == :<<
@@ -73,5 +72,4 @@ class Brakeman::ErbTemplateProcessor < Brakeman::TemplateProcessor
       block
     end
   end
-
 end

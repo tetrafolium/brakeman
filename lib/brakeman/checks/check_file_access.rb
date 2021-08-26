@@ -28,6 +28,7 @@ class Brakeman::CheckFileAccess < Brakeman::BaseCheck
 
   def process_result result
     return unless original? result
+
     call = result[:call]
 
     file_name = call.first_arg
@@ -40,7 +41,7 @@ class Brakeman::CheckFileAccess < Brakeman::BaseCheck
       match = Match.new(:model, match)
       confidence = :medium
     elsif tracker.options[:check_arguments] and
-      match = include_user_input?(file_name)
+          match = include_user_input?(file_name)
 
       #Check for string building in file name
       if call?(file_name) and (file_name.method == :+ or file_name.method == :<<)

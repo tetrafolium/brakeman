@@ -127,7 +127,7 @@ module Brakeman
     def gemspec
       return @gemspec unless @gemspec.nil?
 
-      gemspecs =  Dir.glob(File.join(@root, "*.gemspec"))
+      gemspecs = Dir.glob(File.join(@root, "*.gemspec"))
 
       if gemspecs.length > 1 or gemspecs.empty?
         @gemspec = false
@@ -136,7 +136,7 @@ module Brakeman
       end
     end
 
-  private
+    private
 
     def find_helper_paths
       find_paths "app/helpers"
@@ -147,7 +147,7 @@ module Brakeman
     end
 
     def find_additional_lib_paths
-      @additional_libs_path.collect{ |path| find_paths path }.flatten
+      @additional_libs_path.collect { |path| find_paths path }.flatten
     end
 
     def find_paths(directory, extensions = ".rb")

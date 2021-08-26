@@ -20,8 +20,8 @@ class Brakeman::CheckReverseTabnabbing < Brakeman::BaseCheck
 
     target = hash_access html_opts, :target
     unless target &&
-          (string?(target) && target.value == "_blank" ||
-          symbol?(target) && target.value == :_blank)
+           (string?(target) && target.value == "_blank" ||
+           symbol?(target) && target.value == :_blank)
       return
     end
 

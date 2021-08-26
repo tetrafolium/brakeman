@@ -12,7 +12,7 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
   def initialize tracker
     super
     @map = Sexp.new(:lvar, :map)
-    @nested = nil  #used for identifying nested targets
+    @nested = nil #used for identifying nested targets
     @prefix = [] #Controller name prefix (a module name, usually)
     @current_controller = nil
     @with_options = nil #For use inside map.with_options
@@ -153,6 +153,7 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
   #Process route option :except => ...
   def process_option_except exp
     return unless exp.node_type == :array
+
     routes = @tracker.routes[@current_controller]
 
     exp[1..-1].each do |e|
@@ -199,7 +200,7 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
     #to a controller which already allows them all
     return if @tracker.routes[@current_controller].is_a? Array and @tracker.routes[@current_controller][0] == :allow_all_actions
 
-    exp.last.each_with_index do |e,i|
+    exp.last.each_with_index do |e, i|
       if symbol? e and e.value == :action
         action = exp.last[i + 1]
 
@@ -256,6 +257,7 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
   # :collection => { :some_action => :http_actions }
   def process_collection exp
     return unless exp.node_type == :hash
+
     routes = @tracker.routes[@current_controller]
 
     hash_iterate(exp) do |action, _type|
@@ -283,7 +285,6 @@ end
 #This is for a really specific case where a hash is used as arguments
 #to one of the map methods.
 class Brakeman::RouteAliasProcessor < Brakeman::AliasProcessor
-
   #This replaces
   # { :some => :hash }.keys
   #with
@@ -294,7 +295,7 @@ class Brakeman::RouteAliasProcessor < Brakeman::AliasProcessor
     if hash? exp.target and exp.method == :keys
       keys = get_keys exp.target
       exp.clear
-      keys.each_with_index do |e,i|
+      keys.each_with_index do |e, i|
         exp[i] = e
       end
     end

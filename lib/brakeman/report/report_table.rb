@@ -24,12 +24,12 @@ class Brakeman::Report::Table < Brakeman::Report::Base
 
     if tracker.options[:report_routes] or tracker.options[:debug]
       out << "\n+CONTROLLERS+\n" <<
-      truncate_table(generate_controllers.to_s) << "\n"
+        truncate_table(generate_controllers.to_s) << "\n"
     end
 
     if tracker.options[:debug]
       out << "\n+TEMPLATES+\n\n" <<
-      truncate_table(generate_templates.to_s) << "\n"
+        truncate_table(generate_templates.to_s) << "\n"
     end
 
     output_table("+Obsolete Ignore Entries+", generate_obsolete, out)
@@ -66,8 +66,8 @@ class Brakeman::Report::Table < Brakeman::Report::Base
   def generate_warning_overview
     types = warnings_summary.keys
     types.delete :high_confidence
-    values = types.sort.collect{|warning_type| [warning_type, warnings_summary[warning_type]] }
-    locals = {:types => types, :warnings_summary => warnings_summary}
+    values = types.sort.collect { |warning_type| [warning_type, warnings_summary[warning_type]] }
+    locals = { :types => types, :warnings_summary => warnings_summary }
 
     render_array('warning_overview', ['Warning Type', 'Total'], values, locals)
   end
@@ -78,20 +78,20 @@ class Brakeman::Report::Table < Brakeman::Report::Base
 
     cols = ['Name', 'Parent', 'Includes', 'Routes']
 
-    locals = {:controller_rows => controller_rows}
-    values = controller_rows.collect{|row| row.values_at(*cols) }
+    locals = { :controller_rows => controller_rows }
+    values = controller_rows.collect { |row| row.values_at(*cols) }
     render_array('controller_overview', cols, values, locals)
   end
 
   #Generate table of errors or return nil if no errors
   def generate_errors
-    values = tracker.errors.collect{|error| [error[:error], error[:backtrace][0]]}
-    render_array('error_overview', ['Error', 'Location'], values, {:tracker => tracker})
+    values = tracker.errors.collect { |error| [error[:error], error[:backtrace][0]]}
+    render_array('error_overview', ['Error', 'Location'], values, { :tracker => tracker })
   end
 
   def generate_obsolete
-    values = tracker.unused_fingerprints.collect{|fingerprint| [fingerprint] }
-    render_array('obsolete_ignore_entries', ['fingerprint'], values, {:tracker => tracker})
+    values = tracker.unused_fingerprints.collect { |fingerprint| [fingerprint] }
+    render_array('obsolete_ignore_entries', ['fingerprint'], values, { :tracker => tracker })
   end
 
   def generate_warnings
@@ -109,7 +109,6 @@ class Brakeman::Report::Table < Brakeman::Report::Base
                     'view_warnings',
                     ['Confidence', 'Template', 'Warning Type', 'Message'],
                     'Template'
-
   end
 
   #Generate table of model warnings or return nil if no warnings
@@ -164,7 +163,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
       end
     end
 
-    template_rows = template_rows.sort_by{|name, _value| name.to_s}
+    template_rows = template_rows.sort_by { |name, _value| name.to_s}
 
     output = ''
     template_rows.each do |template|
@@ -255,17 +254,17 @@ class Brakeman::Report::Table < Brakeman::Report::Base
 
   #Generate header for text output
   def text_header
-    <<-HEADER
-
-+BRAKEMAN REPORT+
-
-Application path: #{tracker.app_path}
-Rails version: #{rails_version}
-Brakeman version: #{Brakeman::Version}
-Started at #{tracker.start_time}
-Duration: #{tracker.duration} seconds
-Checks run: #{checks.checks_run.sort.join(", ")}
-HEADER
+    <<~HEADER
+      
+      +BRAKEMAN REPORT+
+      
+      Application path: #{tracker.app_path}
+      Rails version: #{rails_version}
+      Brakeman version: #{Brakeman::Version}
+      Started at #{tracker.start_time}
+      Duration: #{tracker.duration} seconds
+      Checks run: #{checks.checks_run.sort.join(", ")}
+    HEADER
   end
 
   def truncate_table str

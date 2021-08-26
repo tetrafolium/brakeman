@@ -12,8 +12,8 @@ class Brakeman::CheckNumberToCurrency < Brakeman::BaseCheck
 
   def run_check
     if version_between? "2.0.0", "2.3.18" or
-      version_between? "3.0.0", "3.2.16" or
-      version_between? "4.0.0", "4.0.2"
+       version_between? "3.0.0", "3.2.16" or
+       version_between? "4.0.0", "4.0.2"
 
       return if lts_version? "2.3.18.8"
 

@@ -82,7 +82,6 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
   def replace exp, int = 0
     return exp if int > 3
 
-
     if replacement = env[exp] and not duplicate? replacement
       replace(replacement.deep_clone(exp.line), int + 1)
     elsif tracker and replacement = tracker.constant_lookup(exp) and not duplicate? replacement
@@ -166,6 +165,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
   #Process a method call.
   def process_call exp
     return exp if process_call_defn? exp
+
     target_var = exp.target
     target_var &&= target_var.deep_clone
     if exp.node_type == :safe_call
@@ -223,9 +223,9 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       end
     when :merge!, :update
       if hash? target and hash? first_arg
-         target = process_hash_merge! target, first_arg
-         env[target_var] = target
-         return target
+        target = process_hash_merge! target, first_arg
+        env[target_var] = target
+        return target
       end
     when :merge
       if hash? target and hash? first_arg
@@ -544,7 +544,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       unless node_type? target, :hash
         exp.target = target
       end
-    elsif method.to_s[-1,1] == "="
+    elsif method.to_s[-1, 1] == "="
       exp.first_arg = process(index_arg)
       value = get_rhs(exp)
       #This is what we'll replace with the value
@@ -705,11 +705,11 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
     if @tracker
       @tracker.add_constant exp.lhs,
-        exp.rhs,
-        :file => @current_file,
-        :module => @current_module,
-        :class => @current_class,
-        :method => @current_method
+                            exp.rhs,
+                            :file => @current_file,
+                            :module => @current_module,
+                            :class => @current_class,
+                            :method => @current_method
     end
 
     if exp.lhs.is_a? Symbol
@@ -730,15 +730,15 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
   #
   def array_include_all_literals? exp
     call? exp and
-    exp.method == :include? and
-    all_literals? exp.target
+      exp.method == :include? and
+      all_literals? exp.target
   end
 
   def array_detect_all_literals? exp
     call? exp and
-    [:detect, :find].include? exp.method and
-    exp.first_arg.nil? and
-    all_literals? exp.target
+      [:detect, :find].include? exp.method and
+      exp.first_arg.nil? and
+      all_literals? exp.target
   end
 
   #Sets @inside_if = true
@@ -847,8 +847,8 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
     exp[1] = process exp[1] if exp[1]
 
     case_value = if node_type? exp[1], :lvar, :ivar, :call
-      exp[1].deep_clone
-    end
+                   exp[1].deep_clone
+                 end
 
     exp.each_sexp do |e|
       if node_type? e, :when
@@ -925,9 +925,9 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
   def too_deep? exp
     @or_depth_limit >= 0 and
-    node_type? exp, :or and
-    exp.or_depth and
-    exp.or_depth >= @or_depth_limit
+      node_type? exp, :or and
+      exp.or_depth and
+      exp.or_depth >= @or_depth_limit
   end
 
   # Change x.send(:y, 1) to x.y(1)
@@ -938,6 +938,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
     end
 
     return unless symbol? first_arg or string? first_arg
+
     exp.method = first_arg.value.to_sym
     args = exp.args
     exp.pop # remove last arg
@@ -1019,7 +1020,6 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
     #Add arguments to method environment
     assign_args method_exp, args, meth_env
-
 
     #Find return values if method does not depend on environment/args
     values = @helper_method_cache[method_name]
@@ -1122,9 +1122,9 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
   #Return true if for x += blah or @x += blah
   def self_assign_var? var, value
     call? value and
-    value.method == :+ and
-    node_type? value.target, :lvar, :ivar and
-    value.target.value == var
+      value.method == :+ and
+      node_type? value.target, :lvar, :ivar and
+      value.target.value == var
   end
 
   #Return true for x = x.blah

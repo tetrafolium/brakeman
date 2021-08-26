@@ -63,9 +63,9 @@ class Brakeman::Report::CSV < Brakeman::Report::Table
       headings = headings.first
     end
 
-    output = CSV.generate_line(headings.cells.map{|cell| cell.to_s.strip})
+    output = CSV.generate_line(headings.cells.map { |cell| cell.to_s.strip})
     table.rows.each do |row|
-      output << CSV.generate_line(row.cells.map{|cell| cell.to_s.strip})
+      output << CSV.generate_line(row.cells.map { |cell| cell.to_s.strip})
     end
     output
   end

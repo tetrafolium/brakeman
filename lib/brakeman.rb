@@ -2,7 +2,6 @@ require 'set'
 require 'brakeman/version'
 
 module Brakeman
-
   #This exit code is used when warnings are found and the --exit-on-warn
   #option is set
   Warnings_Found_Exit_Code = 3
@@ -130,7 +129,7 @@ module Brakeman
         options.each { |k, v| options[k] = Set.new v if v.is_a? Array }
 
         # After parsing the yaml config file for options, convert any string keys into symbols.
-        options.keys.select {|k| k.is_a? String}.map {|k| k.to_sym }.each {|k| options[k] = options[k.to_s]; options.delete(k.to_s) }
+        options.keys.select { |k| k.is_a? String }.map { |k| k.to_sym }.each { |k| options[k] = options[k.to_s]; options.delete(k.to_s) }
 
         unless line_options[:allow_check_paths_in_config]
           if options.include? :additional_checks_path
@@ -160,7 +159,7 @@ module Brakeman
   def self.config_file custom_location, app_path
     app_config = File.expand_path(File.join(app_path, "config", "brakeman.yml"))
     supported_locations = [File.expand_path(custom_location || ""), app_config] + CONFIG_FILES
-    supported_locations.detect {|f| File.file?(f) }
+    supported_locations.detect { |f| File.file?(f) }
   end
 
   #Default set of options
@@ -186,8 +185,7 @@ module Brakeman
       :relative_path => false,
       :report_progress => true,
       :safe_methods => Set.new,
-      :skip_checks => Set.new,
-    }
+      :skip_checks => Set.new, }
   end
 
   #Determine output formats based on options[:output_formats]
@@ -197,6 +195,7 @@ module Brakeman
     if options[:output_format] && options[:output_files] && options[:output_files].size > 1
       raise ArgumentError, "Cannot specify output format if multiple output files specified"
     end
+
     if options[:output_format]
       get_formats_from_output_format options[:output_format]
     elsif options[:output_files]
@@ -227,7 +226,7 @@ module Brakeman
       [:to_markdown]
     when :cc, :to_cc, :codeclimate, :to_codeclimate
       [:to_codeclimate]
-    when :plain ,:to_plain, :text, :to_text, :to_s
+    when :plain, :to_plain, :text, :to_text, :to_s
       [:to_text]
     when :table, :to_table
       [:to_table]
@@ -272,6 +271,7 @@ module Brakeman
       unless name && repo && !(name.empty? || repo.empty?)
         raise ArgumentError, "Invalid GitHub repository format"
       end
+
       path.chomp '/' if path
       ref ||= 'master'
       ['https://github.com', name, repo, 'blob', ref, path].compact.join '/'
@@ -314,7 +314,7 @@ module Brakeman
 
     options.delete :create_config
 
-    options.each do |k,v|
+    options.each do |k, v|
       if v.is_a? Set
         options[k] = v.to_a
       end
@@ -534,7 +534,7 @@ module Brakeman
     missing = Brakeman::Checks.missing_checks(checks)
 
     unless missing.empty?
-      raise MissingChecksError, "Could not find specified check#{missing.length > 1 ? 's' : ''}: #{missing.map {|c| "`#{c}`"}.join(', ')}"
+      raise MissingChecksError, "Could not find specified check#{missing.length > 1 ? 's' : ''}: #{missing.map { |c| "`#{c}`"}.join(', ')}"
     end
   end
 

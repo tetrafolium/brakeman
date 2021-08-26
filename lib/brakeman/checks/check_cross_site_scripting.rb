@@ -212,6 +212,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
 
   def actually_process_call exp
     return if @matched
+
     target = exp.target
     if sexp? target
       target = process target
@@ -287,12 +288,12 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
 
   def setup
     @ignore_methods = Set[:==, :!=, :button_to, :check_box, :content_tag, :escapeHTML, :escape_once,
-                           :field_field, :fields_for, :form_for, :h, :hidden_field,
-                           :hidden_field, :hidden_field_tag, :image_tag, :label,
-                           :link_to, :mail_to, :radio_button, :select,
-                           :submit_tag, :text_area, :text_field,
-                           :text_field_tag, :url_encode, :u, :url_for,
-                           :will_paginate].merge tracker.options[:safe_methods]
+                          :field_field, :fields_for, :form_for, :h, :hidden_field,
+                          :hidden_field, :hidden_field_tag, :image_tag, :label,
+                          :link_to, :mail_to, :radio_button, :select,
+                          :submit_tag, :text_area, :text_field,
+                          :text_field_tag, :url_encode, :u, :url_for,
+                          :will_paginate].merge tracker.options[:safe_methods]
 
     @models = tracker.models.keys
     @inspect_arguments = tracker.options[:check_arguments]
@@ -317,7 +318,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
 
     json_escape_on = false
     initializers = tracker.find_call(target: :ActiveSupport, method: :escape_html_entities_in_json=)
-    initializers.each {|result| json_escape_on = true?(result[:call].first_arg) }
+    initializers.each { |result| json_escape_on = true?(result[:call].first_arg) }
 
     if tracker.config.escape_html_entities_in_json?
       json_escape_on = true
@@ -344,19 +345,19 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
 
   def ignore_call? target, method
     ignored_method?(target, method) or
-    safe_input_attribute?(target, method) or
-    ignored_model_method?(target, method) or
-    form_builder_method?(target, method) or
-    haml_escaped?(target, method) or
-    boolean_method?(method) or
-    cgi_escaped?(target, method) or
-    xml_escaped?(target, method)
+      safe_input_attribute?(target, method) or
+      ignored_model_method?(target, method) or
+      form_builder_method?(target, method) or
+      haml_escaped?(target, method) or
+      boolean_method?(method) or
+      cgi_escaped?(target, method) or
+      xml_escaped?(target, method)
   end
 
   def ignored_model_method? target, method
     ((@matched and @matched.type == :model) or
        model_name? target) and
-       IGNORE_MODEL_METHODS.include? method
+      IGNORE_MODEL_METHODS.include? method
   end
 
   def ignored_method? _target, method
@@ -365,7 +366,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
 
   def cgi_escaped? target, method
     method == :escape and
-    (target == URI or target == CGI)
+      (target == URI or target == CGI)
   end
 
   def haml_escaped? target, method

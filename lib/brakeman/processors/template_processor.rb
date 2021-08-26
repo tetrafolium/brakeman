@@ -3,7 +3,6 @@ require 'brakeman/tracker/template'
 
 #Base Processor for templates/views
 class Brakeman::TemplateProcessor < Brakeman::BaseProcessor
-
   #Initializes template information.
   def initialize tracker, template_name, called_from = nil, current_file = nil
     super(tracker)
@@ -32,7 +31,7 @@ class Brakeman::TemplateProcessor < Brakeman::BaseProcessor
 
   #Ignore initial variable assignment
   def process_lasgn exp
-    if exp.lhs == :_erbout and exp.rhs.node_type == :str  #ignore
+    if exp.lhs == :_erbout and exp.rhs.node_type == :str #ignore
       ignore
     elsif exp.lhs == :_buf and exp.rhs.node_type == :str
       ignore

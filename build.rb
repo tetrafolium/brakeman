@@ -2,7 +2,7 @@
 puts 'Packaging Brakeman gem...'
 
 system 'rm -rf bundle Gemfile.lock brakeman-*.gem' and
-system 'BM_PACKAGE=true bundle install --standalone'
+  system 'BM_PACKAGE=true bundle install --standalone'
 
 abort "No bundle installed" unless Dir.exist? 'bundle'
 

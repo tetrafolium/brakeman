@@ -1,18 +1,15 @@
 require 'brakeman/options'
 
 module Brakeman
-
   # Implements handling of running Brakeman from the command line.
   class Commandline
     class << self
-
       # Main method to run Brakeman from the command line.
       #
       # If no options are provided, ARGV will be parsed and used instead.
       # Otherwise, the options are expected to be a Hash like the one returned
       # after ARGV is parsed.
       def start options = nil, app_path = "."
-
         unless options
           options, app_path = parse_options ARGV
         end
@@ -115,7 +112,7 @@ module Brakeman
 
       # Runs a regular report based on the options provided.
       def regular_report options
-        tracker = run_brakeman options 
+        tracker = run_brakeman options
 
         if tracker.options[:exit_on_warn] and not tracker.filtered_warnings.empty?
           quit Brakeman::Warnings_Found_Exit_Code

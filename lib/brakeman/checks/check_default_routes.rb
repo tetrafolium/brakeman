@@ -33,6 +33,7 @@ class Brakeman::CheckDefaultRoutes < Brakeman::BaseCheck
 
   def check_for_action_globs
     return if allow_all_actions?
+
     Brakeman.debug "Checking each controller for default routes"
 
     tracker.routes.each do |name, actions|

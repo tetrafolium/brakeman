@@ -103,14 +103,15 @@ class Brakeman::Report::Text < Brakeman::Report::Base
 
   def generate_errors
     return if tracker.errors.empty?
+
     full_trace = tracker.options[:debug]
 
     errors = tracker.errors.map do |e|
       trace = if full_trace
-        e[:backtrace].join("\n")
-      else
-        e[:backtrace][0]
-      end
+                e[:backtrace].join("\n")
+              else
+                e[:backtrace][0]
+              end
 
       [
         label("Error", e[:error]),
@@ -202,7 +203,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
   # ONLY used for generate_controllers to avoid duplication
   def render_array _name, _cols, values, _locals
     controllers = values.map do |controller_name, parent, includes, routes|
-      c = [ label("Controller", controller_name) ]
+      c = [label("Controller", controller_name)]
       c << label("Parent", parent) unless parent.empty?
       c << label("Includes", includes) unless includes.empty?
       c << label("Routes", routes)

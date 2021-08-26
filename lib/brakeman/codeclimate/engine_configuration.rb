@@ -3,7 +3,6 @@ require 'pathname'
 module Brakeman
   module Codeclimate
     class EngineConfiguration
-
       def initialize(engine_config = {})
         @engine_config = engine_config
       end
@@ -70,18 +69,19 @@ module Brakeman
         subprefixes = path_subprefixes(prefix)
         engine_config["include_paths"] && engine_config["include_paths"].map do |path|
           next unless path
+
           stripped_include_path(prefix, subprefixes, path)
         end.compact
       end
 
       def path_subprefixes(path)
         Pathname.new(path).each_filename.inject([]) do |memo, piece|
-         memo <<
-           if memo.any?
-             File.join(memo.last, piece)
-           else
-             File.join(piece)
-           end
+          memo <<
+            if memo.any?
+              File.join(memo.last, piece)
+            else
+              File.join(piece)
+            end
         end
       end
 

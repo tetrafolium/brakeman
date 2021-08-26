@@ -2,7 +2,6 @@ require 'set'
 
 #Stores call sites to look up later.
 class Brakeman::CallIndex
-
   #Initialize index with calls from FindAllCalls
   def initialize calls
     @calls_by_method = {}
@@ -256,6 +255,7 @@ class Brakeman::CallIndex
   def from_template call, template_name
     return false unless call[:location][:type] == :template
     return true if template_name.nil?
+
     call[:location][:template] == template_name
   end
 end

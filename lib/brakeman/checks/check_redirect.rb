@@ -37,11 +37,11 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
     opt = call.first_arg
 
     if method == :redirect_to and
-        not only_path?(call) and
-        not explicit_host?(opt) and
-        not slice_call?(opt) and
-        not safe_permit?(opt) and
-        res = include_user_input?(call)
+       not only_path?(call) and
+       not explicit_host?(opt) and
+       not slice_call?(opt) and
+       not safe_permit?(opt) and
+       res = include_user_input?(call)
 
       if res.type == :immediate
         confidence = :high
@@ -98,7 +98,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
     end
 
     if tracker.options[:check_arguments] and call? arg
-      include_user_input? arg, false  #I'm doubting if this is really necessary...
+      include_user_input? arg, false #I'm doubting if this is really necessary...
     else
       false
     end
@@ -183,7 +183,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
       model_instance? exp.lhs or model_instance? exp.rhs
     elsif call? exp
       if model_target? exp and
-        (@model_find_calls.include? exp.method or exp.method.to_s.match(/^find_by_/))
+         (@model_find_calls.include? exp.method or exp.method.to_s.match(/^find_by_/))
         true
       else
         association?(exp.target, exp.method)
@@ -193,9 +193,10 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
 
   def model_target? exp
     return false unless call? exp
+
     model_name? exp.target or
-    friendly_model? exp.target or
-    model_target? exp.target
+      friendly_model? exp.target or
+      model_target? exp.target
   end
 
   #Returns true if exp is (probably) a friendly model instance
@@ -203,7 +204,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
   def friendly_model? exp
     call? exp and model_name? exp.target and exp.method == :friendly
   end
-  
+
   #Returns true if exp is (probably) a decorated model instance
   #using the Draper gem
   def decorated_model? exp
@@ -211,10 +212,10 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
       decorated_model? exp.lhs or decorated_model? exp.rhs
     else
       tracker.config.has_gem? :draper and
-      call? exp and
-      node_type?(exp.target, :const) and
-      exp.target.value.to_s.match(/Decorator$/) and
-      exp.method == :decorate
+        call? exp and
+        node_type?(exp.target, :const) and
+        exp.target.value.to_s.match(/Decorator$/) and
+        exp.method == :decorate
     end
   end
 
@@ -235,6 +236,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
 
   def slice_call? exp
     return unless call? exp
+
     exp.method == :slice
   end
 
@@ -244,7 +246,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
     if call? exp and params? exp.target and exp.method == :permit
       exp.each_arg do |opt|
         if symbol? opt and DANGEROUS_KEYS.include? opt.value
-          return false 
+          return false
         end
       end
 

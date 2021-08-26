@@ -13,12 +13,12 @@ class Brakeman::CheckLinkToHref < Brakeman::CheckLinkTo
 
   def run_check
     @ignore_methods = Set[:button_to, :check_box,
-                           :field_field, :fields_for, :hidden_field,
-                           :hidden_field, :hidden_field_tag, :image_tag, :label,
-                           :mail_to, :polymorphic_url, :radio_button, :select, :slice,
-                           :submit_tag, :text_area, :text_field,
-                           :text_field_tag, :url_encode, :u,
-                           :will_paginate].merge(tracker.options[:url_safe_methods] || [])
+                          :field_field, :fields_for, :hidden_field,
+                          :hidden_field, :hidden_field_tag, :image_tag, :label,
+                          :mail_to, :polymorphic_url, :radio_button, :select, :slice,
+                          :submit_tag, :text_area, :text_field,
+                          :text_field_tag, :url_encode, :u,
+                          :will_paginate].merge(tracker.options[:url_safe_methods] || [])
 
     @models = tracker.models.keys
     @inspect_arguments = tracker.options[:check_arguments]
@@ -62,6 +62,7 @@ class Brakeman::CheckLinkToHref < Brakeman::CheckLinkTo
       end
     elsif not tracker.options[:ignore_model_output] and input = has_immediate_model?(url_arg)
       return if ignore_model_call? url_arg, input or duplicate? result
+
       add_result result
 
       message = msg("Potentially unsafe model attribute in ", msg_code("link_to"), " href")
@@ -145,7 +146,7 @@ class Brakeman::CheckLinkToHref < Brakeman::CheckLinkTo
 
   def call_on_params? exp
     call? exp and
-    params? exp.target and
-    exp.method != :[]
+      params? exp.target and
+      exp.method != :[]
   end
 end

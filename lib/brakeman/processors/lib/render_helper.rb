@@ -2,7 +2,6 @@ require 'digest/sha1'
 
 #Processes a call to render() in a controller or template
 module Brakeman::RenderHelper
-
   #Process s(:render, TYPE, OPTION?, OPTIONS)
   def process_render exp
     process_default exp
@@ -55,7 +54,6 @@ module Brakeman::RenderHelper
   #Processes a template, adding any instance variables
   #to its environment.
   def process_template name, args, called_from = nil, *_
-
     Brakeman.debug "Rendering #{name} (#{called_from})"
     #Get scanned source for this template
     name = name.to_s.gsub(/^\//, "")

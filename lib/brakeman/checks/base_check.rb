@@ -41,7 +41,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
     @has_user_input = nil
     @in_array = false
     @safe_input_attributes = Set[:to_i, :to_f, :arel_table, :id]
-    @comparison_ops  = Set[:==, :!=, :>, :<, :>=, :<=]
+    @comparison_ops = Set[:==, :!=, :>, :<, :>=, :<=]
   end
 
   #Add result to result list, which is used to check for duplicates
@@ -174,7 +174,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
     @mass_assign_disabled = false
 
     if version_between?("3.1.0", "3.9.9") and
-      tracker.config.whitelist_attributes?
+       tracker.config.whitelist_attributes?
 
       @mass_assign_disabled = true
     elsif tracker.options[:rails4] && (!tracker.config.has_gem?(:protected_attributes) || tracker.config.whitelist_attributes?)
@@ -240,6 +240,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
 
   def original? result
     return false if result[:call].original_line or duplicate? result
+
     add_result result
     true
   end
@@ -338,10 +339,10 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
         has_immediate_user_input? exp.value
       when :if
         (sexp? exp.then_clause and has_immediate_user_input? exp.then_clause) or
-        (sexp? exp.else_clause and has_immediate_user_input? exp.else_clause)
+          (sexp? exp.else_clause and has_immediate_user_input? exp.else_clause)
       when :or
         has_immediate_user_input? exp.lhs or
-        has_immediate_user_input? exp.rhs
+          has_immediate_user_input? exp.rhs
       when :splat, :kwsplat
         exp.each_sexp do |e|
           match = has_immediate_user_input?(e)
@@ -379,7 +380,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
 
       if always_safe_method? method
         false
-      elsif call? target and not method.to_s[-1,1] == "?"
+      elsif call? target and not method.to_s[-1, 1] == "?"
         if has_immediate_model?(target, out)
           exp
         else
@@ -419,7 +420,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
          (sexp? exp.else_clause and has_immediate_model? exp.else_clause, out))
       when :or
         has_immediate_model? exp.lhs or
-        has_immediate_model? exp.rhs
+          has_immediate_model? exp.rhs
       else
         false
       end
@@ -458,9 +459,8 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
 
   def lts_version? version
     tracker.config.has_gem? :'railslts-version' and
-    version_between? version, "2.3.18.99", tracker.config.gem_version(:'railslts-version')
+      version_between? version, "2.3.18.99", tracker.config.gem_version(:'railslts-version')
   end
-
 
   def version_between? low_version, high_version, current_version = nil
     tracker.config.version_between? low_version, high_version, current_version
@@ -503,8 +503,8 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
     return false unless call? exp and STRING_METHODS.include? exp.method
 
     node_type? exp.target, :str, :dstr or
-    node_type? exp.first_arg, :str, :dstr or
-    string_building? exp.target or
-    string_building? exp.first_arg
+      node_type? exp.first_arg, :str, :dstr or
+      string_building? exp.target or
+      string_building? exp.first_arg
   end
 end

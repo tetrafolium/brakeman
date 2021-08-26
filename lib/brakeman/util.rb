@@ -3,7 +3,6 @@ require 'pathname'
 
 #This is a mixin containing utility methods.
 module Brakeman::Util
-
   QUERY_PARAMETERS = Sexp.new(:call, Sexp.new(:call, nil, :request), :query_parameters)
 
   PATH_PARAMETERS = Sexp.new(:call, Sexp.new(:call, nil, :request), :path_parameters)
@@ -42,8 +41,8 @@ module Brakeman::Util
   #Taken from ActiveSupport.
   def underscore camel_cased_word
     camel_cased_word.to_s.gsub(/::/, '/').
-      gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-      gsub(/([a-z\d])([A-Z])/,'\1_\2').
+      gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
+      gsub(/([a-z\d])([A-Z])/, '\1_\2').
       tr("-", "_").
       downcase
   end
@@ -114,7 +113,7 @@ module Brakeman::Util
   #Insert value into Hash Sexp
   def hash_insert hash, key, value
     index = 1
-    hash_iterate hash.dup do |k,_v|
+    hash_iterate hash.dup do |k, _v|
       if k == key
         hash[index + 1] = value
         return hash
@@ -268,8 +267,8 @@ module Brakeman::Util
   #Check if exp is params, cookies, or request_env
   def request_value? exp
     params? exp or
-    cookies? exp or
-    request_env? exp
+      cookies? exp or
+      request_env? exp
   end
 
   def constant? exp

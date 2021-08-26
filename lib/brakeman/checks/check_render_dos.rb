@@ -21,7 +21,7 @@ class Brakeman::CheckRenderDoS < Brakeman::BaseCheck
 
   def text_render? result
     node_type? result[:call], :render and
-    result[:call].render_type == :text
+      result[:call].render_type == :text
   end
 
   def warn_about_text_render

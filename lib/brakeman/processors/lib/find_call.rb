@@ -32,7 +32,6 @@ require 'brakeman/processors/lib/basic_processor'
 # #Find all calls to sub, sub!, gsub, or gsub!
 # FindCall.new nil, /^g?sub!?$/
 class Brakeman::FindCall < Brakeman::BasicProcessor
-
   def initialize targets, methods, tracker
     super tracker
     @calls = []
@@ -76,7 +75,7 @@ class Brakeman::FindCall < Brakeman::BasicProcessor
     if match(@find_targets, target) and match(@find_methods, method)
       @calls << Sexp.new(:result, @current_module, @current_class, @current_method, exp).line(exp.line)
     end
-    
+
     exp
   end
 

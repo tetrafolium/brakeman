@@ -1,5 +1,5 @@
 # extracting the diff logic to it's own class for consistency. Currently handles
-# an array of Brakeman::Warnings or plain hash representations.  
+# an array of Brakeman::Warnings or plain hash representations.
 class Brakeman::Differ
   attr_reader :old_warnings, :new_warnings
 

@@ -52,11 +52,13 @@ class Sexp
 
   def value
     raise WrongSexpError, "Sexp#value called on multi-item Sexp: `#{self.inspect}`" if size > 2
+
     self[1]
   end
 
   def value= exp
     raise WrongSexpError, "Sexp#value= called on multi-item Sexp: `#{self.inspect}`" if size > 2
+
     @my_hash_value = nil
     self[1] = exp
   end
@@ -314,7 +316,7 @@ class Sexp
     chain = []
     call = self
 
-    while call.class == Sexp and CALLS.include? call.first 
+    while call.class == Sexp and CALLS.include? call.first
       chain << call.method
       call = call.target
     end
@@ -338,7 +340,6 @@ class Sexp
     expect :if
     self[1] = exp
   end
-
 
   #Returns 'then' clause of an if expression:
   #
@@ -602,17 +603,16 @@ end
 
 #Invalidate hash cache if the Sexp changes
 [:[]=, :clear, :collect!, :compact!, :concat, :delete, :delete_at,
-  :delete_if, :drop, :drop_while, :fill, :flatten!, :replace, :insert,
-  :keep_if, :map!, :pop, :push, :reject!, :replace, :reverse!, :rotate!,
-  :select!, :shift, :shuffle!, :slice!, :sort!, :sort_by!, :transpose,
-  :uniq!, :unshift].each do |method|
-
+ :delete_if, :drop, :drop_while, :fill, :flatten!, :replace, :insert,
+ :keep_if, :map!, :pop, :push, :reject!, :replace, :reverse!, :rotate!,
+ :select!, :shift, :shuffle!, :slice!, :sort!, :sort_by!, :transpose,
+ :uniq!, :unshift].each do |method|
   Sexp.class_eval <<-RUBY
     def #{method} *args
       @my_hash_value = nil
       super
     end
-    RUBY
+  RUBY
 end
 
 #Methods used by RubyParser which would normally go through method_missing but

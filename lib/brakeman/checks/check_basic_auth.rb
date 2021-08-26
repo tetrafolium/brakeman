@@ -23,7 +23,6 @@ class Brakeman::CheckBasicAuth < Brakeman::BaseCheck
 
     Hash[controllers].each do |name, controller|
       controller.options[:http_basic_authenticate_with].each do |call|
-
         if pass = get_password(call) and string? pass
           warn :controller => name,
               :warning_type => "Basic Auth",
@@ -45,12 +44,12 @@ class Brakeman::CheckBasicAuth < Brakeman::BaseCheck
   def check_basic_auth_request
     tracker.find_call(:target => nil, :method => :authenticate_or_request_with_http_basic).each do |result|
       if include_password_literal? result
-          warn :result => result,
-              :code => @include_password,
-              :warning_type => "Basic Auth",
-              :warning_code => :basic_auth_password,
-              :message => "Basic authentication password stored in source code",
-              :confidence => :high
+        warn :result => result,
+            :code => @include_password,
+            :warning_type => "Basic Auth",
+            :warning_code => :basic_auth_password,
+            :message => "Basic authentication password stored in source code",
+            :confidence => :high
       end
     end
   end
@@ -68,9 +67,9 @@ class Brakeman::CheckBasicAuth < Brakeman::BaseCheck
     target = exp.target
 
     if node_type?(target, :lvar) and
-      target.value == @password_var and
-      exp.method == :== and
-      string? exp.first_arg
+       target.value == @password_var and
+       exp.method == :== and
+       string? exp.first_arg
 
       @include_password = exp
     end

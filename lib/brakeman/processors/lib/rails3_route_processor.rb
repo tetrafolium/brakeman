@@ -12,7 +12,7 @@ class Brakeman::Rails3RoutesProcessor < Brakeman::BasicProcessor
   def initialize tracker
     super
     @map = Sexp.new(:lvar, :map)
-    @nested = nil  #used for identifying nested targets
+    @nested = nil #used for identifying nested targets
     @prefix = [] #Controller name prefix (a module name, usually)
     @current_controller = nil
     @with_options = nil #For use inside map.with_options
@@ -62,7 +62,7 @@ class Brakeman::Rails3RoutesProcessor < Brakeman::BasicProcessor
 
   def process_namespace exp
     arg = exp.block_call.first_arg
-    return exp unless symbol? arg or string? arg 
+    return exp unless symbol? arg or string? arg
 
     name = arg.value
     block = exp.block
@@ -96,13 +96,13 @@ class Brakeman::Rails3RoutesProcessor < Brakeman::BasicProcessor
 
       matcher = first_arg.value
       if matcher == ':controller(/:action(/:id(.:format)))' or
-        matcher.include? ':controller' and action_route?(matcher)  #Default routes
+         matcher.include? ':controller' and action_route?(matcher) #Default routes
         @tracker.routes[:allow_all_actions] = first_arg
         return exp
       elsif action_route?(first_arg)
-          if hash? second_arg and controller_name = hash_access(second_arg, :controller)
-            loose_action(controller_name, "matched") #TODO: Parse verbs
-          end
+        if hash? second_arg and controller_name = hash_access(second_arg, :controller)
+          loose_action(controller_name, "matched") #TODO: Parse verbs
+        end
       elsif second_arg.nil? and in_controller_block? and not matcher.include? ":"
         add_route matcher
       end
@@ -117,21 +117,21 @@ class Brakeman::Rails3RoutesProcessor < Brakeman::BasicProcessor
             add_route v
           end
         elsif symbol? k
-         case k.value
-         when :action
-          if string? v
-            add_route_from_string v
-          else
-            add_route v
-          end
+          case k.value
+          when :action
+            if string? v
+              add_route_from_string v
+            else
+              add_route v
+            end
 
-         when :to
-           if string? v
-             add_route_from_string v[1]
-           elsif in_controller_block? and symbol? v
-             add_route v
-           end
-         end
+          when :to
+            if string? v
+              add_route_from_string v[1]
+            elsif in_controller_block? and symbol? v
+              add_route v
+            end
+          end
         end
       end
     end
@@ -184,15 +184,15 @@ class Brakeman::Rails3RoutesProcessor < Brakeman::BasicProcessor
         add_route route[1], route[0]
       end
     else hash? first_arg
-      hash_iterate first_arg do |k, v|
-        if string? k
-          if string? v
-            add_route_from_string v
-          elsif in_controller_block?
-            add_route v
-          end
-        end
-      end
+         hash_iterate first_arg do |k, v|
+           if string? k
+             if string? v
+               add_route_from_string v
+             elsif in_controller_block?
+               add_route v
+             end
+           end
+         end
     end
 
     @current_controller = nil unless in_controller_block?
@@ -301,6 +301,6 @@ class Brakeman::Rails3RoutesProcessor < Brakeman::BasicProcessor
 
   def loose_action controller_name, verb = "any"
     self.current_controller = controller_name.value
-    @tracker.routes[@current_controller] = [:allow_all_actions, {:allow_verb => verb}]
+    @tracker.routes[@current_controller] = [:allow_all_actions, { :allow_verb => verb }]
   end
 end

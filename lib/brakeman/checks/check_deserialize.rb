@@ -45,7 +45,7 @@ class Brakeman::CheckDeserialize < Brakeman::BaseCheck
   end
 
   def check_methods target, *methods
-    tracker.find_call(:target => target, :methods => methods ).each do |result|
+    tracker.find_call(:target => target, :methods => methods).each do |result|
       check_deserialize result, target
     end
   end

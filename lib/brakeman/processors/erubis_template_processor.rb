@@ -2,7 +2,6 @@ require 'brakeman/processors/template_processor'
 
 #Processes ERB templates using Erubis instead of erb.
 class Brakeman::ErubisTemplateProcessor < Brakeman::TemplateProcessor
-
   #s(:call, TARGET, :method, ARGS)
   def process_call exp
     target = exp.target
@@ -82,6 +81,7 @@ class Brakeman::ErubisTemplateProcessor < Brakeman::TemplateProcessor
   end
 
   private
+
   def append_method?(method)
     method == :append= || safe_append_method?(method)
   end

@@ -150,7 +150,7 @@ class Brakeman::HamlTemplateProcessor < Brakeman::TemplateProcessor
   def fix_textareas? exp
     call? exp and
       exp.target == HAMLOUT and
-      exp.method == :fix_textareas! 
+      exp.method == :fix_textareas!
   end
 
   def raw? exp

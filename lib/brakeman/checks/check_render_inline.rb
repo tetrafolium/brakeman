@@ -17,7 +17,7 @@ class Brakeman::CheckRenderInline < Brakeman::CheckCrossSiteScripting
     call = result[:call]
 
     if node_type? call, :render and
-      (call.render_type == :text or call.render_type == :inline)
+       (call.render_type == :text or call.render_type == :inline)
 
       unless call.render_type == :text and content_type_set? call[3]
         render_value = call[2]

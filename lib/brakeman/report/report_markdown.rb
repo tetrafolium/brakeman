@@ -1,16 +1,14 @@
 require 'brakeman/report/report_table'
 
 class Brakeman::Report::Markdown < Brakeman::Report::Table
-
   class MarkdownTable < Terminal::Table
-
     def initialize options = {}, &block
       options[:style] ||= {}
       options[:style].merge!({
-          :border_x => '-',
+                               :border_x => '-',
           :border_y => '|',
           :border_i => '|'
-      })
+                             })
       super options, &block
     end
 
@@ -18,7 +16,6 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
       super.split("\n")[1...-1].join("\n")
     end
     alias :to_s :render
-
   end
 
   def initialize *args
@@ -28,23 +25,23 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
 
   def generate_report
     out = "# BRAKEMAN REPORT\n\n" <<
-    generate_metadata.to_s << "\n\n" <<
-    generate_checks.to_s << "\n\n" <<
-    "### SUMMARY\n\n" <<
-    generate_overview.to_s << "\n\n" <<
-    generate_warning_overview.to_s << "\n\n"
+          generate_metadata.to_s << "\n\n" <<
+          generate_checks.to_s << "\n\n" <<
+          "### SUMMARY\n\n" <<
+          generate_overview.to_s << "\n\n" <<
+          generate_warning_overview.to_s << "\n\n"
 
     #Return output early if only summarizing
     return out if tracker.options[:summary_only]
 
     if tracker.options[:report_routes] or tracker.options[:debug]
-      out << "### CONTROLLERS"  << "\n\n" <<
-      generate_controllers.to_s << "\n\n"
+      out << "### CONTROLLERS" << "\n\n" <<
+        generate_controllers.to_s << "\n\n"
     end
 
     if tracker.options[:debug]
       out << "### TEMPLATES\n\n" <<
-      generate_templates.to_s << "\n\n"
+        generate_templates.to_s << "\n\n"
     end
 
     output_table("Errors", generate_errors, out)
@@ -68,12 +65,12 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
         ['Application path', 'Rails version', 'Brakeman version', 'Started at', 'Duration']
     ) do |t|
       t.add_row([
-        tracker.app_path,
-        rails_version,
-        Brakeman::Version,
-        tracker.start_time,
-        "#{tracker.duration} seconds",
-      ])
+                  tracker.app_path,
+                  rails_version,
+                  Brakeman::Version,
+                  tracker.start_time,
+                  "#{tracker.duration} seconds",
+                ])
     end
   end
 
@@ -104,7 +101,7 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
     end
 
     if warning.code
-      code = warning.format_code.gsub('`','``').gsub(/\A``|``\z/, '` `')
+      code = warning.format_code.gsub('`', '``').gsub(/\A``|``\z/, '` `')
       message << ": `#{code}`"
     end
 

@@ -104,19 +104,19 @@ class Brakeman::SlimTemplateProcessor < Brakeman::TemplateProcessor
 
   def is_escaped? exp
     call? exp and
-    exp.target == TEMPLE_UTILS and
-    (exp.method == :escape_html or exp.method == :escape_html_safe)
+      exp.target == TEMPLE_UTILS and
+      (exp.method == :escape_html or exp.method == :escape_html_safe)
   end
 
   def internal_variable? exp
     node_type? exp, :lvar and
-    exp.value =~ /^_(temple_|slim_)/
+      exp.value =~ /^_(temple_|slim_)/
   end
 
   def render? exp
     call? exp and
-    exp.target.nil? and
-    exp.method == :render
+      exp.target.nil? and
+      exp.method == :render
   end
 
   def process_render exp

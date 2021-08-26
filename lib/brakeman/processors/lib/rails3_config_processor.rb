@@ -1,4 +1,3 @@
-
 require 'brakeman/processors/lib/basic_processor'
 
 #Processes configuration. Results are put in tracker.config.
@@ -35,8 +34,8 @@ class Brakeman::Rails3ConfigProcessor < Brakeman::BasicProcessor
     call = exp.block_call
 
     if node_type?(call.target, :colon2) and
-      call.target.rhs == :Application and
-      call.method == :configure
+       call.target.rhs == :Application and
+       call.method == :configure
 
       @inside_config = true
       process exp.block if sexp? exp.block

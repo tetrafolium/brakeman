@@ -33,7 +33,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     end
 
     @connection_calls = [:delete, :execute, :insert, :select_all, :select_one,
-      :select_rows, :select_value, :select_values]
+                         :select_rows, :select_value, :select_values]
 
     if tracker.options[:rails3]
       @connection_calls.concat [:exec_delete, :exec_insert, :exec_query, :exec_update]
@@ -111,7 +111,6 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     { :call => call, :location => { :type => :class, :class => model.name, :file => model.file }, :method => :named_scope }
   end
 
-
   def process_scope_with_block model, args
     scope_name = args[1][1]
     block = args[-1][-1]
@@ -185,7 +184,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
                         else
                           check_find_arguments call.last_arg
                         end
-                      when :where, :having, :find_by, :find_by!, :find_or_create_by, :find_or_create_by!, :find_or_initialize_by,:not, :delete_by, :destroy_by
+                      when :where, :having, :find_by, :find_by!, :find_or_create_by, :find_or_create_by!, :find_or_initialize_by, :not, :delete_by, :destroy_by
                         check_query_arguments call.arglist
                       when :order, :group, :reorder
                         check_order_arguments call.arglist
@@ -253,7 +252,6 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     end
   end
 
-
   #The 'find' methods accept a number of different types of parameters:
   #
   # * The first argument might be :all, :first, or :last
@@ -279,6 +277,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
 
   def check_query_arguments arg
     return unless sexp? arg
+
     first_arg = arg[1]
 
     if node_type? arg, :arglist
@@ -363,7 +362,6 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
 
     unsafe_sql?(arg, :ignore_hash)
   end
-
 
   #Check hash keys for user input.
   #(Seems unlikely, but if a user can control the column names queried, that
@@ -534,9 +532,9 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
 
     if STRING_METHODS.include? method
       check_str_target_or_arg(target, arg) or
-      check_interp_target_or_arg(target, arg) or
-      check_for_string_building(target) or
-      check_for_string_building(arg)
+        check_interp_target_or_arg(target, arg) or
+        check_for_string_building(target) or
+        check_for_string_building(arg)
     else
       nil
     end
@@ -553,7 +551,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   def check_interp_target_or_arg target, arg
     if string_interp? target or string_interp? arg
       check_string_arg target and
-      check_string_arg arg
+        check_string_arg arg
     end
   end
 
@@ -572,11 +570,11 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   end
 
   IGNORE_METHODS_IN_SQL = Set[:id, :merge_conditions, :table_name, :quoted_table_name,
-    :quoted_primary_key, :to_i, :to_f, :sanitize_sql, :sanitize_sql_array,
-    :sanitize_sql_for_assignment, :sanitize_sql_for_conditions, :sanitize_sql_hash,
-    :sanitize_sql_hash_for_assignment, :sanitize_sql_hash_for_conditions,
-    :to_sql, :sanitize, :primary_key, :table_name_prefix, :table_name_suffix,
-    :where_values_hash, :foreign_key
+                              :quoted_primary_key, :to_i, :to_f, :sanitize_sql, :sanitize_sql_array,
+                              :sanitize_sql_for_assignment, :sanitize_sql_for_conditions, :sanitize_sql_hash,
+                              :sanitize_sql_hash_for_assignment, :sanitize_sql_hash_for_conditions,
+                              :to_sql, :sanitize, :primary_key, :table_name_prefix, :table_name_suffix,
+                              :where_values_hash, :foreign_key
   ]
 
   def safe_value? exp
@@ -590,9 +588,9 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
         safe_value? exp.target
       else
         IGNORE_METHODS_IN_SQL.include? exp.method or
-        quote_call? exp or
-        arel? exp or
-        exp.method.to_s.end_with? "_id"
+          quote_call? exp or
+          arel? exp or
+          exp.method.to_s.end_with? "_id"
       end
     when :if
       safe_value? exp.then_clause and safe_value? exp.else_clause
@@ -628,6 +626,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   #Check call for string building
   def check_call exp
     return unless call? exp
+
     unsafe = check_for_string_building exp
 
     if unsafe
@@ -689,10 +688,10 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
       klass = class_name(target)
 
       target.nil? or
-      target == SELF_CLASS or
-      node_type? target, :self or
-      klass == :"ActiveRecord::Base" or
-      active_record_models.include? klass
+        target == SELF_CLASS or
+        node_type? target, :self or
+        klass == :"ActiveRecord::Base" or
+        active_record_models.include? klass
     end
   end
 end

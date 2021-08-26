@@ -8,7 +8,6 @@ class Brakeman::CheckSelectTag < Brakeman::BaseCheck
   @description = "Looks for unsafe uses of select_tag() in some versions of Rails 3.x"
 
   def run_check
-
     if version_between? "3.0.0", "3.0.16"
       suggested_version = "3.0.17"
     elsif version_between? "3.1.0", "3.1.7"

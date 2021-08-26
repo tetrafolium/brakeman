@@ -6,8 +6,8 @@ require 'brakeman/messages'
 #The Warning class stores information about warnings
 class Brakeman::Warning
   attr_reader :called_from, :check, :class, :confidence, :controller,
-    :line, :method, :model, :template, :user_input, :user_input_type,
-    :warning_code, :warning_set, :warning_type
+              :line, :method, :model, :template, :user_input, :user_input_type,
+              :warning_code, :warning_set, :warning_type
 
   attr_accessor :code, :context, :file, :message
 
@@ -237,12 +237,12 @@ class Brakeman::Warning
   end
 
   def to_s
-   output =  "(#{TEXT_CONFIDENCE[self.confidence]}) #{self.warning_type} - #{self.message}"
-   output << " near line #{self.line}" if self.line
-   output << " in #{self.file.relative}" if self.file
-   output << ": #{self.format_code}" if self.code
+    output = "(#{TEXT_CONFIDENCE[self.confidence]}) #{self.warning_type} - #{self.message}"
+    output << " near line #{self.line}" if self.line
+    output << " in #{self.file.relative}" if self.file
+    output << ": #{self.format_code}" if self.code
 
-   output
+    output
   end
 
   def fingerprint
@@ -294,8 +294,7 @@ class Brakeman::Warning
       :render_path => render_path,
       :location => self.location(false),
       :user_input => (@user_input && self.format_user_input(false)),
-      :confidence => TEXT_CONFIDENCE[self.confidence]
-    }
+      :confidence => TEXT_CONFIDENCE[self.confidence] }
   end
 
   def to_json(*_args)
@@ -310,4 +309,3 @@ class Brakeman::Warning
     formatted
   end
 end
-

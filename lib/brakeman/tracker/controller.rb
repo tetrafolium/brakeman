@@ -44,7 +44,7 @@ module Brakeman
         filters = controller.get_before_filters(processor, method) + filters
 
         controller = tracker.controllers[controller.parent] ||
-          tracker.libs[controller.parent]
+                     tracker.libs[controller.parent]
       end
 
       remove_skipped_filters processor, filters, method
@@ -69,7 +69,6 @@ module Brakeman
       filters
     end
 
-
     def remove_skipped_filters processor, filters, method
       controller = self
 
@@ -77,7 +76,7 @@ module Brakeman
         filters = filters - controller.get_skipped_filters(processor, method)
 
         controller = tracker.controllers[controller.parent] ||
-          tracker.libs[controller.parent]
+                     tracker.libs[controller.parent]
       end
 
       filters
@@ -125,7 +124,7 @@ module Brakeman
         value = args[-1][2]
         case value.node_type
         when :array
-          filter[option] = value[1..-1].map {|v| v[1] }
+          filter[option] = value[1..-1].map { |v| v[1] }
         when :lit, :str
           filter[option] = value[1]
         else
@@ -141,11 +140,11 @@ module Brakeman
     private
 
     def filter_includes_method? filter_rule, method_name
-       filter_rule[:all] or
-       (filter_rule[:only] == method_name) or
-       (filter_rule[:only].is_a? Array and filter_rule[:only].include? method_name) or
-       (filter_rule[:except].is_a? Symbol and filter_rule[:except] != method_name) or
-       (filter_rule[:except].is_a? Array and not filter_rule[:except].include? method_name)
+      filter_rule[:all] or
+        (filter_rule[:only] == method_name) or
+        (filter_rule[:only].is_a? Array and filter_rule[:only].include? method_name) or
+        (filter_rule[:except].is_a? Symbol and filter_rule[:except] != method_name) or
+        (filter_rule[:except].is_a? Array and not filter_rule[:except].include? method_name)
     end
   end
 

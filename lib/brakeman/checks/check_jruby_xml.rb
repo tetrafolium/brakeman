@@ -9,15 +9,15 @@ class Brakeman::CheckJRubyXML < Brakeman::BaseCheck
     return unless RUBY_PLATFORM == "java"
 
     fix_version = case
-      when version_between?('3.0.0', '3.0.99')
-        '3.2.13'
-      when version_between?('3.1.0', '3.1.11')
-        '3.1.12'
-      when version_between?('3.2.0', '3.2.12')
-        '3.2.13'
-      else
-        return
-      end
+                  when version_between?('3.0.0', '3.0.99')
+                    '3.2.13'
+                  when version_between?('3.1.0', '3.1.11')
+                    '3.1.12'
+                  when version_between?('3.2.0', '3.2.12')
+                    '3.2.13'
+                  else
+                    return
+                  end
 
     #Check for workaround
     tracker.find_call(target: :"ActiveSupport::XmlMini", method: :backend=, chained: true).each do |result|

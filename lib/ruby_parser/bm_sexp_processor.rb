@@ -11,7 +11,6 @@
 #
 
 class Brakeman::SexpProcessor
-
   VERSION = 'CUSTOM'
 
   ##
@@ -42,7 +41,7 @@ class Brakeman::SexpProcessor
   # SexpProcessor
 
   def initialize
-    @expected            = Sexp
+    @expected = Sexp
     @processors = self.class.processors
     @context    = []
     @current_class = @current_module = @current_method = @visibility = nil
@@ -78,9 +77,9 @@ class Brakeman::SexpProcessor
         result = self.process_default(exp)
       end
     end
-    
+
     raise SexpTypeError, "Result must be a #{@expected}, was #{result.class}:#{result.inspect}" unless @expected === result
-    
+
     result
   end
 

@@ -7,13 +7,13 @@ class Brakeman::CheckModelSerialize < Brakeman::BaseCheck
 
   def run_check
     @upgrade_version = case
-                      when version_between?("2.0.0", "2.3.16")
-                        "2.3.17"
-                      when version_between?("3.0.0", "3.0.99")
-                        "3.2.11"
-                      else
-                        nil
-                      end
+                       when version_between?("2.0.0", "2.3.16")
+                         "2.3.17"
+                       when version_between?("3.0.0", "3.0.99")
+                         "3.2.11"
+                       else
+                         nil
+                       end
 
     return unless @upgrade_version
 

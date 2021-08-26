@@ -49,7 +49,7 @@ class Brakeman::FindReturnValue
     elsif exp
       @return_values << last_value(exp)
     else
-       Brakeman.debug "FindReturnValue: Given something strange? #{exp.inspect}"
+      Brakeman.debug "FindReturnValue: Given something strange? #{exp.inspect}"
     end
 
     exp

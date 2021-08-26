@@ -59,10 +59,10 @@ module Brakeman
       else
         require 'erb'
         src = if ERB.instance_method(:initialize).parameters.assoc(:key) # Ruby 2.6+
-          ERB.new(text, trim_mode: '-').src
-        else
-          ERB.new(text, nil, '-').src
-        end
+                ERB.new(text, trim_mode: '-').src
+              else
+                ERB.new(text, nil, '-').src
+              end
         src.sub!(/^#.*\n/, '')
         src
       end
@@ -80,8 +80,7 @@ module Brakeman
       Haml::Engine.new(text,
                        :filename => path,
                        :escape_html => tracker.config.escape_html?,
-                       :escape_filter_interpolations => tracker.config.escape_filter_interpolations?
-                      ).precompiled.gsub(/([^\\])\\n/, '\1')
+                       :escape_filter_interpolations => tracker.config.escape_filter_interpolations?).precompiled.gsub(/([^\\])\\n/, '\1')
     rescue Haml::Error => e
       tracker.error e, ["While compiling HAML in #{path}"] << e.backtrace
       nil

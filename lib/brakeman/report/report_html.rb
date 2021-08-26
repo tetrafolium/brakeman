@@ -2,9 +2,9 @@ require 'cgi'
 require 'brakeman/report/report_table.rb'
 
 class Brakeman::Report::HTML < Brakeman::Report::Table
-  HTML_CONFIDENCE = [ "<span class='high-confidence'>High</span>",
-                      "<span class='med-confidence'>Medium</span>",
-                      "<span class='weak-confidence'>Weak</span>" ]
+  HTML_CONFIDENCE = ["<span class='high-confidence'>High</span>",
+                     "<span class='med-confidence'>Medium</span>",
+                     "<span class='weak-confidence'>Weak</span>"]
 
   def initialize *args
     super
@@ -14,8 +14,8 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
 
   def generate_report
     out = html_header <<
-    generate_overview <<
-    generate_warning_overview.to_s
+          generate_overview <<
+          generate_warning_overview.to_s
 
     # Return early if only summarizing
     return out if tracker.options[:summary_only]
@@ -32,15 +32,15 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
   end
 
   def generate_overview
-      locals = {
-        :tracker => tracker,
-        :warnings => all_warnings.length,
-        :warnings_summary => warnings_summary,
-        :number_of_templates => number_of_templates(@tracker),
-        :ignored_warnings => ignored_warnings.length
-        }
+    locals = {
+      :tracker => tracker,
+      :warnings => all_warnings.length,
+      :warnings_summary => warnings_summary,
+      :number_of_templates => number_of_templates(@tracker),
+      :ignored_warnings => ignored_warnings.length
+    }
 
-      Brakeman::Report::Renderer.new('overview', :locals => locals).render
+    Brakeman::Report::Renderer.new('overview', :locals => locals).render
   end
 
   #Generate listings of templates and their output
@@ -55,9 +55,9 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
       end
     end
 
-    template_rows = template_rows.sort_by{|name, _value| name.to_s}
+    template_rows = template_rows.sort_by { |name, _value| name.to_s}
 
-      Brakeman::Report::Renderer.new('template_overview', :locals => {:template_rows => template_rows}).render
+    Brakeman::Report::Renderer.new('template_overview', :locals => { :template_rows => template_rows }).render
   end
 
   def render_array template, _headings, value_array, locals
@@ -105,7 +105,7 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
       :checks => checks,
       :rails_version => rails_version,
       :brakeman_version => Brakeman::Version
-      }
+    }
 
     Brakeman::Report::Renderer.new('header', :locals => locals).render
   end
@@ -121,9 +121,9 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
     full_message_id = "full_message#@element_id"
     alt = false
     output = "<div class='warning_message' onClick=\"toggle('#{code_id}');toggle('#{message_id}');toggle('#{full_message_id}')\" >" <<
-    message <<
-    "<table id='#{code_id}' class='context' style='display:none'>" <<
-    "<caption>#{CGI.escapeHTML warning_file(warning) || ''}</caption>"
+             message <<
+             "<table id='#{code_id}' class='context' style='display:none'>" <<
+             "<caption>#{CGI.escapeHTML warning_file(warning) || ''}</caption>"
 
     output << <<-HTML
       <thead style='display:none'>
@@ -208,7 +208,7 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
         full_message_id = "full_message#@element_id"
 
         "<span id='#{message_id}' style='display:block'>#{message}: ...</span>" <<
-        "<span id='#{full_message_id}' style='display:none'>#{full_message}</span>"
+          "<span id='#{full_message_id}' style='display:none'>#{full_message}</span>"
       else
         full_message
       end

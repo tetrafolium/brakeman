@@ -4,18 +4,18 @@ require 'brakeman/differ'
 
 #Class for rescanning changed files after an initial scan
 class Brakeman::Rescanner < Brakeman::Scanner
- include Brakeman::Util
+  include Brakeman::Util
   KNOWN_TEMPLATE_EXTENSIONS = Brakeman::TemplateParser::KNOWN_TEMPLATE_EXTENSIONS
   SCAN_ORDER = [:config, :gemfile, :initializer, :lib, :routes, :template,
-    :model, :controller]
+                :model, :controller]
 
   #Create new Rescanner to scan changed files
   def initialize options, processor, changed_files
     super(options, processor)
 
-    @paths = changed_files.map {|f| tracker.app_tree.file_path(f) }
-    @old_results = tracker.filtered_warnings  #Old warnings from previous scan
-    @changes = nil                 #True if files had to be rescanned
+    @paths = changed_files.map { |f| tracker.app_tree.file_path(f) }
+    @old_results = tracker.filtered_warnings #Old warnings from previous scan
+    @changes = nil #True if files had to be rescanned
     @reindex = Set.new
   end
 
@@ -112,6 +112,7 @@ class Brakeman::Rescanner < Brakeman::Scanner
       if controller.files.include?(path)
         tracker.templates.each do |template_name, template|
           next unless template.render_path
+
           if template.render_path.include_controller? name
             tracker.reset_template template_name
           end
@@ -452,16 +453,16 @@ class Brakeman::RescanReport
     Brakeman.load_brakeman_dependency 'terminal-table'
 
     if !verbose
-      <<-OUTPUT
-Total warnings: #{all_warnings.length}
-Fixed warnings: #{fixed_warnings.length}
-New warnings: #{new_warnings.length}
+      <<~OUTPUT
+        Total warnings: #{all_warnings.length}
+        Fixed warnings: #{fixed_warnings.length}
+        New warnings: #{new_warnings.length}
       OUTPUT
     else
       #Eventually move this to different method, or make default to_s
       out = ""
 
-      {:fixed => fixed_warnings, :new => new_warnings, :existing => existing_warnings}.each do |warning_type, warnings|
+      { :fixed => fixed_warnings, :new => new_warnings, :existing => existing_warnings }.each do |warning_type, warnings|
         if warnings.length > 0
           out << "#{warning_type.to_s.titleize} warnings: #{warnings.length}\n"
 

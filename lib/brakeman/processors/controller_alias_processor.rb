@@ -120,7 +120,7 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
     elsif exp.target.nil? and method == :template_exists?
       env[exp.first_arg] = Sexp.new(:lit, :"brakeman:existing_template")
     elsif @tracker.options[:interprocedural] and
-      @current_method and (exp.target.nil? or exp.target.node_type == :self)
+          @current_method and (exp.target.nil? or exp.target.node_type == :self)
 
       exp = get_call_value(exp)
     end
@@ -249,6 +249,7 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
   #If found, returns hash table with controller name and method sexp.
   def find_method method_name, klass
     return nil if sexp? method_name
+
     method_name = method_name.to_sym
 
     if method = @method_cache[method_name]
@@ -268,7 +269,7 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
             @method_cache[method_name] = method
             return method
           end
-       end
+        end
 
         @method_cache[method_name] = find_method method_name, controller.parent
       else

@@ -58,6 +58,7 @@ module Brakeman
 
     def [] exp
       return unless constant? exp
+
       match = find_constant exp
 
       if match

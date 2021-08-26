@@ -27,12 +27,11 @@ class Brakeman::CheckSymbolDoS < Brakeman::BaseCheck
       args = [call.target]
     end
 
-    if input = args.map{ |arg| has_immediate_user_input?(arg) }.compact.first
+    if input = args.map { |arg| has_immediate_user_input?(arg) }.compact.first
       confidence = :high
-    elsif input = args.map{ |arg| include_user_input?(arg) }.compact.first
+    elsif input = args.map { |arg| include_user_input?(arg) }.compact.first
       confidence = :medium
     end
-
 
     if confidence
       return if safe_parameter? input.match
@@ -53,8 +52,8 @@ class Brakeman::CheckSymbolDoS < Brakeman::BaseCheck
     if call? input
       if node_type? input.target, :params
         input.method == :[] and
-        symbol? input.first_arg and
-        [:controller, :action].include? input.first_arg.value
+          symbol? input.first_arg and
+          [:controller, :action].include? input.first_arg.value
       else
         safe_parameter? input.target
       end

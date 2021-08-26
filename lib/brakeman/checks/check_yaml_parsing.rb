@@ -76,8 +76,8 @@ class Brakeman::CheckYAMLParsing < Brakeman::BaseCheck
 
     matches.each do |result|
       if result[:call].first_arg == mime_yaml and
-        symbol? result[:call].second_arg and
-        result[:call].second_arg.value == :yaml
+         symbol? result[:call].second_arg and
+         result[:call].second_arg.value == :yaml
 
         return true
       end

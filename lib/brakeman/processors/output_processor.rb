@@ -102,7 +102,6 @@ class Brakeman::OutputProcessor < Ruby2Ruby
     output_format exp, "Escaped Output"
   end
 
-
   def process_format exp
     output_format exp, "Format"
   end

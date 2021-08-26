@@ -103,7 +103,7 @@ class Brakeman::Scanner
     end
 
     if @app_tree.exists?("vendor/plugins/rails_xss") or
-      options[:rails3] or options[:escape_html]
+       options[:rails3] or options[:escape_html]
 
       tracker.config.escape_html = true
       Brakeman.notify "[Notice] Escaping HTML by default"
@@ -120,7 +120,6 @@ class Brakeman::Scanner
     if path.exists?
       @processor.process_config(parse_ruby_file(path), path)
     end
-
   rescue => e
     Brakeman.notify "[Notice] Error while processing #{path}"
     tracker.error e.exception(e.message + "\nwhile processing #{path}"), e.backtrace
@@ -314,6 +313,7 @@ class Brakeman::Scanner
 
   def report_progress(current, total, type = "files")
     return unless @options[:report_progress]
+
     $stderr.print " #{current}/#{total} #{type} processed\r"
   end
 

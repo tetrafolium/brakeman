@@ -36,18 +36,17 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
 
     Brakeman.debug "Finding possible mass assignment calls on #{models.length} models"
     @mass_assign_calls = tracker.find_call :chained => true, :targets => models, :methods => [:new,
-      :attributes=,
-      :update_attributes,
-      :update_attributes!,
-      :create,
-      :create!,
-      :build,
-      :first_or_create,
-      :first_or_create!,
-      :first_or_initialize!,
-      :assign_attributes,
-      :update
-    ]
+                                                                                              :attributes=,
+                                                                                              :update_attributes,
+                                                                                              :update_attributes!,
+                                                                                              :create,
+                                                                                              :create!,
+                                                                                              :build,
+                                                                                              :first_or_create,
+                                                                                              :first_or_create!,
+                                                                                              :first_or_initialize!,
+                                                                                              :assign_attributes,
+                                                                                              :update]
   end
 
   def check_mass_assignment
@@ -141,7 +140,6 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
         literal? arg
       end
     end
-
   end
 
   def literal? exp
@@ -173,8 +171,8 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
     line = result[:call].line
     find_mass_assign_calls.any? do |call|
       call[:location] == location and
-      params? call[:call].first_arg and
-      call[:call].line >= line
+        params? call[:call].first_arg and
+        call[:call].line >= line
     end
   end
 

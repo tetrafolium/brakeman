@@ -13,8 +13,8 @@ class Brakeman::CheckForgerySetting < Brakeman::BaseCheck
     return if tracker.config.default_protect_from_forgery?
 
     tracker.controllers
-    .select { |_, controller| controller.parent == :"ActionController::Base" }
-    .each do |name, controller|
+           .select { |_, controller| controller.parent == :"ActionController::Base" }
+           .each do |name, controller|
       if controller and not controller.protect_from_forgery?
         csrf_warning :controller => name,
           :warning_code => :csrf_protection_missing,
@@ -23,8 +23,8 @@ class Brakeman::CheckForgerySetting < Brakeman::BaseCheck
           :line => controller.top_line
       elsif version_between? "4.0.0", "100.0.0" and forgery_opts = controller.options[:protect_from_forgery]
         unless forgery_opts.is_a?(Array) and sexp?(forgery_opts.first) and
-          access_arg = hash_access(forgery_opts.first.first_arg, :with) and symbol? access_arg and
-          access_arg.value == :exception
+               access_arg = hash_access(forgery_opts.first.first_arg, :with) and symbol? access_arg and
+               access_arg.value == :exception
 
           args = {
             :controller => name,

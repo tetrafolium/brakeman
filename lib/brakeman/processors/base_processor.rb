@@ -184,11 +184,11 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
   def process_cdecl exp
     if @tracker
       @tracker.add_constant exp.lhs,
-        exp.rhs,
-        :file => current_file,
-        :module => @current_module,
-        :class => @current_class,
-        :method => @current_method
+                            exp.rhs,
+                            :file => current_file,
+                            :module => @current_module,
+                            :class => @current_class,
+                            :method => @current_method
     end
 
     exp
@@ -200,7 +200,7 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
   end
 
   #Generates :render node from call to render.
-  def make_render exp, in_view = false 
+  def make_render exp, in_view = false
     render_type, value, rest = find_render_type exp, in_view
     rest = process rest
     result = Sexp.new(:render, render_type, value, rest)
@@ -260,7 +260,7 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
         if symbol? key and types_in_hash.include? key.value
           type = key.value
           value = val
-        else  
+        else
           rest << key << val
         end
       end

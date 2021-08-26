@@ -1,6 +1,6 @@
 class Brakeman::Report::JSON < Brakeman::Report::Base
   def generate_report
-    errors = tracker.errors.map{|e| { :error => e[:error], :location => e[:backtrace][0] }}
+    errors = tracker.errors.map { |e| { :error => e[:error], :location => e[:backtrace][0] }}
 
     obsolete = tracker.unused_fingerprints
 

@@ -3,9 +3,7 @@ require 'set'
 
 #Parses command line arguments for Brakeman
 module Brakeman::Options
-
   class << self
-
     #Parse argument array
     def parse args
       get_options args
@@ -55,7 +53,7 @@ module Brakeman::Options
           options[:quiet] = quiet
         end
 
-        opts.on( "-z", "--[no-]exit-on-warn", "Exit code is non-zero if warnings found (Default)") do |exit_on_warn|
+        opts.on("-z", "--[no-]exit-on-warn", "Exit code is non-zero if warnings found (Default)") do |exit_on_warn|
           options[:exit_on_warn] = exit_on_warn
         end
 
@@ -144,12 +142,12 @@ module Brakeman::Options
 
         opts.on "-s", "--safe-methods meth1,meth2,etc", Array, "Set methods as safe for unescaped output in views" do |methods|
           options[:safe_methods] ||= Set.new
-          options[:safe_methods].merge methods.map {|e| e.to_sym }
+          options[:safe_methods].merge methods.map { |e| e.to_sym }
         end
 
         opts.on "--url-safe-methods method1,method2,etc", Array, "Do not warn of XSS if the link_to href parameter is wrapped in a safe method" do |methods|
           options[:url_safe_methods] ||= Set.new
-          options[:url_safe_methods].merge methods.map {|e| e.to_sym }
+          options[:url_safe_methods].merge methods.map { |e| e.to_sym }
         end
 
         opts.on "--skip-files file1,path2,etc", Array, "Skip processing of these files/directories. Directories are application relative and must end in \"#{File::SEPARATOR}\"" do |files|
@@ -191,7 +189,7 @@ module Brakeman::Options
 
         opts.on "-t", "--test Check1,Check2,etc", Array, "Only run the specified checks" do |checks|
           checks.each_with_index do |s, index|
-            if s[0,5] != "Check"
+            if s[0, 5] != "Check"
               checks[index] = "Check" << s
             end
           end
@@ -202,7 +200,7 @@ module Brakeman::Options
 
         opts.on "-x", "--except Check1,Check2,etc", Array, "Skip the specified checks" do |skip|
           skip.each do |s|
-            if s[0,5] != "Check"
+            if s[0, 5] != "Check"
               s = "Check" << s
             end
 
@@ -213,7 +211,7 @@ module Brakeman::Options
 
         opts.on "--add-checks-path path1,path2,etc", Array, "A directory containing additional out-of-tree checks to run" do |paths|
           options[:additional_checks_path] ||= Set.new
-          options[:additional_checks_path].merge paths.map {|p| File.expand_path p}
+          options[:additional_checks_path].merge paths.map { |p| File.expand_path p}
         end
 
         opts.separator ""
@@ -224,10 +222,9 @@ module Brakeman::Options
         end
 
         opts.on "-f",
-          "--format TYPE",
-          [:pdf, :text, :html, :csv, :tabs, :json, :markdown, :codeclimate, :cc, :plain, :table],
-          "Specify output formats. Default is text" do |type|
-
+                "--format TYPE",
+                [:pdf, :text, :html, :csv, :tabs, :json, :markdown, :codeclimate, :cc, :plain, :table],
+                "Specify output formats. Default is text" do |type|
           type = "s" if type == :text
           options[:output_format] = ("to_" << type.to_s).to_sym
         end
@@ -302,11 +299,10 @@ module Brakeman::Options
         end
 
         opts.on "-w",
-          "--confidence-level LEVEL",
-          ["1", "2", "3"],
-          "Set minimal confidence level (1 - 3)" do |level|
-
-          options[:min_confidence] =  3 - level.to_i
+                "--confidence-level LEVEL",
+                ["1", "2", "3"],
+                "Set minimal confidence level (1 - 3)" do |level|
+          options[:min_confidence] = 3 - level.to_i
         end
 
         opts.on "--compare FILE", "Compare the results of a previous Brakeman scan (only JSON is supported)" do |file|

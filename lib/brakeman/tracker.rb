@@ -10,9 +10,9 @@ require 'brakeman/tracker/constants'
 #The Tracker keeps track of all the processed information.
 class Brakeman::Tracker
   attr_accessor :controllers, :constants, :templates, :models, :errors,
-    :checks, :initializers, :config, :routes, :processor, :libs,
-    :template_cache, :options, :filter_cache, :start_time, :end_time,
-    :duration, :ignored_filter, :app_tree
+                :checks, :initializers, :config, :routes, :processor, :libs,
+                :template_cache, :options, :filter_cache, :start_time, :end_time,
+                :duration, :ignored_filter, :app_tree
 
   #Place holder when there should be a model, but it is not
   #clear what model it will be.
@@ -55,7 +55,7 @@ class Brakeman::Tracker
   def error exception, backtrace = nil
     backtrace ||= exception.backtrace
     unless backtrace.is_a? Array
-      backtrace = [ backtrace ]
+      backtrace = [backtrace]
     end
 
     Brakeman.debug exception
@@ -104,7 +104,7 @@ class Brakeman::Tracker
   #Prioritizes templates which have been rendered.
   def each_template
     if @processed.nil?
-      @processed, @rest = templates.keys.sort_by{|template| template.to_s}.partition { |k| k.to_s.include? "." }
+      @processed, @rest = templates.keys.sort_by { |template| template.to_s}.partition { |k| k.to_s.include? "." }
     end
 
     @processed.each do |k|
@@ -115,7 +115,6 @@ class Brakeman::Tracker
       yield k, templates[k]
     end
   end
-
 
   def each_class
     classes = [self.controllers, self.models]
@@ -191,6 +190,7 @@ class Brakeman::Tracker
 
   def unused_fingerprints
     return [] unless self.ignored_filter
+
     self.ignored_filter.obsolete_fingerprints
   end
 

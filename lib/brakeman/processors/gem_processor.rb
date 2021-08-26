@@ -2,7 +2,6 @@ require 'brakeman/processors/lib/basic_processor'
 
 #Processes Gemfile and Gemfile.lock
 class Brakeman::GemProcessor < Brakeman::BasicProcessor
-
   def initialize *args
     super
     @gem_name_version = /^\s*([-_+.A-Za-z0-9]+) \((\w(\.\w+)*)\)/
@@ -12,7 +11,6 @@ class Brakeman::GemProcessor < Brakeman::BasicProcessor
     @gem_files = gem_files
     @gemfile = gem_files[:gemfile] && gem_files[:gemfile][:file]
     @gemspec = gem_files[:gemspec] && gem_files[:gemspec][:file]
-
 
     if @gemspec
       process gem_files[:gemspec][:src]

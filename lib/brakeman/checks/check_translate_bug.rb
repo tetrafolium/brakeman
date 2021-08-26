@@ -8,15 +8,16 @@ class Brakeman::CheckTranslateBug < Brakeman::BaseCheck
 
   def run_check
     return if lts_version? '2.3.18.6'
+
     if (version_between?('2.3.0', '2.3.99') and tracker.config.escape_html?) or
-        version_between?('3.0.0', '3.0.10') or
-        version_between?('3.1.0', '3.1.1')
+       version_between?('3.0.0', '3.0.10') or
+       version_between?('3.1.0', '3.1.1')
 
       confidence = if uses_translate?
-        :high
-      else
-        :medium
-      end
+                     :high
+                   else
+                     :medium
+                   end
 
       description = [" has a vulnerability in the translate helper with keys ending in ", msg_code("_html")]
 

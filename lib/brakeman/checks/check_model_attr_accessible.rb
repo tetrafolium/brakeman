@@ -42,6 +42,7 @@ class Brakeman::CheckModelAttrAccessible < Brakeman::BaseCheck
   def role_limited? model, attribute
     role_accessible = model.role_accessible
     return if role_accessible.nil?
+
     role_accessible.include? attribute
   end
 

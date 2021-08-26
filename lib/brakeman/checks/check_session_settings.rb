@@ -17,7 +17,7 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
   end
 
   def run_check
-    settings = tracker.config.session_settings 
+    settings = tracker.config.session_settings
 
     check_for_issues settings, @app_tree.file_path("config/environment.rb")
 
@@ -49,7 +49,7 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
     end
 
     if tracker.options[:rails3] and settings_target?(exp.target) and
-      (exp.method == :secret_token= or exp.method == :secret_key_base=) and string? exp.first_arg
+       (exp.method == :secret_token= or exp.method == :secret_key_base=) and string? exp.first_arg
 
       warn_about_secret_token exp.line, @app_tree.file_path("config/initializers/secret_token.rb")
     end
@@ -71,9 +71,9 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
 
   def settings_target? exp
     call? exp and
-    exp.method == :config and
-    node_type? exp.target, :colon2 and
-    exp.target.rhs == :Application
+      exp.method == :config and
+      node_type? exp.target, :colon2 and
+      exp.target.rhs == :Application
   end
 
   def check_for_issues settings, file
@@ -143,7 +143,6 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
       :confidence => :high,
       :line => line,
       :file => file
-
   end
 
   def warn_about_secret_token line, file
@@ -168,7 +167,7 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
     [".", "config", "config/initializers"].each do |dir|
       ignore_file = @app_tree.file_path("#{dir}/.gitignore")
       if @app_tree.exists? ignore_file
-        input = ignore_file.read 
+        input = ignore_file.read
 
         return true if input.include? file
       end

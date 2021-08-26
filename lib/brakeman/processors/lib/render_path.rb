@@ -13,8 +13,7 @@ module Brakeman
                  :class => controller_name.to_sym,
                  :method => method_name.to_sym,
                  :line => line,
-                 :file => file
-                }
+                 :file => file }
 
       self
     end
@@ -23,8 +22,7 @@ module Brakeman
       @path << { :type => :template,
                  :name => template_name.to_sym,
                  :line => line,
-                 :file => file
-               }
+                 :file => file }
 
       self
     end

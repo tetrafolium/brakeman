@@ -50,6 +50,6 @@ class Brakeman::CheckDetailedExceptions < Brakeman::BaseCheck
 
   def safe? body
     false? body or
-    body == LOCAL_REQUEST
+      body == LOCAL_REQUEST
   end
 end

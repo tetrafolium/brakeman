@@ -38,7 +38,7 @@ module Brakeman
     # Remove warning from ignored list
     def unignore warning
       @ignored_fingerprints.delete warning.fingerprint
-      if @already_ignored.reject! { |w|w[:fingerprint] == warning.fingerprint }
+      if @already_ignored.reject! { |w| w[:fingerprint] == warning.fingerprint }
         @changed = true
       end
     end

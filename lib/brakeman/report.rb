@@ -15,34 +15,34 @@ class Brakeman::Report
 
   def format format
     reporter = case format
-    when :to_codeclimate
-      require_report 'codeclimate'
-      Brakeman::Report::CodeClimate
-    when :to_csv
-      require_report 'csv'
-      Brakeman::Report::CSV
-    when :to_html
-      require_report 'html'
-      Brakeman::Report::HTML
-    when :to_json
-      return self.to_json
-    when :to_tabs
-      require_report 'tabs'
-      Brakeman::Report::Tabs
-    when :to_hash
-      require_report 'hash'
-      Brakeman::Report::Hash
-    when :to_markdown
-      return self.to_markdown
-    when :to_plain, :to_text, :to_s
-      return self.to_plain
-    when :to_table
-      return self.to_table
-    when :to_pdf
-      raise "PDF output is not yet supported."
-    else
-      raise "Invalid format: #{format}. Should be one of #{VALID_FORMATS.inspect}"
-    end
+               when :to_codeclimate
+                 require_report 'codeclimate'
+                 Brakeman::Report::CodeClimate
+               when :to_csv
+                 require_report 'csv'
+                 Brakeman::Report::CSV
+               when :to_html
+                 require_report 'html'
+                 Brakeman::Report::HTML
+               when :to_json
+                 return self.to_json
+               when :to_tabs
+                 require_report 'tabs'
+                 Brakeman::Report::Tabs
+               when :to_hash
+                 require_report 'hash'
+                 Brakeman::Report::Hash
+               when :to_markdown
+                 return self.to_markdown
+               when :to_plain, :to_text, :to_s
+                 return self.to_plain
+               when :to_table
+                 return self.to_table
+               when :to_pdf
+                 raise "PDF output is not yet supported."
+               else
+                 raise "Invalid format: #{format}. Should be one of #{VALID_FORMATS.inspect}"
+               end
 
     generate(reporter)
   end

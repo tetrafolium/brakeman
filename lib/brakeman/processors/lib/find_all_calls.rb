@@ -202,12 +202,12 @@ class Brakeman::FindAllCalls < Brakeman::BasicProcessor
       key = [@current_class, @current_method, @current_file]
       cached = @cache[key]
       return cached if cached
+
       @cache[key] = { :type => :class,
         :class => @current_class,
         :method => @current_method,
         :file => @current_file }
     end
-
   end
 
   #Return info hash for a call Sexp

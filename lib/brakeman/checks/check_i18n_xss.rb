@@ -29,6 +29,7 @@ class Brakeman::CheckI18nXSS < Brakeman::BaseCheck
 
   def version_before gem_version, target
     return true unless gem_version
+
     gem_version.split('.').map(&:to_i).zip(target.split('.').map(&:to_i)).each do |gv, t|
       if gv < t
         return true

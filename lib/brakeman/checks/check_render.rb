@@ -65,7 +65,6 @@ class Brakeman::CheckRender < Brakeman::BaseCheck
                   version_between? "4.0.0", "4.1.14" or
                   version_between? "4.2.0", "4.2.5"
 
-
     view = result[:call][2]
     if sexp? view and not duplicate? result
       if params? view
@@ -94,4 +93,4 @@ class Brakeman::CheckRender < Brakeman::BaseCheck
       end
     end
   end
-end 
+end

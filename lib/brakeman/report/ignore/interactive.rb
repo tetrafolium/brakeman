@@ -107,15 +107,15 @@ module Brakeman
     end
 
     def show_help
-      say <<-HELP
-i - Add warning to ignore list
-n - Add warning to ignore list and add note
-s - Skip this warning (will remain ignored or shown)
-u - Remove this warning from ignore list
-a - Ignore this warning and all remaining warnings
-k - Skip this warning and all remaining warnings
-q - Quit, do not update ignored warnings
-? - Display this help
+      say <<~HELP
+        i - Add warning to ignore list
+        n - Add warning to ignore list and add note
+        s - Skip this warning (will remain ignored or shown)
+        u - Remove this warning from ignore list
+        a - Ignore this warning and all remaining warnings
+        k - Skip this warning and all remaining warnings
+        q - Quit, do not update ignored warnings
+        ? - Display this help
       HELP
     end
 

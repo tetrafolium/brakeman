@@ -9,15 +9,15 @@ class Brakeman::CheckSanitizeMethods < Brakeman::BaseCheck
 
   def run_check
     @fix_version = case
-      when version_between?('2.0.0', '2.3.17')
-        '2.3.18'
-      when version_between?('3.0.0', '3.0.99')
-        '3.2.13'
-      when version_between?('3.1.0', '3.1.11')
-        '3.1.12'
-      when version_between?('3.2.0', '3.2.12')
-        '3.2.13'
-      end
+                   when version_between?('2.0.0', '2.3.17')
+                     '2.3.18'
+                   when version_between?('3.0.0', '3.0.99')
+                     '3.2.13'
+                   when version_between?('3.1.0', '3.1.11')
+                     '3.1.12'
+                   when version_between?('3.2.0', '3.2.12')
+                     '3.2.13'
+                   end
 
     if @fix_version
       check_cve_2013_1855
@@ -42,6 +42,7 @@ class Brakeman::CheckSanitizeMethods < Brakeman::BaseCheck
   def check_for_cve method, code, link
     tracker.find_call(:target => false, :method => method).each do |result|
       next if duplicate? result
+
       add_result result
 
       message = msg(msg_version(rails_version), " has a vulnerability in ", msg_code(method), ". Upgrade to ", msg_version(@fix_version), " or patch")

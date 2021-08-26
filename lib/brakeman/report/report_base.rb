@@ -43,12 +43,12 @@ class Brakeman::Report::Base
   def controller_information
     controller_rows = []
 
-    tracker.controllers.keys.map{|k| k.to_s}.sort.each do |name|
+    tracker.controllers.keys.map { |k| k.to_s}.sort.each do |name|
       name = name.to_sym
       c = tracker.controllers[name]
 
       if tracker.routes.include? :allow_all_actions or (tracker.routes[name] and tracker.routes[name].include? :allow_all_actions)
-        routes = c.methods_public.keys.map{|e| e.to_s}.sort.join(", ")
+        routes = c.methods_public.keys.map { |e| e.to_s}.sort.join(", ")
       elsif tracker.routes[name].nil?
         #No routes defined for this controller.
         #This can happen when it is only a parent class
@@ -57,10 +57,10 @@ class Brakeman::Report::Base
 
       else
         routes = (Set.new(c.methods_public.keys) & tracker.routes[name.to_sym]).
-          to_a.
-          map {|e| e.to_s}.
-          sort.
-          join(", ")
+                 to_a.
+                 map { |e| e.to_s}.
+                 sort
+                                                                               .join(", ")
       end
 
       if routes == ""
@@ -70,8 +70,7 @@ class Brakeman::Report::Base
       controller_rows << { "Name" => name.to_s,
         "Parent" => c.parent.to_s,
         "Includes" => c.includes.join(", "),
-        "Routes" => routes
-      }
+        "Routes" => routes }
     end
 
     controller_rows
@@ -120,7 +119,7 @@ class Brakeman::Report::Base
   end
 
   def number_of_templates tracker
-    Set.new(tracker.templates.map {|_k,v| v.name.to_s[/[^.]+/]}).length
+    Set.new(tracker.templates.map { |_k, v| v.name.to_s[/[^.]+/]}).length
   end
 
   def absolute_paths?
@@ -182,7 +181,7 @@ class Brakeman::Report::Base
     end
   end
 
-  def github_url file, line=nil
+  def github_url file, line = nil
     if repo_url = @tracker.options[:github_url] and file
       url = "#{repo_url}/#{file.relative}"
       url << "#L#{line}" if line

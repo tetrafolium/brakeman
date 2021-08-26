@@ -7,15 +7,15 @@ class Brakeman::CheckMimeTypeDoS < Brakeman::BaseCheck
 
   def run_check
     fix_version = case
-               when version_between?("3.0.0", "3.2.22")
-                 "3.2.22.1"
-               when version_between?("4.0.0", "4.1.14")
-                 "4.1.14.1"
-               when version_between?("4.2.0", "4.2.5")
-                 "4.2.5.1"
-               else
-                 return
-               end
+                  when version_between?("3.0.0", "3.2.22")
+                    "3.2.22.1"
+                  when version_between?("4.0.0", "4.1.14")
+                    "4.1.14.1"
+                  when version_between?("4.2.0", "4.2.5")
+                    "4.2.5.1"
+                  else
+                    return
+                  end
 
     return if has_workaround?
 

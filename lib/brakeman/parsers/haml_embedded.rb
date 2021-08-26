@@ -7,6 +7,7 @@ module Brakeman
         text = unescape_interpolation(text).gsub(/(\\+)n/) do |s|
           escapes = $1.size
           next s if escapes % 2 == 0
+
           ("\\" * (escapes - 1)) + "\n"
         end
         # We need to add a newline at the beginning to get the
@@ -16,9 +17,9 @@ module Brakeman
         # newline so that the whole filter block doesn't take up
         # too many.
         text = "\n" + text.sub(/\n"\Z/, "\\n\"")
-        push_script <<RUBY.rstrip, :escape_html => false
-find_and_preserve(#{filter.inspect}.render_with_options(#{text}, _hamlout.options))
-RUBY
+        push_script <<~RUBY.rstrip, :escape_html => false
+          find_and_preserve(#{filter.inspect}.render_with_options(#{text}, _hamlout.options))
+        RUBY
         return
       end
     end

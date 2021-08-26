@@ -54,7 +54,7 @@ class Brakeman::Checks
   end
 
   #No need to use this directly.
-  def initialize options = { }
+  def initialize options = {}
     if options[:min_confidence]
       @min_confidence = options[:min_confidence]
     else
@@ -157,7 +157,6 @@ class Brakeman::Checks
 
     check_runner
   end
-
 
   def self.get_check_name check_class
     check_class.to_s.split("::").last

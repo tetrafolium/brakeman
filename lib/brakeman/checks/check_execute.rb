@@ -14,9 +14,9 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
   @description = "Finds instances of possible command injection"
 
   SAFE_VALUES = [s(:const, :RAILS_ROOT),
-                  s(:call, s(:const, :Rails), :root),
-                  s(:call, s(:const, :Rails), :env),
-                  s(:call, s(:const, :Process), :pid)]
+                 s(:call, s(:const, :Rails), :root),
+                 s(:call, s(:const, :Rails), :env),
+                 s(:call, s(:const, :Process), :pid)]
 
   SHELL_ESCAPE_MODULE_METHODS = Set[:escape, :join, :shellescape, :shelljoin]
   SHELL_ESCAPE_MIXIN_METHODS = Set[:shellescape, :shelljoin]
@@ -37,8 +37,8 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
     Brakeman.debug "Finding other system calls"
     calls = tracker.find_call :targets => [:IO, :Open3, :Kernel, :'POSIX::Spawn', :Process, nil],
       :methods => [:capture2, :capture2e, :capture3, :exec, :pipeline, :pipeline_r,
-        :pipeline_rw, :pipeline_start, :pipeline_w, :popen, :popen2, :popen2e,
-        :popen3, :spawn, :syscall, :system], :nested => true
+                   :pipeline_rw, :pipeline_start, :pipeline_w, :popen, :popen2, :popen2e,
+                   :popen3, :spawn, :syscall, :system], :nested => true
 
     Brakeman.debug "Processing system calls"
     calls.each do |result|
@@ -115,9 +115,9 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
   #   invokes a new shell process via `<shell_command> -c` (like `bash -c`)
   def dash_c_shell_command?(first_arg, second_arg)
     string?(first_arg) &&
-    KNOWN_SHELL_COMMANDS.include?(first_arg.value) &&
-    string?(second_arg) &&
-    second_arg.value == "-c"
+      KNOWN_SHELL_COMMANDS.include?(first_arg.value) &&
+      string?(second_arg) &&
+      second_arg.value == "-c"
   end
 
   def check_open_calls
@@ -226,6 +226,7 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
   def dangerous_interp? exp
     match = include_interp? exp
     return unless match
+
     interp = match.match
 
     interp.each_sexp do |e|
