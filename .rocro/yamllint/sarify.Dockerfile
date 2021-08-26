@@ -8,7 +8,8 @@ ENV REPOPATH="github.com/tetrafolium/brakeman" \
 ENV REPODIR="${GOPATH}/src/${REPOPATH}" \
     TOOLDIR="${GOPATH}/src/${TOOLPATH}"
 
-ENV OUTDIR="/.reports"
+ARG OUTDIR
+ENV OUTDIR="${OUTDIR:-"/.reports"}"
 ENV OUTFILE="${OUTDIR}/yamllint.sarif"
 
 RUN mkdir -p "${REPODIR}" "${OUTDIR}"
@@ -27,6 +28,6 @@ RUN ln -s "${REPODIR}/$(basename "${TOOLPATH}")" "${TOOLDIR}"
 RUN GO111MODULE="off" \
     go run "${TOOLDIR}/yamllint/cmd/main.go" \
         -v "$(cat "${VERSIONFILE}")" "${REPOPATH}" \
-        < "${INFILE}" > "${OUTFILE}"
-RUN ls -l "${INFILE}" "${OUTFILE}"
+        < "${INFILE}" > "${OUTFILE}" && \
+    ls -l "${INFILE}" "${OUTFILE}"
 #RUN jq '.runs[0].tool.driver' "${OUTFILE}"
