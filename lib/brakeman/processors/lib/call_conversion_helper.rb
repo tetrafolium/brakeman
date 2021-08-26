@@ -24,7 +24,7 @@ module Brakeman
     # Join two string literals into one.
     def join_strings lhs, rhs, original_exp = nil
       if string? lhs and string? rhs
-        if (lhs.value.length + rhs.value.length > STRING_LENGTH_LIMIT)
+        if lhs.value.length + rhs.value.length > STRING_LENGTH_LIMIT
           # Avoid gigantic strings
           lhs
         else
@@ -49,9 +49,9 @@ module Brakeman
 
     def math_op op, lhs, rhs, original_exp = nil
       if number? lhs and number? rhs
-        if op == :/ and rhs.value == 0 and not lhs.value.is_a? Float
+        if op == :/ and rhs.value == 0 and !lhs.value.is_a? Float
           # Avoid division by zero
-          return original_exp
+          original_exp
         else
           value = lhs.value.send(op, rhs.value)
           Sexp.new(:lit, value).line(lhs.line)

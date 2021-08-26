@@ -34,7 +34,7 @@ class Brakeman::Rails3Erubis < ::Erubis::Eruby
     end
   end
 
-  BLOCK_EXPR = /\s*((\s+|\))do|\{)(\s*\|[^|]*\|)?\s*\Z/
+  BLOCK_EXPR = /\s*((\s+|\))do|\{)(\s*\|[^|]*\|)?\s*\Z/.freeze
 
   def add_expr_literal(src, code)
     flush_newline_if_pending(src)

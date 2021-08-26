@@ -43,7 +43,7 @@ module Brakeman::RouteHelper
 
     routes = @tracker.routes[@current_controller]
 
-    if routes and not routes.include? :allow_all_actions
+    if routes and !routes.include? :allow_all_actions
       routes << route
     end
   end
@@ -53,7 +53,7 @@ module Brakeman::RouteHelper
     existing_routes = @tracker.routes[@current_controller]
 
     unless existing_routes.is_a? Array and existing_routes.first == :allow_all_actions
-      existing_routes.merge [:index, :new, :create, :show, :edit, :update, :destroy]
+      existing_routes.merge %i[index new create show edit update destroy]
     end
   end
 
@@ -62,7 +62,7 @@ module Brakeman::RouteHelper
     existing_routes = @tracker.routes[@current_controller]
 
     unless existing_routes.is_a? Array and existing_routes.first == :allow_all_actions
-      existing_routes.merge [:new, :create, :show, :edit, :update, :destroy]
+      existing_routes.merge %i[new create show edit update destroy]
     end
   end
 end

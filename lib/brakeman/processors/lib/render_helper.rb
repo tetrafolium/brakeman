@@ -56,7 +56,7 @@ module Brakeman::RenderHelper
   def process_template name, args, called_from = nil, *_
     Brakeman.debug "Rendering #{name} (#{called_from})"
     #Get scanned source for this template
-    name = name.to_s.gsub(/^\//, "")
+    name = name.to_s.gsub(%r{^/}, "")
     template = @tracker.templates[name.to_sym]
     unless template
       Brakeman.debug "[Notice] No such template: #{name}"
@@ -77,7 +77,7 @@ module Brakeman::RenderHelper
 
     if @tracker.template_cache.include? digest
       #Already processed this template with identical environment
-      return
+      nil
     else
       @tracker.template_cache << digest
 
@@ -88,7 +88,7 @@ module Brakeman::RenderHelper
         process_template "layouts/#{options[:layout][1]}", nil, nil, nil
       elsif node_type? options[:layout], :false
         #nothing
-      elsif not template.name.to_s.match(/[^\/_][^\/]+$/)
+      elsif !template.name.to_s.match(%r{[^/_][^/]+$})
         #Don't do this for partials
 
         process_layout
@@ -104,7 +104,7 @@ module Brakeman::RenderHelper
 
         #The collection name is the name of the partial without the leading
         #underscore.
-        variable = template.name.to_s.match(/[^\/_][^\/]+$/)[0].to_sym
+        variable = template.name.to_s.match(%r{[^/_][^/]+$})[0].to_sym
 
         #Unless the :as => :variable_name option is used
         if options[:as]
@@ -121,11 +121,10 @@ module Brakeman::RenderHelper
       #Set original_line for values so it is clear
       #that values came from another file
       template_env.all.each do |_var, value|
-        unless value.original_line
-          #TODO: This has been broken for a while now and no one noticed
-          #so maybe we can skip it
-          value.original_line = value.line
-        end
+        next if value.original_line
+        #TODO: This has been broken for a while now and no one noticed
+        #so maybe we can skip it
+        value.original_line = value.line
       end
 
       #Run source through AliasProcessor with instance variables from the
@@ -176,8 +175,6 @@ module Brakeman::RenderHelper
       klass = class_name sexp
       if klass.is_a? Symbol
         klass
-      else
-        nil
       end
     end
   end

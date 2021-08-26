@@ -25,11 +25,11 @@ class Brakeman::CheckNumberToCurrency < Brakeman::BaseCheck
   def generic_warning
     message = msg(msg_version(rails_version), " has a vulnerability in number helpers ", msg_cve("CVE-2014-0081"), ". Upgrade to ")
 
-    if version_between? "2.3.0", "3.2.16"
-      message << msg_version("3.2.17")
+    message << if version_between? "2.3.0", "3.2.16"
+      msg_version("3.2.17")
     else
-      message << msg_version("4.0.3")
-    end
+      msg_version("4.0.3")
+               end
 
     warn :warning_type => "Cross-Site Scripting",
       :warning_code => :CVE_2014_0081,
@@ -40,15 +40,14 @@ class Brakeman::CheckNumberToCurrency < Brakeman::BaseCheck
   end
 
   def check_number_helper_usage
-    number_methods = [:number_to_currency, :number_to_percentage, :number_to_human]
+    number_methods = %i[number_to_currency number_to_percentage number_to_human]
     tracker.find_call(:target => false, :methods => number_methods).each do |result|
       arg = result[:call].second_arg
       next unless arg
 
-      if not check_helper_option(result, arg) and hash? arg
-        hash_iterate(arg) do |_key, value|
-          break if check_helper_option(result, value)
-        end
+      next unless !check_helper_option(result, arg) and hash? arg
+      hash_iterate(arg) do |_key, value|
+        break if check_helper_option(result, value)
       end
     end
   end

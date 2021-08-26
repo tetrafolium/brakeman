@@ -35,7 +35,7 @@ class Brakeman::ControllerProcessor < Brakeman::BaseProcessor
       return exp
     end
 
-    if not name.to_s.end_with? "Controller"
+    unless name.to_s.end_with? "Controller"
       Brakeman.debug "[Notice] Adding noncontroller as library: #{name}"
       #Set the class to be a module in order to get the right namespacing.
       #Add class to libraries, in case it is needed later (e.g. it's used
@@ -62,7 +62,7 @@ class Brakeman::ControllerProcessor < Brakeman::BaseProcessor
     return unless @current_class
 
     if mod = @tracker.find_class(concern_name)
-      if mod.options[:included] and not @concerns.include? concern_name
+      if mod.options[:included] and !@concerns.include? concern_name
         @concerns << concern_name
         process mod.options[:included].deep_clone
       end
@@ -136,7 +136,7 @@ class Brakeman::ControllerProcessor < Brakeman::BaseProcessor
       end
 
       exp
-    elsif target == nil and method == :render
+    elsif target.nil? and method == :render
       make_render exp
     elsif exp == FORMAT_HTML and context[1] != :iter
       #This is an empty call to
@@ -195,17 +195,17 @@ class Brakeman::ControllerProcessor < Brakeman::BaseProcessor
     args.insert(1, Sexp.new(:lit, filter_name).line(exp.line))
     before_filter_call = make_call(nil, :before_filter, args).line(exp.line)
 
-    if exp.block_args.length > 1
-      block_variable = exp.block_args[1]
+    block_variable = if exp.block_args.length > 1
+      exp.block_args[1]
     else
-      block_variable = :temp
-    end
+      :temp
+                     end
 
-    if node_type? exp.block, :block
-      block_inner = exp.block[1..-1]
+    block_inner = if node_type? exp.block, :block
+      exp.block[1..-1]
     else
-      block_inner = [exp.block]
-    end
+      [exp.block]
+                  end
 
     #Build Sexp for filter method
     body = Sexp.new(:lasgn,
@@ -229,11 +229,11 @@ class Brakeman::ControllerProcessor < Brakeman::BaseProcessor
     result = Sexp.new(:iter, e).line(e.line)
 
     # Add block arguments
-    if node_type? lambda_node[2], :args
-      result << lambda_node[2].last
+    result << if node_type? lambda_node[2], :args
+      lambda_node[2].last
     else
-      result << s(:args)
-    end
+      s(:args)
+              end
 
     # Add block contents
     if sexp? lambda_node[3]

@@ -52,7 +52,7 @@ class Brakeman::TemplateAliasProcessor < Brakeman::AliasProcessor
     end
   end
 
-  HAML_CAPTURE = [:capture, :capture_haml]
+  HAML_CAPTURE = %i[capture capture_haml].freeze
 
   def haml_capture? exp
     node_type? exp, :iter and
@@ -63,7 +63,7 @@ class Brakeman::TemplateAliasProcessor < Brakeman::AliasProcessor
   #Determine template name
   def template_name name
     if !name.to_s.include?('/') && @template.name.to_s.include?('/')
-      name = "#{@template.name.to_s.match(/^(.*\/).*$/)[1]}#{name}"
+      name = "#{@template.name.to_s.match(%r{^(.*/).*$})[1]}#{name}"
     end
     name
   end
@@ -86,11 +86,11 @@ class Brakeman::TemplateAliasProcessor < Brakeman::AliasProcessor
       #Check for e.g. Model.find.each do ... end
       if method == :each and arg and block and model = get_model_target(target)
         if arg.is_a? Symbol
-          if model == target.target
-            env[Sexp.new(:lvar, arg)] = Sexp.new(:call, model, :new)
+          env[Sexp.new(:lvar, arg)] = if model == target.target
+            Sexp.new(:call, model, :new)
           else
-            env[Sexp.new(:lvar, arg)] = UNKNOWN_MODEL_CALL
-          end
+            UNKNOWN_MODEL_CALL
+                                      end
 
           process block if sexp? block
         end
@@ -106,7 +106,7 @@ class Brakeman::TemplateAliasProcessor < Brakeman::AliasProcessor
     exp
   end
 
-  COLLECTION_METHODS = [:all, :find, :select, :where]
+  COLLECTION_METHODS = %i[all find select where].freeze
 
   #Checks if +exp+ is a call to Model.all or Model.find*
   def get_model_target exp

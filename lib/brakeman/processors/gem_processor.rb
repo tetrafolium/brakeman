@@ -36,7 +36,7 @@ class Brakeman::GemProcessor < Brakeman::BasicProcessor
   # Perhaps we should instantiate an array of `::Gem::Requirement`s or even a
   # `::Gem::Dependency` and pass that to `Tracker::Config#add_gem`?
   def process_call exp
-    if exp.target == nil
+    if exp.target.nil?
       if exp.method == :gem
         gem_name = exp.first_arg
         return exp unless string? gem_name
@@ -45,8 +45,6 @@ class Brakeman::GemProcessor < Brakeman::BasicProcessor
 
         version = if string? gem_version
                     gem_version.value
-                  else
-                    nil
                   end
 
         @tracker.config.add_gem gem_name.value, version, @gemfile, exp.line
@@ -92,7 +90,7 @@ class Brakeman::GemProcessor < Brakeman::BasicProcessor
   # Supports .rc2 but not ~>, >=, or <=
   def set_gem_version_and_file line, file, line_num
     if line =~ @gem_name_version
-      @tracker.config.add_gem $1, $2, file, line_num
+      @tracker.config.add_gem Regexp.last_match(1), Regexp.last_match(2), file, line_num
     end
   end
 end

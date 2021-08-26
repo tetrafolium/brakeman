@@ -66,11 +66,11 @@ class Brakeman::Messages::Message
   end
 
   def << msg
-    if msg.is_a? String
-      @parts << Brakeman::Messages::Plain.new(msg)
+    @parts << if msg.is_a? String
+      Brakeman::Messages::Plain.new(msg)
     else
-      @parts << msg
-    end
+      msg
+              end
   end
 
   def to_s

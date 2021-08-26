@@ -24,7 +24,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
   end
 
   def add_chunk chunk, out = @output_string
-    if chunk and not chunk.empty?
+    if chunk and !chunk.empty?
       if chunk.is_a? Array
         chunk = chunk.join("\n")
       end
@@ -41,7 +41,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
         label("Routes", ci["Routes"])
       ]
 
-      if ci["Includes"] and not ci["Includes"].empty?
+      if ci["Includes"] and !ci["Includes"].empty?
         controller.insert(2, label("Includes", ci["Includes"]))
       end
 

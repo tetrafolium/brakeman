@@ -31,7 +31,7 @@ module Brakeman
       if @path.last
         @path.last[:rendered] = {
           name: template.name,
-          file: template.file,
+          file: template.file
         }
       else
         Brakeman.debug "[Notice] No render path to add template information"

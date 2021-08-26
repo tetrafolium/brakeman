@@ -86,20 +86,16 @@ module Brakeman
       # Returns an option hash and the app_path.
       def parse_options argv
         begin
-          options, _ = Brakeman::Options.parse! argv
+          options, = Brakeman::Options.parse! argv
         rescue OptionParser::ParseError => e
-          $stderr.puts e.message
-          $stderr.puts "Please see `brakeman --help` for valid options"
+          warn e.message
+          warn "Please see `brakeman --help` for valid options"
           quit(-1)
         end
 
-        if argv[-1]
-          app_path = argv[-1]
-        else
-          app_path = "."
-        end
+        app_path = argv[-1] || "."
 
-        return options, app_path
+        [options, app_path]
       end
 
       # Exits with the given exit code and prints out the message, if given.
@@ -114,7 +110,7 @@ module Brakeman
       def regular_report options
         tracker = run_brakeman options
 
-        if tracker.options[:exit_on_warn] and not tracker.filtered_warnings.empty?
+        if tracker.options[:exit_on_warn] and !tracker.filtered_warnings.empty?
           quit Brakeman::Warnings_Found_Exit_Code
         end
 
@@ -132,7 +128,7 @@ module Brakeman
 
       # Run either a comparison or regular report based on options provided.
       def run_report options
-        begin
+        
           if options[:previous_results_json]
             compare_results options
           else
@@ -142,7 +138,7 @@ module Brakeman
           quit Brakeman::No_App_Found_Exit_Code, e.message
         rescue Brakeman::MissingChecksError => e
           quit Brakeman::Missing_Checks_Exit_Code, e.message
-        end
+        
       end
 
       # Sets interrupt handler to gracefully handle Ctrl+C

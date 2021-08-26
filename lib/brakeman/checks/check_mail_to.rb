@@ -13,11 +13,11 @@ class Brakeman::CheckMailTo < Brakeman::BaseCheck
     if (version_between? "2.3.0", "2.3.10" or version_between? "3.0.0", "3.0.3") and result = mail_to_javascript?
       message = msg("Vulnerability in ", msg_code("mail_to"), " using javascript encoding ", msg_cve("CVE-2011-0446"), ". Upgrade to ")
 
-      if version_between? "2.3.0", "2.3.10"
-        message << msg_version("2.3.11")
+      message << if version_between? "2.3.0", "2.3.10"
+        msg_version("2.3.11")
       else
-        message << msg_version("3.0.4")
-      end
+        msg_version("3.0.4")
+                 end
 
       warn :result => result,
         :warning_type => "Mail Link",
@@ -36,10 +36,9 @@ class Brakeman::CheckMailTo < Brakeman::BaseCheck
 
     tracker.find_call(:target => false, :method => :mail_to).each do |result|
       result[:call].each_arg do |arg|
-        if hash? arg
-          if option = hash_access(arg, :encode)
-            return result if symbol? option and option.value == :javascript
-          end
+        next unless hash? arg
+        if option = hash_access(arg, :encode)
+          return result if symbol? option and option.value == :javascript
         end
       end
     end

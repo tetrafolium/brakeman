@@ -62,7 +62,7 @@ module Brakeman
     rescue Errno::ECHILD
       # on jruby 9x waiting on pid raises (per tty-pager)
       true
-    rescue => e
+    rescue StandardError => e
       warn "[Error] #{e}"
       warn "[Error] Could not use pager. Set --no-pager to avoid this issue."
       no_pager text

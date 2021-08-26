@@ -1,12 +1,12 @@
 module Brakeman
   module GemDependencies
-    def self.dev_dependencies spec
+    def self.dev_dependencies(spec)
       spec.add_development_dependency "minitest"
       spec.add_development_dependency "minitest-ci"
       spec.add_development_dependency "simplecov"
     end
 
-    def self.base_dependencies spec
+    def self.base_dependencies(spec)
       spec.add_dependency "ruby_parser", "~>3.13"
       spec.add_dependency "ruby_parser-legacy", "~>1.0"
       spec.add_dependency "sexp_processor", "~> 4.7"
@@ -14,7 +14,7 @@ module Brakeman
       spec.add_dependency "safe_yaml", ">= 1.0"
     end
 
-    def self.extended_dependencies spec
+    def self.extended_dependencies(spec)
       spec.add_dependency "terminal-table", "~>1.4"
       spec.add_dependency "highline", "~>2.0"
       spec.add_dependency "erubis", "~>2.6"

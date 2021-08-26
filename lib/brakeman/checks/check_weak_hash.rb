@@ -5,18 +5,18 @@ class Brakeman::CheckWeakHash < Brakeman::BaseCheck
 
   @description = "Checks for use of weak hashes like MD5"
 
-  DIGEST_CALLS = [:base64digest, :digest, :hexdigest, :new]
+  DIGEST_CALLS = %i[base64digest digest hexdigest new].freeze
 
   def run_check
-    tracker.find_call(:targets => [:'Digest::MD5', :'Digest::SHA1', :'OpenSSL::Digest::MD5', :'OpenSSL::Digest::SHA1'], :nested => true).each do |result|
+    tracker.find_call(:targets => %i[Digest::MD5 Digest::SHA1 OpenSSL::Digest::MD5 OpenSSL::Digest::SHA1], :nested => true).each do |result|
       process_hash_result result
     end
 
-    tracker.find_call(:target => :'Digest::HMAC', :methods => [:new, :hexdigest], :nested => true).each do |result|
+    tracker.find_call(:target => :'Digest::HMAC', :methods => %i[new hexdigest], :nested => true).each do |result|
       process_hmac_result result
     end
 
-    tracker.find_call(:targets => [:'OpenSSL::Digest::Digest', :'OpenSSL::Digest'], :method => :new).each do |result|
+    tracker.find_call(:targets => %i[OpenSSL::Digest::Digest OpenSSL::Digest], :method => :new).each do |result|
       process_openssl_result result
     end
   end
@@ -27,17 +27,17 @@ class Brakeman::CheckWeakHash < Brakeman::BaseCheck
     input = nil
     call = result[:call]
 
-    if DIGEST_CALLS.include? call.method
+    confidence = if DIGEST_CALLS.include? call.method
       if input = user_input_as_arg?(call)
-        confidence = :high
+        :high
       elsif input = hashing_password?(call)
-        confidence = :high
+        :high
       else
-        confidence = :medium
-      end
+        :medium
+                   end
     else
-      confidence = :medium
-    end
+      :medium
+                 end
 
     message = msg("Weak hashing algorithm used")
 

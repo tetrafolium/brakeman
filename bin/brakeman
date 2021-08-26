@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #Adjust path in case called directly and not through gem
-$:.unshift "#{File.expand_path(File.dirname(__FILE__))}/../lib"
+$:.unshift "#{__dir__}/../lib"
 
 Encoding.default_external = 'UTF-8'
 

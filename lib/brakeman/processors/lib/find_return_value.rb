@@ -41,10 +41,10 @@ class Brakeman::FindReturnValue
     if node_type? exp, :defn, :defs
       body = exp.body
 
-      unless body.empty?
-        @return_values << last_value(body)
-      else
+      if body.empty?
         Brakeman.debug "FindReturnValue: Empty method? #{exp.inspect}"
+      else
+        @return_values << last_value(body)
       end
     elsif exp
       @return_values << last_value(exp)
@@ -128,8 +128,6 @@ class Brakeman::FindReturnValue
     when :return
       if exp.value
         last_value exp.value
-      else
-        nil
       end
     when :nil
       nil

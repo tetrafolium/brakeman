@@ -21,16 +21,15 @@ class Brakeman::CheckDynamicFinders < Brakeman::BaseCheck
 
     if potentially_dangerous? call.method
       call.each_arg do |arg|
-        if params? arg and not safe_call? arg
-          warn :result => result,
-            :warning_type => "SQL Injection",
-            :warning_code => :sql_injection_dynamic_finder,
-            :message => "MySQL integer conversion may cause 0 to match any string",
-            :confidence => :medium,
-            :user_input => arg
+        next unless params? arg and !safe_call? arg
+        warn :result => result,
+          :warning_type => "SQL Injection",
+          :warning_code => :sql_injection_dynamic_finder,
+          :message => "MySQL integer conversion may cause 0 to match any string",
+          :confidence => :medium,
+          :user_input => arg
 
-          break
-        end
+        break
       end
     end
   end

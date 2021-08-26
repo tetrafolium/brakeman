@@ -34,7 +34,7 @@ class Brakeman::ErbTemplateProcessor < Brakeman::TemplateProcessor
       else
         abort "Unrecognized action on _erbout: #{method}"
       end
-    elsif target == nil and method == :render
+    elsif target.nil? and method == :render
       exp.arglist = process(exp.arglist)
       make_render_in_view exp
     else

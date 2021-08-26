@@ -33,7 +33,7 @@ module Brakeman::Util
   #
   #Taken from ActiveSupport.
   def camelize lower_case_and_underscored_word
-    lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
+    lower_case_and_underscored_word.to_s.gsub(%r{/(.?)}) { "::#{Regexp.last_match(1).upcase}" }.gsub(/(?:^|_)(.)/) { Regexp.last_match(1).upcase }
   end
 
   #Convert a string from "Something::LikeThis" to "something/like_this"

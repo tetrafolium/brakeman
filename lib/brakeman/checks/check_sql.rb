@@ -18,10 +18,10 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     # Note that we retroactively find `user_input` inside the "dangerous" value.
     @safe_input_attributes.merge IGNORE_METHODS_IN_SQL
 
-    @sql_targets = [:average, :calculate, :count, :count_by_sql, :delete_all, :destroy_all,
-                    :find_by_sql, :maximum, :minimum, :pluck, :sum, :update_all]
-    @sql_targets.concat [:from, :group, :having, :joins, :lock, :order, :reorder, :where] if tracker.options[:rails3]
-    @sql_targets.concat [:find_by, :find_by!, :find_or_create_by, :find_or_create_by!, :find_or_initialize_by, :not] if tracker.options[:rails4]
+    @sql_targets = %i[average calculate count count_by_sql delete_all destroy_all
+                    find_by_sql maximum minimum pluck sum update_all]
+    @sql_targets.concat %i[from group having joins lock order reorder where] if tracker.options[:rails3]
+    @sql_targets.concat %i[find_by find_by! find_or_create_by find_or_create_by! find_or_initialize_by not] if tracker.options[:rails4]
     @sql_targets << :delete_by << :destroy_by if tracker.options[:rails6]
 
     if version_between?("2.0.0", "3.9.9") or tracker.config.rails_version.nil?
@@ -32,21 +32,21 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
       @sql_targets << :find
     end
 
-    @connection_calls = [:delete, :execute, :insert, :select_all, :select_one,
-                         :select_rows, :select_value, :select_values]
+    @connection_calls = %i[delete execute insert select_all select_one
+                         select_rows select_value select_values]
 
     if tracker.options[:rails3]
-      @connection_calls.concat [:exec_delete, :exec_insert, :exec_query, :exec_update]
+      @connection_calls.concat %i[exec_delete exec_insert exec_query exec_update]
     else
-      @connection_calls.concat [:add_limit!, :add_offset_limit!, :add_lock!]
+      @connection_calls.concat %i[add_limit! add_offset_limit! add_lock!]
     end
 
-    @expected_targets = active_record_models.keys + [:connection, :"ActiveRecord::Base", :Arel]
+    @expected_targets = active_record_models.keys + %i[connection ActiveRecord::Base Arel]
 
     Brakeman.debug "Finding possible SQL calls on models"
     calls = tracker.find_call(:methods => @sql_targets, :nested => true)
 
-    narrow_targets = [:exists?, :select]
+    narrow_targets = %i[exists? select]
     calls.concat tracker.find_call(:targets => active_record_models.keys, :methods => narrow_targets, :chained => true)
 
     Brakeman.debug "Finding possible SQL calls with no target"
@@ -99,10 +99,9 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   def ar_scope_calls(symbol_name)
     active_record_models.each do |_name, model|
       model_args = model.options[symbol_name]
-      if model_args
-        model_args.each do |args|
-          yield model, args
-        end
+      next unless model_args
+      model_args.each do |args|
+        yield model, args
       end
     end
   end
@@ -218,7 +217,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
         user_input = dangerous_value
       end
 
-      if result[:call].target and result[:chain] and not @expected_targets.include? result[:chain].first
+      if result[:call].target and result[:chain] and !@expected_targets.include? result[:chain].first
         confidence = case confidence
                      when :high
                        :medium
@@ -238,11 +237,11 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     end
 
     if check_for_limit_or_offset_vulnerability call.last_arg
-      if include_user_input? call.last_arg
-        confidence = :high
+      confidence = if include_user_input? call.last_arg
+        :high
       else
-        confidence = :weak
-      end
+        :weak
+                   end
 
       warn :result => result,
         :warning_type => "SQL Injection",
@@ -264,7 +263,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   #
   #This method should only be passed the second argument.
   def check_find_arguments arg
-    return nil if not sexp? arg or node_type? arg, :lit, :string, :str, :true, :false, :nil
+    return nil if !sexp? arg or node_type? arg, :lit, :string, :str, :true, :false, :nil
 
     unsafe_sql? arg
   end
@@ -290,11 +289,11 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     end
 
     if request_value? arg
-      unless call? arg and params? arg.target and [:permit, :slice, :to_h, :to_hash, :symbolize_keys].include? arg.method
+      unless call? arg and params? arg.target and %i[permit slice to_h to_hash symbolize_keys].include? arg.method
         # Model.where(params[:where])
         arg
       end
-    elsif hash? arg and not kwsplat? arg
+    elsif hash? arg and !kwsplat? arg
       #This is generally going to be a hash of column names and values, which
       #would escape the values. But the keys _could_ be user input.
       check_hash_keys arg
@@ -331,7 +330,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   #joins can take a string, hash of associations, or an array of both(?)
   #We only care about the possible string values.
   def check_joins_arguments arg
-    return unless sexp? arg and not node_type? arg, :hash, :string, :str
+    return unless sexp? arg and !node_type? arg, :hash, :string, :str
 
     if array? arg
       arg.each do |a|
@@ -358,7 +357,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   #any SQL fragment. This does not apply to all databases. (For those who do not
   #support it, the lock method does nothing).
   def check_lock_arguments arg
-    return unless sexp? arg and not node_type? arg, :hash, :array, :string, :str
+    return unless sexp? arg and !node_type? arg, :hash, :array, :string, :str
 
     unsafe_sql?(arg, :ignore_hash)
   end
@@ -391,17 +390,17 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     nil
   end
 
-  TO_STRING_METHODS = [:to_s, :strip_heredoc]
+  TO_STRING_METHODS = %i[to_s strip_heredoc].freeze
 
   #Returns value if interpolated value is not something safe
   def unsafe_string_interp? exp
-    if node_type? exp, :evstr
-      value = exp.value
+    value = if node_type? exp, :evstr
+      exp.value
     else
-      value = exp
-    end
+      exp
+            end
 
-    if not sexp? value
+    if !sexp? value
       nil
     elsif call? value and TO_STRING_METHODS.include? value.method
       unsafe_string_interp? value.target
@@ -413,7 +412,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
         unsafe_string_interp?(value.lhs) || unsafe_string_interp?(value.rhs)
       when :dstr
         if dangerous = check_string_interp(value)
-          return dangerous
+          dangerous
         end
       else
         if safe_value? value
@@ -455,10 +454,8 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     when :hash
       if kwsplat? exp and has_immediate_user_input? exp
         exp
-      elsif not ignore_hash
+      elsif !ignore_hash
         check_hash_values exp
-      else
-        nil
       end
     when :if
       unsafe_sql? exp.then_clause or unsafe_sql? exp.else_clause
@@ -475,16 +472,12 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     when :or
       if unsafe = (unsafe_sql?(exp.lhs) || unsafe_sql?(exp.rhs))
         unsafe
-      else
-        nil
       end
     when :block, :rlist
       unsafe_sql? exp.last
     else
       if has_immediate_user_input? exp
         exp
-      else
-        nil
       end
     end
   end
@@ -512,8 +505,6 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
                    check_lock_arguments value
                  when :from
                    unsafe_sql? value
-                 else
-                   nil
                  end
 
         return unsafe if unsafe
@@ -535,8 +526,6 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
         check_interp_target_or_arg(target, arg) or
         check_for_string_building(target) or
         check_for_string_building(arg)
-    else
-      nil
     end
   end
 
@@ -599,13 +588,13 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     when :or
       safe_value? exp.lhs and safe_value? exp.rhs
     when :dstr
-      not unsafe_string_interp? exp
+      !unsafe_string_interp? exp
     else
       false
     end
   end
 
-  QUOTE_METHODS = [:quote, :quote_column_name, :quoted_date, :quote_string, :quote_table_name]
+  QUOTE_METHODS = %i[quote quote_column_name quoted_date quote_string quote_table_name].freeze
 
   def quote_call? exp
     if call? exp.target
@@ -615,9 +604,9 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     end
   end
 
-  AREL_METHODS = [:all, :and, :arel_table, :as, :eq, :eq_any, :exists, :group,
-                  :gt, :gteq, :having, :in, :join_sources, :limit, :lt, :lteq, :not,
-                  :not_eq, :on, :or, :order, :project, :skip, :take, :where, :with]
+  AREL_METHODS = %i[all and arel_table as eq eq_any exists group
+                  gt gteq having in join_sources limit lt lteq not
+                  not_eq on or order project skip take where with].freeze
 
   def arel? exp
     call? exp and (AREL_METHODS.include? exp.method or arel? exp.target)
@@ -633,8 +622,6 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
       unsafe
     elsif call? exp.target
       check_call exp.target
-    else
-      nil
     end
   end
 
@@ -651,7 +638,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
   #
   #http://www.rorsecurity.info/2008/09/08/sql-injection-issue-in-limit-and-offset-parameter/
   def check_for_limit_or_offset_vulnerability options
-    return false if rails_version.nil? or rails_version >= "2.1.1" or not hash?(options)
+    return false if rails_version.nil? or rails_version >= "2.1.1" or !hash?(options)
 
     return true if hash_access(options, :limit) or hash_access(options, :offset)
 

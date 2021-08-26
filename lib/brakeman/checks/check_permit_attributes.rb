@@ -9,8 +9,8 @@ class Brakeman::CheckPermitAttributes < Brakeman::BaseCheck
     admin: :high,
     account_id: :high,
     role: :medium,
-    banned: :medium,
-  }
+    banned: :medium
+  }.freeze
 
   def run_check
     tracker.find_call(:method => :permit).each do |result|
@@ -24,10 +24,9 @@ class Brakeman::CheckPermitAttributes < Brakeman::BaseCheck
     call = result[:call]
 
     call.each_arg do |arg|
-      if symbol? arg
-        if SUSPICIOUS_KEYS.key? arg.value
-          warn_on_permit_key result, arg
-        end
+      next unless symbol? arg
+      if SUSPICIOUS_KEYS.key? arg.value
+        warn_on_permit_key result, arg
       end
     end
   end

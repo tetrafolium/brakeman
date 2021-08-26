@@ -10,7 +10,7 @@ class Brakeman::CheckLinkTo < Brakeman::CheckCrossSiteScripting
   @description = "Checks for XSS in link_to in versions before 3.0"
 
   def run_check
-    return unless version_between?("2.0.0", "2.9.9") and not tracker.config.escape_html?
+    return unless version_between?("2.0.0", "2.9.9") and !tracker.config.escape_html?
 
     @ignore_methods = Set[:button_to, :check_box, :escapeHTML, :escape_once,
                           :field_field, :fields_for, :h, :hidden_field,
@@ -47,7 +47,7 @@ class Brakeman::CheckLinkTo < Brakeman::CheckCrossSiteScripting
     if version_between? "2.0.0", "2.2.99"
       check_argument result, first_arg
 
-      if second_arg and not hash? second_arg
+      if second_arg and !hash? second_arg
         check_argument result, second_arg
       end
     elsif second_arg
@@ -127,7 +127,7 @@ class Brakeman::CheckLinkTo < Brakeman::CheckCrossSiteScripting
     #Bare records create links to the model resource,
     #not a string that could have injection
     #TODO: Needs test? I think this is broken?
-    return exp if model_name? target and context == [:call, :arglist]
+    return exp if model_name? target and context == %i[call arglist]
 
     super
   end

@@ -185,11 +185,10 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
       tracker.find_call(target: :"ActiveRecord::Base", method: :attr_accessible).each do |result|
         call = result[:call]
 
-        if call? call
-          if call.first_arg == Sexp.new(:nil)
-            @mass_assign_disabled = true
-            break
-          end
+        next unless call? call
+        if call.first_arg == Sexp.new(:nil)
+          @mass_assign_disabled = true
+          break
         end
       end
 
@@ -199,13 +198,12 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
         #    attr_accessible nil
         #  end
         tracker.check_initializers([], :attr_accessible).each do |result|
-          if result.module == "ActiveRecord" and result.result_class == :Base
-            arg = result.call.first_arg
+          next unless result.module == "ActiveRecord" and result.result_class == :Base
+          arg = result.call.first_arg
 
-            if arg.nil? or node_type? arg, :nil
-              @mass_assign_disabled = true
-              break
-            end
+          if arg.nil? or node_type? arg, :nil
+            @mass_assign_disabled = true
+            break
           end
         end
       end
@@ -215,7 +213,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
     #gem and still using hack above, so this is a separate check for
     #including ActiveModel::ForbiddenAttributesProtection in
     #ActiveRecord::Base in an initializer.
-    if not @mass_assign_disabled and version_between?("3.1.0", "3.9.9") and tracker.config.has_gem? :strong_parameters
+    if !@mass_assign_disabled and version_between?("3.1.0", "3.9.9") and tracker.config.has_gem? :strong_parameters
       matches = tracker.check_initializers([], :include)
       forbidden_protection = Sexp.new(:colon2, Sexp.new(:const, :ActiveModel), :ForbiddenAttributesProtection)
 
@@ -226,7 +224,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
       end
 
       unless @mass_assign_disabled
-        tracker.find_call(target: :"ActiveRecord::Base", method: [:send, :include]).each do |result|
+        tracker.find_call(target: :"ActiveRecord::Base", method: %i[send include]).each do |result|
           call = result[:call]
           if call? call and (call.first_arg == forbidden_protection or call.second_arg == forbidden_protection)
             @mass_assign_disabled = true
@@ -278,7 +276,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
     location = location.name if location.is_a? Brakeman::Collection
     location = location.to_sym
 
-    return location, line
+    [location, line]
   end
 
   #Checks if _exp_ includes user input in the form of cookies, parameters,
@@ -303,13 +301,13 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
   def has_immediate_user_input? exp
     if exp.nil?
       false
-    elsif call? exp and not always_safe_method? exp.method
+    elsif call? exp and !always_safe_method? exp.method
       if params? exp
-        return Match.new(:params, exp)
+        Match.new(:params, exp)
       elsif cookies? exp
-        return Match.new(:cookies, exp)
+        Match.new(:cookies, exp)
       elsif request_env? exp
-        return Match.new(:request, exp)
+        Match.new(:request, exp)
       else
         has_immediate_user_input? exp.target
       end
@@ -380,7 +378,7 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
 
       if always_safe_method? method
         false
-      elsif call? target and not method.to_s[-1, 1] == "?"
+      elsif call? target and method.to_s[-1, 1] != "?"
         if has_immediate_model?(target, out)
           exp
         else
@@ -478,8 +476,8 @@ class Brakeman::BaseCheck < Brakeman::SexpProcessor
     end
   end
 
-  def self.description
-    @description
+  class << self
+    attr_reader :description
   end
 
   def active_record_models

@@ -356,21 +356,20 @@ class Brakeman::Tracker
 
     #Remove from controller
     @controllers.each do |name, controller|
-      if controller.files.include?(path)
-        controller_name = name
+      next unless controller.files.include?(path)
+      controller_name = name
 
-        #Remove templates rendered from this controller
-        @templates.each do |template_name, template|
-          if template.render_path and template.render_path.include_controller? name
-            reset_template template_name
-            @call_index.remove_template_indexes template_name
-          end
+      #Remove templates rendered from this controller
+      @templates.each do |template_name, template|
+        if template.render_path and template.render_path.include_controller? name
+          reset_template template_name
+          @call_index.remove_template_indexes template_name
         end
-
-        #Remove calls indexed from this controller
-        @call_index.remove_indexes_by_class [name]
-        break
       end
+
+      #Remove calls indexed from this controller
+      @call_index.remove_indexes_by_class [name]
+      break
     end
     @controllers.delete controller_name
   end

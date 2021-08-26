@@ -2,7 +2,7 @@ module Brakeman
   class TemplateParser
     include Brakeman::Util
     attr_reader :tracker
-    KNOWN_TEMPLATE_EXTENSIONS = /.*\.(erb|haml|rhtml|slim)$/
+    KNOWN_TEMPLATE_EXTENSIONS = /.*\.(erb|haml|rhtml|slim)$/.freeze
 
     TemplateFile = Struct.new(:path, :ast, :name, :type)
 
@@ -101,7 +101,7 @@ module Brakeman
       src = tp.parse_erb '_inline_', text
       type = tp.erubis? ? :erubis : :erb
 
-      return type, fp.parse_ruby(src, "_inline_")
+      [type, fp.parse_ruby(src, "_inline_")]
     end
   end
 end

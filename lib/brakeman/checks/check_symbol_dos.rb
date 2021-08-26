@@ -3,7 +3,7 @@ require 'brakeman/checks/base_check'
 class Brakeman::CheckSymbolDoS < Brakeman::BaseCheck
   Brakeman::Checks.add_optional self
 
-  UNSAFE_METHODS = [:to_sym, :literal_to_sym, :intern, :symbolize_keys, :symbolize_keys!]
+  UNSAFE_METHODS = %i[to_sym literal_to_sym intern symbolize_keys symbolize_keys!].freeze
 
   @description = "Checks for symbol denial of service"
 
@@ -21,11 +21,11 @@ class Brakeman::CheckSymbolDoS < Brakeman::BaseCheck
 
     call = result[:call]
 
-    if result[:method] == :literal_to_sym
-      args = call.select { |e| sexp? e }
+    args = if result[:method] == :literal_to_sym
+      call.select { |e| sexp? e }
     else
-      args = [call.target]
-    end
+      [call.target]
+           end
 
     if input = args.map { |arg| has_immediate_user_input?(arg) }.compact.first
       confidence = :high
@@ -53,7 +53,7 @@ class Brakeman::CheckSymbolDoS < Brakeman::BaseCheck
       if node_type? input.target, :params
         input.method == :[] and
           symbol? input.first_arg and
-          [:controller, :action].include? input.first_arg.value
+          %i[controller action].include? input.first_arg.value
       else
         safe_parameter? input.target
       end

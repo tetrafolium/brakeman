@@ -51,12 +51,12 @@ class Brakeman::Rails2ConfigProcessor < Brakeman::BasicProcessor
     if exp.target == RAILS_CONFIG
       #Get rid of '=' at end
       attribute = exp.method.to_s[0..-2].to_sym
-      if exp.args.length > 1
+      @tracker.config.rails[attribute] = if exp.args.length > 1
         #Multiple arguments?...not sure if this will ever happen
-        @tracker.config.rails[attribute] = exp.args
+        exp.args
       else
-        @tracker.config.rails[attribute] = exp.first_arg
-      end
+        exp.first_arg
+                                         end
     elsif include_rails_config? exp
       options = get_rails_config exp
       level = @tracker.config.rails
@@ -90,10 +90,8 @@ class Brakeman::Rails2ConfigProcessor < Brakeman::BasicProcessor
       else
         include_rails_config? target
       end
-    elsif target == RAILS_CONFIG
-      true
     else
-      false
+      target == RAILS_CONFIG
     end
   end
 

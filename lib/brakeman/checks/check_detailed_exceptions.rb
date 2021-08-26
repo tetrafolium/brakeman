@@ -30,20 +30,19 @@ class Brakeman::CheckDetailedExceptions < Brakeman::BaseCheck
         body = src.body.last
         next unless body
 
-        if method_name == :show_detailed_exceptions? and not safe? body
-          if true? body
-            confidence = :high
-          else
-            confidence = :medium
-          end
+        next unless method_name == :show_detailed_exceptions? and !safe? body
+        confidence = if true? body
+          :high
+        else
+          :medium
+                     end
 
-          warn :warning_type => "Information Disclosure",
-               :warning_code => :detailed_exceptions,
-               :message => msg("Detailed exceptions may be enabled in ", msg_code("show_detailed_exceptions?")),
-               :confidence => confidence,
-               :code => src,
-               :file => definition[:file]
-        end
+        warn :warning_type => "Information Disclosure",
+             :warning_code => :detailed_exceptions,
+             :message => msg("Detailed exceptions may be enabled in ", msg_code("show_detailed_exceptions?")),
+             :confidence => confidence,
+             :code => src,
+             :file => definition[:file]
       end
     end
   end

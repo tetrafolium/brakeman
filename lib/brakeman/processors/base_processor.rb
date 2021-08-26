@@ -38,7 +38,7 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
     exp = exp.dup
 
     exp.each_with_index do |e, i|
-      exp[i] = process e if sexp? e and not e.empty?
+      exp[i] = process e if sexp? e and !e.empty?
     end
 
     exp
@@ -159,7 +159,7 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
     exp
   end
 
-  alias :process_iasgn :process_lasgn
+  alias process_iasgn process_lasgn
 
   #Processes an instance variable assignment
   def process_iasgn exp
@@ -222,7 +222,7 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
     first_arg = call.first_arg
 
     if call.second_arg.nil? and first_arg == Sexp.new(:lit, :update)
-      return :update, nil, Sexp.new(:arglist, *call.args[0..-2]) #TODO HUH?
+      return :update, nil, Sexp.new(:arglist, *call.args[0..-2]) #TODO: HUH?
     end
 
     #Look for render :action, ... or render "action", ...
@@ -239,7 +239,7 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
       value = Sexp.new(:lit, first_arg.to_sym)
     elsif first_arg.nil?
       type = :default
-    elsif not hash? first_arg
+    elsif !hash? first_arg
       type = :action
       value = first_arg
     end
@@ -269,11 +269,11 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
     type ||= :default
     value ||= :default
 
-    if type == :inline and string? value and not hash_access(rest, :type)
+    if type == :inline and string? value and !hash_access(rest, :type)
       value, rest = make_inline_render(value, rest)
     end
 
-    return type, value, rest
+    [type, value, rest]
   end
 
   def make_inline_render value, options
@@ -287,12 +287,12 @@ class Brakeman::BaseProcessor < Brakeman::SexpProcessor
                         class_or_module.name
                       end
 
-    template_name = "#@current_method/inline@#{value.line}:#{class_or_module}".to_sym
+    template_name = "#{@current_method}/inline@#{value.line}:#{class_or_module}".to_sym
     type, ast = Brakeman::TemplateParser.parse_inline_erb(@tracker, value.value)
     ast = ast.deep_clone(value.line)
     @tracker.processor.process_template(template_name, ast, type, nil, @current_file)
     @tracker.processor.process_template_alias(@tracker.templates[template_name])
 
-    return s(:lit, template_name), options
+    [s(:lit, template_name), options]
   end
 end

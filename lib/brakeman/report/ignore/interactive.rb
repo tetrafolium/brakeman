@@ -36,11 +36,11 @@ module Brakeman
     def file_menu
       loop do
         @ignore_config.file = HighLine.new.ask "Input file: " do |q|
-          if @ignore_config.file and not @ignore_config.file.empty?
-            q.default = @ignore_config.file
+          q.default = if @ignore_config.file and !@ignore_config.file.empty?
+            @ignore_config.file
           else
-            q.default = "config/brakeman.ignore"
-          end
+            "config/brakeman.ignore"
+                      end
         end
 
         if File.exist? @ignore_config.file
@@ -169,11 +169,11 @@ module Brakeman
 
     def save
       @ignore_config.file = HighLine.new.ask "Output file: " do |q|
-        if @ignore_config.file and not @ignore_config.file.empty?
-          q.default = @ignore_config.file
+        q.default = if @ignore_config.file and !@ignore_config.file.empty?
+          @ignore_config.file
         else
-          q.default = "config/brakeman.ignore"
-        end
+          "config/brakeman.ignore"
+                    end
       end
 
       @ignore_config.save_with_old
@@ -266,7 +266,7 @@ module Brakeman
 
     def pretty_display warning
       progress = "#{@current_index + 1}/#{@warning_count}"
-      say "-------- #{progress} #{"-" * (20 - progress.length)}", :cyan
+      say "-------- #{progress} #{'-' * (20 - progress.length)}", :cyan
       show_confidence warning
 
       label "Category"
@@ -353,7 +353,7 @@ module Brakeman
 
     def yes_or_no message
       answer = HighLine.new.ask message do |q|
-        q.in = ["y", "n", "yes", "no"]
+        q.in = %w[y n yes no]
       end
 
       answer.match(/^y/i)

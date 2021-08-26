@@ -38,7 +38,7 @@ class Brakeman::CheckDeserialize < Brakeman::BaseCheck
         if symbol? mode and mode.value == unsafe_mode
           check_deserialize result, :Oj
         end
-      elsif not safe_default
+      elsif !safe_default
         check_deserialize result, :Oj
       end
     end

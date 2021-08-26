@@ -81,7 +81,7 @@ module Brakeman
     # Use AppTree#file_path(path).relative instead.
     def relative_path(path)
       pname = Pathname.new path
-      if path and not path.empty? and pname.absolute?
+      if path and !path.empty? and pname.absolute?
         pname.relative_path_from(Pathname.new(self.root)).to_s
       else
         path
@@ -129,11 +129,11 @@ module Brakeman
 
       gemspecs = Dir.glob(File.join(@root, "*.gemspec"))
 
-      if gemspecs.length > 1 or gemspecs.empty?
-        @gemspec = false
+      @gemspec = if gemspecs.length > 1 or gemspecs.empty?
+        false
       else
-        @gemspec = file_path(File.basename(gemspecs.first))
-      end
+        file_path(File.basename(gemspecs.first))
+                 end
     end
 
     private

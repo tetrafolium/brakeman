@@ -2,7 +2,7 @@ require './lib/brakeman/version'
 require './gem_common'
 
 Gem::Specification.new do |s|
-  s.name = %q{brakeman}
+  s.name = 'brakeman'
   s.version = Brakeman::Version
   s.authors = ["Justin Collins"]
   s.email = "gem@brakeman.org"
@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
 
     s.files += Dir['bundle/ruby/*/gems/**/*'].reject do |path|
       # Skip unnecessary files in dependencies
-      path =~ /^bundle\/ruby\/\d\.\d\.\d\/gems\/[^\/]+\/(Rakefile|benchmark|bin|doc|example|man|site|spec|test)/
+      path =~ %r{^bundle/ruby/\d\.\d\.\d/gems/[^/]+/(Rakefile|benchmark|bin|doc|example|man|site|spec|test)}
     end
   else
     Brakeman::GemDependencies.dev_dependencies(s) unless ENV['BM_PACKAGE']

@@ -24,11 +24,11 @@ class Brakeman::CheckStripTags < Brakeman::BaseCheck
 
   def cve_2011_2931
     if version_between?('2.0.0', '2.3.12') or version_between?('3.0.0', '3.0.9')
-      if rails_version =~ /^3/
-        message = msg("Versions before 3.0.10 have a vulnerability in ", msg_code("strip_tags"), " ", msg_cve("CVE-2011-2931"))
+      message = if rails_version =~ /^3/
+        msg("Versions before 3.0.10 have a vulnerability in ", msg_code("strip_tags"), " ", msg_cve("CVE-2011-2931"))
       else
-        message = msg("Versions before 2.3.13 have a vulnerability in ", msg_code("strip_tags"), " ", msg_cve("CVE-2011-2931"))
-      end
+        msg("Versions before 2.3.13 have a vulnerability in ", msg_code("strip_tags"), " ", msg_cve("CVE-2011-2931"))
+                end
 
       warn :warning_type => "Cross-Site Scripting",
         :warning_code => :CVE_2011_2931,
@@ -65,11 +65,11 @@ class Brakeman::CheckStripTags < Brakeman::BaseCheck
 
   def cve_2015_7579
     if tracker.config.gem_version(:'rails-html-sanitizer') == '1.0.2'
-      if uses_strip_tags?
-        confidence = :high
+      confidence = if uses_strip_tags?
+        :high
       else
-        confidence = :medium
-      end
+        :medium
+                   end
 
       message = msg(msg_version("1.0.2", "rails-html-sanitizer"), " is vulnerable (CVE-2015-7579). Upgrade to ", msg_version("1.0.3", "rails-html-sanitizer"))
 
@@ -86,6 +86,6 @@ class Brakeman::CheckStripTags < Brakeman::BaseCheck
   def uses_strip_tags?
     Brakeman.debug "Finding calls to strip_tags()"
 
-    not tracker.find_call(:target => false, :method => :strip_tags, :nested => true).empty?
+    !tracker.find_call(:target => false, :method => :strip_tags, :nested => true).empty?
   end
 end

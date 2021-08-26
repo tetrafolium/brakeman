@@ -60,7 +60,7 @@ class Brakeman::CheckLinkToHref < Brakeman::CheckLinkTo
           :confidence => :high,
           :link_path => "link_to_href"
       end
-    elsif not tracker.options[:ignore_model_output] and input = has_immediate_model?(url_arg)
+    elsif !tracker.options[:ignore_model_output] and input = has_immediate_model?(url_arg)
       return if ignore_model_call? url_arg, input or duplicate? result
 
       add_result result
@@ -77,7 +77,7 @@ class Brakeman::CheckLinkToHref < Brakeman::CheckLinkTo
     end
   end
 
-  CHECK_INSIDE_METHODS = [:url_for, :h, :sanitize]
+  CHECK_INSIDE_METHODS = %i[url_for h sanitize].freeze
 
   def check_argument? url_arg
     return unless call? url_arg

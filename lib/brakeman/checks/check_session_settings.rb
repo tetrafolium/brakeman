@@ -9,10 +9,8 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
   def initialize *args
     super
 
-    unless tracker.options[:rails3]
-      @session_settings = Sexp.new(:colon2, Sexp.new(:const, :ActionController), :Base)
-    else
-      @session_settings = nil
+    @session_settings = unless tracker.options[:rails3]
+      Sexp.new(:colon2, Sexp.new(:const, :ActionController), :Base)
     end
   end
 
@@ -25,7 +23,7 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
     secret_token = @app_tree.file_path("config/initializers/secret_token.rb")
 
     [session_store, secret_token].each do |file|
-      if tracker.initializers[file] and not ignored? file.basename
+      if tracker.initializers[file] and !ignored? file.basename
         process tracker.initializers[file]
       end
     end
@@ -44,7 +42,7 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
   #and App::Application.config.secret_key_base =
   #in Rails 4.x apps
   def process_attrasgn exp
-    if not tracker.options[:rails3] and exp.target == @session_settings and exp.method == :session=
+    if !tracker.options[:rails3] and exp.target == @session_settings and exp.method == :session=
       check_for_issues exp.first_arg, @app_tree.file_path("config/initializers/session_store.rb")
     end
 
@@ -114,7 +112,7 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
   def check_secrets_yaml
     secrets_file = @app_tree.file_path("config/secrets.yml")
 
-    if secrets_file.exists? and not ignored? "secrets.yml" and not ignored? "config/*.yml"
+    if secrets_file.exists? and !ignored? "secrets.yml" and !ignored? "config/*.yml"
       yaml = secrets_file.read
       require 'date' # https://github.com/dtao/safe_yaml/issues/80
       require 'safe_yaml/load'
@@ -166,11 +164,10 @@ class Brakeman::CheckSessionSettings < Brakeman::BaseCheck
   def ignored? file
     [".", "config", "config/initializers"].each do |dir|
       ignore_file = @app_tree.file_path("#{dir}/.gitignore")
-      if @app_tree.exists? ignore_file
-        input = ignore_file.read
+      next unless @app_tree.exists? ignore_file
+      input = ignore_file.read
 
-        return true if input.include? file
-      end
+      return true if input.include? file
     end
 
     false

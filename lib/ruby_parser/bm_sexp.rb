@@ -3,8 +3,8 @@
 #of a Sexp.
 class Sexp
   attr_accessor :original_line, :or_depth
-  ASSIGNMENT_BOOL = [:gasgn, :iasgn, :lasgn, :cvdecl, :cvasgn, :cdecl, :or, :and, :colon2, :op_asgn_or]
-  CALLS = [:call, :attrasgn, :safe_call, :safe_attrasgn]
+  ASSIGNMENT_BOOL = %i[gasgn iasgn lasgn cvdecl cvasgn cdecl or and colon2 op_asgn_or].freeze
+  CALLS = %i[call attrasgn safe_call safe_attrasgn].freeze
 
   def method_missing name, *args
     #Brakeman does not use this functionality,
@@ -28,11 +28,11 @@ class Sexp
     s = Sexp.new
 
     self.each do |e|
-      if e.is_a? Sexp
-        s << e.deep_clone(line)
+      s << if e.is_a? Sexp
+        e.deep_clone(line)
       else
-        s << e
-      end
+        e
+           end
     end
 
     if line
@@ -87,13 +87,13 @@ class Sexp
     combined
   end
 
-  alias :node_type :sexp_type
-  alias :values :sexp_body # TODO: retire
+  alias node_type sexp_type
+  alias values sexp_body # TODO: retire
 
-  alias :old_push :<<
-  alias :old_compact :compact
-  alias :old_fara :find_and_replace_all
-  alias :old_find_node :find_node
+  alias old_push <<
+  alias old_compact compact
+  alias old_fara find_and_replace_all
+  alias old_find_node find_node
 
   def << arg
     @my_hash_value = nil
@@ -305,8 +305,6 @@ class Sexp
 
     if self[3]
       self[-1]
-    else
-      nil
     end
   end
 
@@ -415,7 +413,7 @@ class Sexp
   def block_args
     expect :iter
     if self[2] == 0 # ?! See https://github.com/presidentbeef/brakeman/issues/331
-      return Sexp.new(:args)
+      Sexp.new(:args)
     else
       self[2]
     end
@@ -602,11 +600,11 @@ class Sexp
 end
 
 #Invalidate hash cache if the Sexp changes
-[:[]=, :clear, :collect!, :compact!, :concat, :delete, :delete_at,
- :delete_if, :drop, :drop_while, :fill, :flatten!, :replace, :insert,
- :keep_if, :map!, :pop, :push, :reject!, :replace, :reverse!, :rotate!,
- :select!, :shift, :shuffle!, :slice!, :sort!, :sort_by!, :transpose,
- :uniq!, :unshift].each do |method|
+%i[\[\]= clear collect! compact! concat delete delete_at
+ delete_if drop drop_while fill flatten! replace insert
+ keep_if map! pop push reject! replace reverse! rotate!
+ select! shift shuffle! slice! sort! sort_by! transpose
+ uniq! unshift].each do |method|
   Sexp.class_eval <<-RUBY
     def #{method} *args
       @my_hash_value = nil
@@ -617,7 +615,7 @@ end
 
 #Methods used by RubyParser which would normally go through method_missing but
 #we don't want that to happen because it hides Brakeman errors
-[:resbody, :lasgn, :iasgn, :splat].each do |method|
+%i[resbody lasgn iasgn splat].each do |method|
   Sexp.class_eval <<-RUBY
     def #{method} delete = false
       if delete

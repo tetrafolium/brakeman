@@ -76,7 +76,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
   def generate_controllers
     controller_rows = controller_information
 
-    cols = ['Name', 'Parent', 'Includes', 'Routes']
+    cols = %w[Name Parent Includes Routes]
 
     locals = { :controller_rows => controller_rows }
     values = controller_rows.collect { |row| row.values_at(*cols) }
@@ -86,7 +86,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
   #Generate table of errors or return nil if no errors
   def generate_errors
     values = tracker.errors.collect { |error| [error[:error], error[:backtrace][0]]}
-    render_array('error_overview', ['Error', 'Location'], values, { :tracker => tracker })
+    render_array('error_overview', %w[Error Location], values, { :tracker => tracker })
   end
 
   def generate_obsolete
@@ -146,8 +146,6 @@ class Brakeman::Report::Table < Brakeman::Report::Base
       locals = { :warnings => rows }
 
       render_array(template, cols, values, locals)
-    else
-      nil
     end
   end
 
@@ -238,13 +236,13 @@ class Brakeman::Report::Table < Brakeman::Report::Base
     end
 
     if warning.code
-      if @highlight_user_input and warning.user_input
-        code = warning.format_with_user_input do |_user_input, user_input_string|
+      code = if @highlight_user_input and warning.user_input
+        warning.format_with_user_input do |_user_input, user_input_string|
           "+#{user_input_string}+"
         end
       else
-        code = warning.format_code
-      end
+        warning.format_code
+             end
 
       message << ": #{code}"
     end
@@ -263,7 +261,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
       Brakeman version: #{Brakeman::Version}
       Started at #{tracker.start_time}
       Duration: #{tracker.duration} seconds
-      Checks run: #{checks.checks_run.sort.join(", ")}
+      Checks run: #{checks.checks_run.sort.join(', ')}
     HEADER
   end
 

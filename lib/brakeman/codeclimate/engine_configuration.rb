@@ -49,11 +49,7 @@ module Brakeman
       end
 
       def brakeman_configuration
-        if engine_config["config"]
-          engine_config["config"]
-        else
-          {}
-        end
+        engine_config["config"] || {}
       end
 
       def active_include_paths

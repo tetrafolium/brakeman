@@ -63,7 +63,7 @@ class Brakeman::FindCall < Brakeman::BasicProcessor
     process_all exp.body
   end
 
-  alias :process_defs :process_defn
+  alias process_defs process_defn
 
   #Look for matching calls and add them to results
   def process_call exp
@@ -107,14 +107,10 @@ class Brakeman::FindCall < Brakeman::BasicProcessor
   def match search_terms, item
     case search_terms
     when Symbol
-      if search_terms == item
-        true
-      else
-        false
-      end
+      search_terms == item
     when Enumerable
       if search_terms.empty?
-        item == nil
+        item.nil?
       end
     end
   end

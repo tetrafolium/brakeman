@@ -50,7 +50,7 @@ class Brakeman::CallIndex
 
     #Find calls with no explicit target
     #with either :target => nil or :target => false
-    elsif (options.key? :target or options.key? :targets) and not target and method
+    elsif (options.key? :target or options.key? :targets) and !target and method
       calls = calls_by_method method
       calls = filter_by_target calls, nil
 
@@ -107,7 +107,7 @@ class Brakeman::CallIndex
 
       target = call[:target]
 
-      if not target.is_a? Sexp
+      if !target.is_a? Sexp
         @calls_by_target[target] ||= []
         @calls_by_target[target] << call
       elsif target.node_type == :params or target.node_type == :session

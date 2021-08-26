@@ -21,9 +21,9 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
   end
 
   def process_controller name, src, current_file
-    if not node_type? src, :class
+    if !node_type? src, :class
       Brakeman.debug "#{name} is not a class, it's a #{src.node_type}"
-      return
+      nil
     else
       @current_class = name
       @current_file = @app_tree.file_path(current_file)
@@ -53,12 +53,12 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
         processor = Brakeman::ControllerProcessor.new(@tracker, mixin.file)
         method = mixin.get_method(name)[:src].deep_clone
 
-        if node_type? method, :defn
-          method = processor.process_defn method
+        method = if node_type? method, :defn
+          processor.process_defn method
         else
           #Should be a defn, but this will catch other cases
-          method = processor.process method
-        end
+          processor.process method
+                 end
 
         @current_file = mixin.file
         #Then process it like any other method in the controller
@@ -99,7 +99,7 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
 
       process_all exp.body
 
-      if is_route and not @rendered
+      if is_route and !@rendered
         process_default_render exp
       end
     end
@@ -275,8 +275,6 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
       else
         @method_cache[method_name] = { :controller => controller.name, :method => method[:src] }
       end
-    else
-      nil
     end
   end
 end

@@ -20,13 +20,13 @@ class Brakeman::TemplateProcessor < Brakeman::BaseProcessor
 
   #Process the template Sexp.
   def process exp
-    begin
+    
       super
-    rescue => e
+    rescue StandardError => e
       except = e.exception("Error when processing #{@current_template.name}: #{e.message}")
       except.set_backtrace(e.backtrace)
       raise except
-    end
+    
   end
 
   #Ignore initial variable assignment
@@ -54,7 +54,7 @@ class Brakeman::TemplateProcessor < Brakeman::BaseProcessor
 
   # Pull out actual output value from template
   def normalize_output arg
-    if call? arg and [:to_s, :html_safe!, :freeze].include? arg.method
+    if call? arg and %i[to_s html_safe! freeze].include? arg.method
       arg.target
     elsif node_type? arg, :if
       branches = [arg.then_clause, arg.else_clause].compact

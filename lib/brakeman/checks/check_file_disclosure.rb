@@ -6,17 +6,14 @@ class Brakeman::CheckFileDisclosure < Brakeman::BaseCheck
   @description = 'Checks for versions with file existence disclosure vulnerability'
 
   def run_check
-    fix_version = case
-                  when version_between?('2.0.0', '2.3.18')
+    fix_version = if version_between?('2.0.0', '2.3.18')
                     '3.2.21'
-                  when version_between?('3.0.0', '3.2.20')
+                  elsif version_between?('3.0.0', '3.2.20')
                     '3.2.21'
-                  when version_between?('4.0.0', '4.0.11')
+                  elsif version_between?('4.0.0', '4.0.11')
                     '4.0.12'
-                  when version_between?('4.1.0', '4.1.7')
+                  elsif version_between?('4.1.0', '4.1.7')
                     '4.1.8'
-                  else
-                    nil
                   end
 
     if fix_version and serves_static_assets?

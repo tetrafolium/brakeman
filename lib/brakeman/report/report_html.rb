@@ -4,7 +4,7 @@ require 'brakeman/report/report_table.rb'
 class Brakeman::Report::HTML < Brakeman::Report::Table
   HTML_CONFIDENCE = ["<span class='high-confidence'>High</span>",
                      "<span class='med-confidence'>Medium</span>",
-                     "<span class='weak-confidence'>Weak</span>"]
+                     "<span class='weak-confidence'>Weak</span>"].freeze
 
   def initialize *args
     super
@@ -116,9 +116,9 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
     context = context_for(warning)
     message = html_message(warning, message)
 
-    code_id = "context#@element_id"
-    message_id = "message#@element_id"
-    full_message_id = "full_message#@element_id"
+    code_id = "context#{@element_id}"
+    message_id = "message#{@element_id}"
+    full_message_id = "full_message#{@element_id}"
     alt = false
     output = "<div class='warning_message' onClick=\"toggle('#{code_id}');toggle('#{message_id}');toggle('#{full_message_id}')\" >" <<
              message <<
@@ -136,13 +136,13 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
     HTML
 
     unless context.empty?
-      if warning.line - 1 == 1 or warning.line + 1 == 1
-        error = " near_error"
+      error = if warning.line - 1 == 1 or warning.line + 1 == 1
+        " near_error"
       elsif 1 == warning.line
-        error = " error"
+        " error"
       else
-        error = ""
-      end
+        ""
+              end
 
       output << <<-HTML
         <tr class='context first#{error}'>
@@ -158,13 +158,13 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
       if context.length > 1
         output << context[1..-1].map do |code|
           alt = !alt
-          if code[0] == warning.line - 1 or code[0] == warning.line + 1
-            error = " near_error"
+          error = if code[0] == warning.line - 1 or code[0] == warning.line + 1
+            " near_error"
           elsif code[0] == warning.line
-            error = " error"
+            " error"
           else
-            error = ""
-          end
+            ""
+                  end
 
           <<-HTML
           <tr class='context#{alt ? ' alt' : ''}#{error}'>
@@ -200,12 +200,12 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
         "[BMP_UI]#{user_input}[/BMP_UI]"
       end
 
-      code = "<span class=\"code\">#{CGI.escapeHTML(code).gsub("[BMP_UI]", "<span class=\"user_input\">").gsub("[/BMP_UI]", "</span>")}</span>"
+      code = "<span class=\"code\">#{CGI.escapeHTML(code).gsub('[BMP_UI]', '<span class="user_input">').gsub('[/BMP_UI]', '</span>')}</span>"
       full_message = "#{message}: #{code}"
 
       if warning.code.mass > 20
-        message_id = "message#@element_id"
-        full_message_id = "full_message#@element_id"
+        message_id = "message#{@element_id}"
+        full_message_id = "full_message#{@element_id}"
 
         "<span id='#{message_id}' style='display:block'>#{message}: ...</span>" <<
           "<span id='#{full_message_id}' style='display:none'>#{full_message}</span>"

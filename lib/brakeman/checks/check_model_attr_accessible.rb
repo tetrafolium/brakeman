@@ -11,12 +11,12 @@ class Brakeman::CheckModelAttrAccessible < Brakeman::BaseCheck
   @description = "Reports models which have dangerous attributes defined under the attr_accessible whitelist."
 
   SUSP_ATTRS = [
-    [:admin, :high], # Very dangerous unless some Rails authorization used
-    [:role, :medium],
-    [:banned, :medium],
-    [:account_id, :high],
+    %i[admin high], # Very dangerous unless some Rails authorization used
+    %i[role medium],
+    %i[banned medium],
+    %i[account_id high],
     [/\S*_id(s?)\z/, :weak] # All other foreign keys have weak/low confidence
-  ]
+  ].freeze
 
   def run_check
     check_models do |_name, model|
@@ -24,16 +24,15 @@ class Brakeman::CheckModelAttrAccessible < Brakeman::BaseCheck
         next if role_limited? model, attribute
 
         SUSP_ATTRS.each do |susp_attr, confidence|
-          if susp_attr.is_a?(Regexp) and susp_attr =~ attribute.to_s or susp_attr == attribute
-            warn :model => model,
-              :file => model.file,
-              :warning_type => "Mass Assignment",
-              :warning_code => :dangerous_attr_accessible,
-              :message => "Potentially dangerous attribute available for mass assignment",
-              :confidence => confidence,
-              :code => Sexp.new(:lit, attribute)
-            break # Prevent from matching single attr multiple times
-          end
+          next unless susp_attr.is_a?(Regexp) and susp_attr =~ attribute.to_s or susp_attr == attribute
+          warn :model => model,
+            :file => model.file,
+            :warning_type => "Mass Assignment",
+            :warning_code => :dangerous_attr_accessible,
+            :message => "Potentially dangerous attribute available for mass assignment",
+            :confidence => confidence,
+            :code => Sexp.new(:lit, attribute)
+          break # Prevent from matching single attr multiple times
         end
       end
     end
@@ -48,7 +47,7 @@ class Brakeman::CheckModelAttrAccessible < Brakeman::BaseCheck
 
   def check_models
     tracker.models.each do |name, model|
-      if !model.attr_accessible.nil?
+      unless model.attr_accessible.nil?
         yield name, model
       end
     end

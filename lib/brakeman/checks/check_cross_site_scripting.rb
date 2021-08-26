@@ -21,7 +21,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
 
   MODEL_METHODS = Set[:all, :find, :first, :last, :new]
 
-  IGNORE_LIKE = /^link_to_|(_path|_tag|_url)$/
+  IGNORE_LIKE = /^link_to_|(_path|_tag|_url)$/.freeze
 
   HAML_HELPERS = Sexp.new(:colon2, Sexp.new(:const, :Haml), :Helpers)
 
@@ -48,11 +48,10 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
       @current_template = template
 
       template.each_output do |out|
-        unless check_for_immediate_xss out
-          @matched = false
-          @mark = false
-          process out
-        end
+        next if check_for_immediate_xss out
+        @matched = false
+        @mark = false
+        process out
       end
     end
   end
@@ -84,21 +83,19 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
         :code => input.match,
         :confidence => :high
 
-    elsif not tracker.options[:ignore_model_output] and match = has_immediate_model?(out)
+    elsif !tracker.options[:ignore_model_output] and match = has_immediate_model?(out)
       method = if call? match
                  match.method
-               else
-                 nil
                end
 
       unless IGNORE_MODEL_METHODS.include? method
         add_result exp
 
-        if likely_model_attribute? match
-          confidence = :high
+        confidence = if likely_model_attribute? match
+          :high
         else
-          confidence = :medium
-        end
+          :medium
+                     end
 
         message = "Unescaped model attribute"
         link_path = "cross_site_scripting"
@@ -146,7 +143,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
   #Otherwise, ignore
   def process_escaped_output exp
     unless check_for_immediate_xss exp
-      if not duplicate? exp
+      unless duplicate? exp
         if raw_call? exp
           process exp.value.first_arg
         elsif html_safe_call? exp
@@ -176,7 +173,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
           message = msg("Unescaped ", msg_input(@matched))
         end
 
-        if message and not duplicate? exp
+        if message and !duplicate? exp
           add_result exp
 
           link_path = "cross_site_scripting"

@@ -1,5 +1,5 @@
 #Load all files in processors/
-Dir.glob("#{File.expand_path(File.dirname(__FILE__))}/processors/*.rb").each { |f| require f.match(/brakeman\/processors.*/)[0] }
+Dir.glob("#{__dir__}/processors/*.rb").each { |f| require f.match(%r{brakeman/processors.*})[0] }
 require 'brakeman/tracker'
 require 'set'
 require 'pathname'
@@ -74,7 +74,7 @@ module Brakeman
       #Each template which is rendered is stored separately
       #with a new name.
       if called_from
-        name = ("#{name}.#{called_from}").to_sym
+        name = "#{name}.#{called_from}".to_sym
       end
 
       @tracker.templates[name].src = result

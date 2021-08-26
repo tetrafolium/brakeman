@@ -46,13 +46,13 @@ class Brakeman::CheckYAMLParsing < Brakeman::BaseCheck
   end
 
   def disabled_xml_parser?
-    if version_between? "0.0.0", "2.3.14"
+    matches = if version_between? "0.0.0", "2.3.14"
       #Look for ActionController::Base.param_parsers.delete(Mime::XML)
-      matches = tracker.find_call(target: :"ActionController::Base.param_parsers", method: :delete)
+      tracker.find_call(target: :"ActionController::Base.param_parsers", method: :delete)
     else
       #Look for ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::XML)
-      matches = tracker.find_call(target: :"ActionDispatch::ParamsParser::DEFAULT_PARSERS", method: :delete)
-    end
+      tracker.find_call(target: :"ActionDispatch::ParamsParser::DEFAULT_PARSERS", method: :delete)
+              end
 
     unless matches.empty?
       mime_xml = s(:colon2, s(:const, :Mime), :XML)
@@ -87,11 +87,11 @@ class Brakeman::CheckYAMLParsing < Brakeman::BaseCheck
   end
 
   def disabled_xml_dangerous_types?
-    if version_between? "0.0.0", "2.3.14"
-      matches = tracker.find_call(target: :"ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING", method: :delete)
+    matches = if version_between? "0.0.0", "2.3.14"
+      tracker.find_call(target: :"ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING", method: :delete)
     else
-      matches = tracker.find_call(target: :"ActiveSupport::XmlMini::PARSING", method: :delete)
-    end
+      tracker.find_call(target: :"ActiveSupport::XmlMini::PARSING", method: :delete)
+              end
 
     symbols_off = false
     yaml_off = false

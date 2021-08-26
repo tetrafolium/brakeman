@@ -11,7 +11,7 @@
 #
 
 class Brakeman::SexpProcessor
-  VERSION = 'CUSTOM'
+  VERSION = 'CUSTOM'.freeze
 
   ##
   # Return a stack of contexts. Most recent node is first.
@@ -48,7 +48,7 @@ class Brakeman::SexpProcessor
 
     if @processors.empty?
       public_methods.each do |name|
-        if name.to_s.start_with? "process_" then
+        if name.to_s.start_with? "process_"
           @processors[name[8..-1].to_sym] = name.to_sym
         end
       end
@@ -66,16 +66,16 @@ class Brakeman::SexpProcessor
     result = nil
 
     type = exp.first
-    raise "Type should be a Symbol, not: #{exp.first.inspect} in #{exp.inspect}" unless Symbol === type
+    raise "Type should be a Symbol, not: #{exp.first.inspect} in #{exp.inspect}" unless type.is_a?(Symbol)
 
     in_context type do
       # now do a pass with the real processor (or generic)
       meth = @processors[type]
-      if meth then
-        result = self.send(meth, exp)
+      result = if meth
+        self.send(meth, exp)
       else
-        result = self.process_default(exp)
-      end
+        self.process_default(exp)
+               end
     end
 
     raise SexpTypeError, "Result must be a #{@expected}, was #{result.class}:#{result.inspect}" unless @expected === result

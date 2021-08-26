@@ -25,8 +25,8 @@ class Brakeman::Checks
     @checks + @optional_checks
   end
 
-  def self.optional_checks
-    @optional_checks
+  class << self
+    attr_reader :optional_checks
   end
 
   def self.initialize_checks check_directory = ""
@@ -55,11 +55,7 @@ class Brakeman::Checks
 
   #No need to use this directly.
   def initialize options = {}
-    if options[:min_confidence]
-      @min_confidence = options[:min_confidence]
-    else
-      @min_confidence = Brakeman.get_defaults[:min_confidence]
-    end
+    @min_confidence = options[:min_confidence] || [](:min_confidence)
 
     @warnings = []
     @template_warnings = []
@@ -189,7 +185,7 @@ class Brakeman::Checks
       check_name = self.get_check_name(c)
 
       skipped.include? check_name or
-        (explicit and not explicit.include? check_name and not enabled.include? check_name)
+        (explicit and !explicit.include? check_name and !enabled.include? check_name)
     end
   end
 
@@ -198,7 +194,7 @@ class Brakeman::Checks
 
     begin
       check.run_check
-    rescue => e
+    rescue StandardError => e
       mutex.synchronize do
         tracker.error e
       end
@@ -209,6 +205,6 @@ class Brakeman::Checks
 end
 
 #Load all files in checks/ directory
-Dir.glob("#{File.expand_path(File.dirname(__FILE__))}/checks/*.rb").sort.each do |f|
-  require f.match(/(brakeman\/checks\/.*)\.rb$/)[0]
+Dir.glob("#{__dir__}/checks/*.rb").sort.each do |f|
+  require f.match(%r{(brakeman/checks/.*)\.rb$})[0]
 end

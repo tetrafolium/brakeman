@@ -28,10 +28,9 @@ class Brakeman::CheckValidationRegex < Brakeman::BaseCheck
 
       validates = model.options[:validates]
 
-      if validates
-        validates.each do |v|
-          process_validates v
-        end
+      next unless validates
+      validates.each do |v|
+        process_validates v
       end
     end
   end
@@ -60,16 +59,16 @@ class Brakeman::CheckValidationRegex < Brakeman::BaseCheck
   end
 
   # Match secure regexp without extended option
-  SECURE_REGEXP_PATTERN = %r{
+  SECURE_REGEXP_PATTERN = /
     \A
     \\A
     .*
     \\[zZ]
     \z
-  }x
+  /x.freeze
 
   # Match secure of regexp with extended option
-  EXTENDED_SECURE_REGEXP_PATTERN = %r{
+  EXTENDED_SECURE_REGEXP_PATTERN = /
     \A
     \s*
     \\A
@@ -77,7 +76,7 @@ class Brakeman::CheckValidationRegex < Brakeman::BaseCheck
     \\[zZ]
     \s*
     \z
-  }mx
+  /mx.freeze
 
   #Issue warning if the regular expression does not use
   #+\A+ and +\z+
@@ -89,7 +88,7 @@ class Brakeman::CheckValidationRegex < Brakeman::BaseCheck
       warn :model => @current_model,
       :warning_type => "Format Validation",
       :warning_code => :validation_regex,
-      :message => msg("Insufficient validation for ", msg_code(get_name validator), " using ", msg_code(regex.inspect), ". Use ", msg_code("\\A"), " and ", msg_code("\\z"), " as anchors"),
+      :message => msg("Insufficient validation for ", msg_code(get_name(validator)), " using ", msg_code(regex.inspect), ". Use ", msg_code("\\A"), " and ", msg_code("\\z"), " as anchors"),
       :line => value.line,
       :confidence => :high
     end

@@ -31,7 +31,7 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
   def process_call exp
     target = exp.target
 
-    if target == map or (not target.nil? and target == nested)
+    if target == map or (!target.nil? and target == nested)
       process_map exp
     else
       process_default exp
@@ -91,11 +91,10 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
       process_resource_options exp[-1]
     else
       exp.each do |argument|
-        if node_type? argument, :lit
-          self.current_controller = exp.first.value
-          add_resources_routes
-          process_resource_options exp.last
-        end
+        next unless node_type? argument, :lit
+        self.current_controller = exp.first.value
+        add_resources_routes
+        process_resource_options exp.last
       end
     end
   end
@@ -139,7 +138,7 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
   #Process route option :only => ...
   def process_option_only exp
     routes = @tracker.routes[@current_controller]
-    [:index, :new, :create, :show, :edit, :update, :destroy].each do |r|
+    %i[index new create show edit update destroy].each do |r|
       routes.delete r
     end
 
@@ -169,11 +168,10 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
       process_resource_options exp.last
     else
       exp.each do |argument|
-        if node_type? argument, :lit
-          self.current_controller = pluralize(exp.first.value.to_s)
-          add_resource_routes
-          process_resource_options exp.last
-        end
+        next unless node_type? argument, :lit
+        self.current_controller = pluralize(exp.first.value.to_s)
+        add_resource_routes
+        process_resource_options exp.last
       end
     end
   end
@@ -201,15 +199,14 @@ class Brakeman::Rails2RoutesProcessor < Brakeman::BasicProcessor
     return if @tracker.routes[@current_controller].is_a? Array and @tracker.routes[@current_controller][0] == :allow_all_actions
 
     exp.last.each_with_index do |e, i|
-      if symbol? e and e.value == :action
-        action = exp.last[i + 1]
+      next unless symbol? e and e.value == :action
+      action = exp.last[i + 1]
 
-        if node_type? action, :lit
-          @tracker.routes[@current_controller] << action.value.to_sym
-        end
-
-        return
+      if node_type? action, :lit
+        @tracker.routes[@current_controller] << action.value.to_sym
       end
+
+      return
     end
   end
 

@@ -16,11 +16,11 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
     @model_find_calls = Set[:all, :create, :create!, :find, :find_by_sql, :first, :last, :new]
 
     if tracker.options[:rails3]
-      @model_find_calls.merge [:from, :group, :having, :joins, :lock, :order, :reorder, :select, :where]
+      @model_find_calls.merge %i[from group having joins lock order reorder select where]
     end
 
     if version_between? "4.0.0", "9.9.9"
-      @model_find_calls.merge [:find_by, :find_by!, :take]
+      @model_find_calls.merge %i[find_by find_by! take]
     end
 
     @tracker.find_call(:target => false, :method => :redirect_to).each do |res|
@@ -37,17 +37,17 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
     opt = call.first_arg
 
     if method == :redirect_to and
-       not only_path?(call) and
-       not explicit_host?(opt) and
-       not slice_call?(opt) and
-       not safe_permit?(opt) and
+       !only_path?(call) and
+       !explicit_host?(opt) and
+       !slice_call?(opt) and
+       !safe_permit?(opt) and
        res = include_user_input?(call)
 
-      if res.type == :immediate
-        confidence = :high
+      confidence = if res.type == :immediate
+        :high
       else
-        confidence = :weak
-      end
+        :weak
+                   end
 
       warn :result => result,
         :warning_type => "Redirect",
@@ -121,7 +121,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
   end
 
   def use_unsafe_hash_method? arg
-    return call_has_param(arg, :to_unsafe_hash) || call_has_param(arg, :to_unsafe_h)
+    call_has_param(arg, :to_unsafe_hash) || call_has_param(arg, :to_unsafe_h)
   end
 
   def call_has_param arg, key
@@ -240,7 +240,7 @@ class Brakeman::CheckRedirect < Brakeman::BaseCheck
     exp.method == :slice
   end
 
-  DANGEROUS_KEYS = [:host, :subdomain, :domain, :port]
+  DANGEROUS_KEYS = %i[host subdomain domain port].freeze
 
   def safe_permit? exp
     if call? exp and params? exp.target and exp.method == :permit

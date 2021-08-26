@@ -92,7 +92,7 @@ module Brakeman
 
     options = default_options.merge(load_options(options)).merge(options)
 
-    if options[:quiet].nil? and not command_line
+    if options[:quiet].nil? and !command_line
       options[:quiet] = true
     end
 
@@ -135,12 +135,12 @@ module Brakeman
           if options.include? :additional_checks_path
             options.delete :additional_checks_path
 
-            notify "[Notice] Ignoring additional check paths in config file. Use --allow-check-paths-in-config to allow" unless (options[:quiet] || quiet)
+            notify "[Notice] Ignoring additional check paths in config file. Use --allow-check-paths-in-config to allow" unless options[:quiet] || quiet
           end
         end
 
         # notify if options[:quiet] and quiet is nil||false
-        notify "[Notice] Using configuration in #{config}" unless (options[:quiet] || quiet)
+        notify "[Notice] Using configuration in #{config}" unless options[:quiet] || quiet
         options
       else
         notify "[Notice] Empty configuration file: #{config}" unless quiet
@@ -154,7 +154,7 @@ module Brakeman
   CONFIG_FILES = [
     File.expand_path("~/.brakeman/config.yml"),
     File.expand_path("/etc/brakeman/config.yml")
-  ]
+  ].freeze
 
   def self.config_file custom_location, app_path
     app_config = File.expand_path(File.join(app_path, "config", "brakeman.yml"))
@@ -172,7 +172,7 @@ module Brakeman
       :exit_on_error => true,
       :exit_on_warn => true,
       :highlight_user_input => true,
-      :html_style => "#{File.expand_path(File.dirname(__FILE__))}/brakeman/format/style.css",
+      :html_style => "#{__dir__}/brakeman/format/style.css",
       :ignore_model_output => false,
       :ignore_redirect_to_model => true,
       :index_libs => true,
@@ -185,7 +185,7 @@ module Brakeman
       :relative_path => false,
       :report_progress => true,
       :safe_methods => Set.new,
-      :skip_checks => Set.new, }
+      :skip_checks => Set.new }
   end
 
   #Determine output formats based on options[:output_formats]
@@ -203,9 +203,9 @@ module Brakeman
     else
       begin
         self.load_brakeman_dependency 'terminal-table', :allow_fail
-        return [:to_s]
+        [:to_s]
       rescue LoadError
-        return [:to_json]
+        [:to_json]
       end
     end
   end
@@ -275,8 +275,6 @@ module Brakeman
       path.chomp '/' if path
       ref ||= 'master'
       ['https://github.com', name, repo, 'blob', ref, path].compact.join '/'
-    else
-      nil
     end
   end
   private_class_method :get_github_url
@@ -288,16 +286,16 @@ module Brakeman
     add_external_checks options
 
     if options[:list_optional_checks]
-      $stderr.puts "Optional Checks:"
+      warn "Optional Checks:"
       checks = Checks.optional_checks
     else
-      $stderr.puts "Available Checks:"
+      warn "Available Checks:"
       checks = Checks.checks
     end
 
     format_length = 30
 
-    $stderr.puts "-" * format_length
+    warn "-" * format_length
     checks.each do |check|
       $stderr.printf("%-#{format_length}s%s\n", check.name, check.description)
     end
@@ -306,10 +304,8 @@ module Brakeman
   #Output configuration to YAML
   def self.dump_config options
     require 'yaml'
-    if options[:create_config].is_a? String
-      file = options[:create_config]
-    else
-      file = nil
+    file = if options[:create_config].is_a? String
+      options[:create_config]
     end
 
     options.delete :create_config
@@ -406,7 +402,7 @@ module Brakeman
       tracker.options[:output_color] = false
     end
 
-    if not $stdout.tty? or not tracker.options[:pager] or output_formats.length > 1 # does this ever happen??
+    if !$stdout.tty? or !tracker.options[:pager] or output_formats.length > 1 # does this ever happen??
       output_formats.each do |output_format|
         puts tracker.report.format(output_format)
       end
@@ -441,18 +437,18 @@ module Brakeman
   end
 
   def self.notify message
-    $stderr.puts message unless @quiet
+    warn message unless @quiet
   end
 
   def self.debug message
-    $stderr.puts message if @debug
+    warn message if @debug
   end
 
   # Compare JSON ouptut from a previous scan and return the diff of the two scans
   def self.compare options
     require 'json'
     require 'brakeman/differ'
-    raise ArgumentError.new("Comparison file doesn't exist") unless File.exist? options[:previous_results_json]
+    raise ArgumentError, "Comparison file doesn't exist" unless File.exist? options[:previous_results_json]
 
     begin
       previous_results = JSON.parse(File.read(options[:previous_results_json]), :symbolize_names => true)[:warnings]
@@ -472,7 +468,7 @@ module Brakeman
     return if @loaded_dependencies.include? name
 
     unless @vendored_paths
-      path_load = "#{File.expand_path(File.dirname(__FILE__))}/../bundle/load.rb"
+      path_load = "#{__dir__}/../bundle/load.rb"
 
       if File.exist? path_load
         require path_load
@@ -487,8 +483,8 @@ module Brakeman
       if allow_fail
         raise e
       else
-        $stderr.puts e.message
-        $stderr.puts "Please install the appropriate dependency: #{name}."
+        warn e.message
+        warn "Please install the appropriate dependency: #{name}."
         exit!(-1)
       end
     end
@@ -503,7 +499,7 @@ module Brakeman
       file = options[:ignore_file]
     elsif app_tree.exists? "config/brakeman.ignore"
       file = app_tree.expand_path("config/brakeman.ignore")
-    elsif not options[:interactive_ignore]
+    elsif !(options[:interactive_ignore])
       return
     end
 
@@ -523,9 +519,11 @@ module Brakeman
   end
 
   def self.add_external_checks options
-    options[:additional_checks_path].each do |path|
-      Brakeman::Checks.initialize_checks path
-    end if options[:additional_checks_path]
+    if options[:additional_checks_path]
+      options[:additional_checks_path].each do |path|
+        Brakeman::Checks.initialize_checks path
+      end
+    end
   end
 
   def self.check_for_missing_checks included_checks, excluded_checks, enabled_checks

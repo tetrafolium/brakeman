@@ -16,7 +16,7 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
   SAFE_VALUES = [s(:const, :RAILS_ROOT),
                  s(:call, s(:const, :Rails), :root),
                  s(:call, s(:const, :Rails), :env),
-                 s(:call, s(:const, :Process), :pid)]
+                 s(:call, s(:const, :Process), :pid)].freeze
 
   SHELL_ESCAPE_MODULE_METHODS = Set[:escape, :join, :shellescape, :shelljoin]
   SHELL_ESCAPE_MIXIN_METHODS = Set[:shellescape, :shelljoin]
@@ -36,9 +36,9 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
 
     Brakeman.debug "Finding other system calls"
     calls = tracker.find_call :targets => [:IO, :Open3, :Kernel, :'POSIX::Spawn', :Process, nil],
-      :methods => [:capture2, :capture2e, :capture3, :exec, :pipeline, :pipeline_r,
-                   :pipeline_rw, :pipeline_start, :pipeline_w, :popen, :popen2, :popen2e,
-                   :popen3, :spawn, :syscall, :system], :nested => true
+      :methods => %i[capture2 capture2e capture3 exec pipeline pipeline_r
+                   pipeline_rw pipeline_start pipeline_w popen popen2 popen2e
+                   popen3 spawn syscall system], :nested => true
 
     Brakeman.debug "Processing system calls"
     calls.each do |result|
@@ -78,15 +78,15 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
       # when the first two arguments are something like "bash -c" because then
       # the third argument is effectively the command being run and might be
       # a malicious executable if it comes (partially or fully) from user input.
-      if dash_c_shell_command?(first_arg, call.second_arg)
-        failure = include_user_input?(args[3]) ||
+      failure = if dash_c_shell_command?(first_arg, call.second_arg)
+        include_user_input?(args[3]) ||
                   dangerous_interp?(args[3]) ||
                   dangerous_string_building?(args[3])
       else
-        failure = include_user_input?(first_arg) ||
+        include_user_input?(first_arg) ||
                   dangerous_interp?(first_arg) ||
                   dangerous_string_building?(first_arg)
-      end
+                end
     else
       failure = include_user_input?(args) ||
                 dangerous_interp?(args) ||
@@ -95,11 +95,11 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
 
     if failure and original? result
 
-      if failure.type == :interp #Not from user input
-        confidence = :medium
+      confidence = if failure.type == :interp #Not from user input
+        :medium
       else
-        confidence = :high
-      end
+        :high
+                   end
 
       warn :result => result,
         :warning_type => "Command Injection",
@@ -122,14 +122,13 @@ class Brakeman::CheckExecute < Brakeman::BaseCheck
 
   def check_open_calls
     tracker.find_call(:targets => [nil, :Kernel], :method => :open).each do |result|
-      if match = dangerous_open_arg?(result[:call].first_arg)
-        warn :result => result,
-          :warning_type => "Command Injection",
-          :warning_code => :command_injection,
-          :message => msg("Possible command injection in ", msg_code("open")),
-          :user_input => match,
-          :confidence => :high
-      end
+      next unless match = dangerous_open_arg?(result[:call].first_arg)
+      warn :result => result,
+        :warning_type => "Command Injection",
+        :warning_code => :command_injection,
+        :message => msg("Possible command injection in ", msg_code("open")),
+        :user_input => match,
+        :confidence => :high
     end
   end
 

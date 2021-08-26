@@ -24,14 +24,14 @@ class Brakeman::CheckModelAttributes < Brakeman::BaseCheck
           :warning_code => :no_attr_accessible,
           :message => msg("Mass assignment is not restricted using ", msg_code("attr_accessible")),
           :confidence => :high
-      elsif not tracker.options[:ignore_attr_protected]
+      elsif !tracker.options[:ignore_attr_protected]
         message, confidence, link = check_for_attr_protected_bypass
 
-        if link
-          warning_code = :CVE_2013_0276
+        warning_code = if link
+          :CVE_2013_0276
         else
-          warning_code = :attr_protected_used
-        end
+          :attr_protected_used
+                       end
 
         warn :model => model,
           :file => model.file,
@@ -53,17 +53,14 @@ class Brakeman::CheckModelAttributes < Brakeman::BaseCheck
   end
 
   def check_for_attr_protected_bypass
-    upgrade_version = case
-                      when version_between?("2.0.0", "2.3.16")
+    upgrade_version = if version_between?("2.0.0", "2.3.16")
                         "2.3.17"
-                      when version_between?("3.0.0", "3.0.99")
+                      elsif version_between?("3.0.0", "3.0.99")
                         "3.2.11"
-                      when version_between?("3.1.0", "3.1.10")
+                      elsif version_between?("3.1.0", "3.1.10")
                         "3.1.11"
-                      when version_between?("3.2.0", "3.2.11")
+                      elsif version_between?("3.2.0", "3.2.11")
                         "3.2.12"
-                      else
-                        nil
                       end
 
     if upgrade_version
@@ -76,6 +73,6 @@ class Brakeman::CheckModelAttributes < Brakeman::BaseCheck
       link = nil
     end
 
-    return message, confidence, link
+    [message, confidence, link]
   end
 end

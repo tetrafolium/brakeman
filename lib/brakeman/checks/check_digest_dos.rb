@@ -18,11 +18,11 @@ class Brakeman::CheckDigestDoS < Brakeman::BaseCheck
       return
     end
 
-    if with_http_digest?
-      confidence = :high
+    confidence = if with_http_digest?
+      :high
     else
-      confidence = :weak
-    end
+      :weak
+                 end
 
     warn :warning_type => "Denial of Service",
       :warning_code => :CVE_2012_3424,
@@ -33,6 +33,6 @@ class Brakeman::CheckDigestDoS < Brakeman::BaseCheck
   end
 
   def with_http_digest?
-    not tracker.find_call(:target => false, :method => [:authenticate_or_request_with_http_digest, :authenticate_with_http_digest]).empty?
+    !tracker.find_call(:target => false, :method => %i[authenticate_or_request_with_http_digest authenticate_with_http_digest]).empty?
   end
 end

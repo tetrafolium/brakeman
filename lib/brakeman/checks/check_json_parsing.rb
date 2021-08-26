@@ -60,7 +60,7 @@ class Brakeman::CheckJSONParsing < Brakeman::BaseCheck
   end
 
   def check_cve_2013_0269
-    [:json, :json_pure].each do |name|
+    %i[json json_pure].each do |name|
       gem_hash = tracker.config.get_gem name
       check_json_version name, gem_hash[:version] if gem_hash and gem_hash[:version]
     end
@@ -104,6 +104,6 @@ class Brakeman::CheckJSONParsing < Brakeman::BaseCheck
   def uses_json_parse?
     return @uses_json_parse unless @uses_json_parse.nil?
 
-    not tracker.find_call(:target => :JSON, :method => :parse).empty?
+    !tracker.find_call(:target => :JSON, :method => :parse).empty?
   end
 end

@@ -33,7 +33,7 @@ class Brakeman::HamlTemplateProcessor < Brakeman::TemplateProcessor
       exp.method == :<<
   end
 
-  PRESERVE_METHODS = [:find_and_preserve, :preserve]
+  PRESERVE_METHODS = %i[find_and_preserve preserve].freeze
 
   def find_and_preserve? exp
     call? exp and

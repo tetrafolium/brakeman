@@ -14,16 +14,16 @@ class Brakeman::Warning
   TEXT_CONFIDENCE = {
     0 => "High",
     1 => "Medium",
-    2 => "Weak",
-  }
+    2 => "Weak"
+  }.freeze
 
   CONFIDENCE = {
     :high => 0,
     :med => 1,
     :medium => 1,
     :low => 2,
-    :weak => 2,
-  }
+    :weak => 2
+  }.freeze
 
   OPTIONS = {
     :called_from => :@called_from,
@@ -42,8 +42,8 @@ class Brakeman::Warning
     :template => :@template,
     :user_input => :@user_input,
     :warning_set => :@warning_set,
-    :warning_type => :@warning_type,
-  }
+    :warning_type => :@warning_type
+  }.freeze
 
   #+options[:result]+ can be a result from Tracker#find_call. Otherwise, it can be +nil+.
   def initialize options = {}
@@ -79,7 +79,7 @@ class Brakeman::Warning
       @user_input = nil
     end
 
-    if not @line
+    unless @line
       if @user_input and @user_input.respond_to? :line
         @line = @user_input.line
       elsif @code and @code.respond_to? :line
@@ -112,10 +112,8 @@ class Brakeman::Warning
       end
     end
 
-    if options[:warning_code]
-      @warning_code = Brakeman::WarningCodes.code options[:warning_code]
-    else
-      @warning_code = nil
+    @warning_code = if options[:warning_code]
+      Brakeman::WarningCodes.code options[:warning_code]
     end
 
     Brakeman.debug("Warning created without warning code: #{options[:warning_code]}") unless @warning_code
@@ -152,11 +150,11 @@ class Brakeman::Warning
 
   #Returns name of a view, including where it was rendered from
   def view_name(include_renderer = true)
-    if called_from and include_renderer
-      @view_name = "#{template.name} (#{called_from.last})"
+    @view_name = if called_from and include_renderer
+      "#{template.name} (#{called_from.last})"
     else
-      @view_name = template.name
-    end
+      template.name
+                 end
   end
 
   #Return String of the code output from the OutputProcessor and
@@ -202,11 +200,11 @@ class Brakeman::Warning
     return @link if @link
 
     if @link_path
-      if @link_path.start_with? "http"
-        @link = @link_path
+      @link = if @link_path.start_with? "http"
+        @link_path
       else
-        @link = "https://brakemanscanner.org/docs/warning_types/#{@link_path}"
-      end
+        "https://brakemanscanner.org/docs/warning_types/#{@link_path}"
+              end
     else
       warning_path = self.warning_type.to_s.downcase.gsub(/\s+/, '_') + "/"
       @link = "https://brakemanscanner.org/docs/warning_types/#{warning_path}"
@@ -248,7 +246,7 @@ class Brakeman::Warning
   def fingerprint
     loc = self.location
     location_string = loc && loc.sort_by { |k, _v| k.to_s }.inspect
-    warning_code_string = sprintf("%03d", @warning_code)
+    warning_code_string = format("%03d", @warning_code)
     code_string = @code.inspect
 
     Digest::SHA2.new(256).update("#{warning_code_string}#{code_string}#{location_string}#{self.file.relative}#{self.confidence}").to_s
@@ -265,8 +263,6 @@ class Brakeman::Warning
     when :warning
       if self.class
         { :type => :method, :class => self.class, :method => self.method }
-      else
-        nil
       end
     end
   end
@@ -276,11 +272,11 @@ class Brakeman::Warning
   end
 
   def to_hash absolute_paths: true
-    if self.called_from and not absolute_paths
-      render_path = self.called_from.with_relative_paths
+    render_path = if self.called_from and !absolute_paths
+      self.called_from.with_relative_paths
     else
-      render_path = self.called_from
-    end
+      self.called_from
+                  end
 
     { :warning_type => self.warning_type,
       :warning_code => @warning_code,

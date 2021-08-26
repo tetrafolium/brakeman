@@ -11,13 +11,13 @@ class Brakeman::CheckUnscopedFind < Brakeman::BaseCheck
 
     associated_model_names = active_record_models.keys.select do |name|
       if belongs_to = active_record_models[name].associations[:belongs_to]
-        not optional_belongs_to? belongs_to
+        !optional_belongs_to? belongs_to
       else
         false
       end
     end
 
-    calls = tracker.find_call :method => [:find, :find_by_id, :find_by_id!],
+    calls = tracker.find_call :method => %i[find find_by_id find_by_id!],
                               :targets => associated_model_names
 
     calls.each do |call|

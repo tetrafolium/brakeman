@@ -21,11 +21,7 @@ module Brakeman::ModuleHelper
 
     exp.body = process_all! exp.body
 
-    if outer_module
-      @current_module = outer_module
-    else
-      @current_module = nil
-    end
+    @current_module = outer_module || nil
 
     exp
   end
@@ -55,11 +51,7 @@ module Brakeman::ModuleHelper
 
     yield if block_given?
 
-    if outer_class
-      @current_class = outer_class
-    else
-      @current_class = nil
-    end
+    @current_class = outer_class || nil
 
     exp
   end
@@ -67,17 +59,15 @@ module Brakeman::ModuleHelper
   def process_defs exp
     name = exp.method_name
 
-    if node_type? exp[1], :self
+    target = if node_type? exp[1], :self
       if @current_class
-        target = @current_class.name
+        @current_class.name
       elsif @current_module
-        target = @current_module.name
-      else
-        target = nil
+        @current_module.name
       end
     else
-      target = class_name exp[1]
-    end
+      class_name exp[1]
+             end
 
     @current_method = name
     res = Sexp.new :defs, target, name, exp.formal_args, *process_all!(exp.body)

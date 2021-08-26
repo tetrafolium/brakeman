@@ -58,13 +58,13 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
     begin
       exp.map! do |e|
-        if sexp? e and not e.empty?
+        if sexp? e and !e.empty?
           process e
         else
           e
         end
       end
-    rescue => e
+    rescue StandardError => e
       if @tracker
         @tracker.error e
       else
@@ -82,9 +82,9 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
   def replace exp, int = 0
     return exp if int > 3
 
-    if replacement = env[exp] and not duplicate? replacement
+    if replacement = env[exp] and !duplicate? replacement
       replace(replacement.deep_clone(exp.line), int + 1)
-    elsif tracker and replacement = tracker.constant_lookup(exp) and not duplicate? replacement
+    elsif tracker and replacement = tracker.constant_lookup(exp) and !duplicate? replacement
       replace(replacement.deep_clone(exp.line), int + 1)
     else
       exp
@@ -191,7 +191,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       collapse_send_call exp, first_arg
     end
 
-    if node_type? target, :or and [:+, :-, :*, :/].include? method
+    if node_type? target, :or and %i[+ - * /].include? method
       res = process_or_simple_operation(exp)
       return res if res
     elsif target == ARRAY_CONST and method == :new
@@ -288,12 +288,10 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
   # Painful conversion of Array#join into string interpolation
   def process_array_join array, join_str
-    result = s()
+    result = s
 
     join_value = if string? join_str
                    join_str.value
-                 else
-                   nil
                  end
 
     array[1..-2].each do |e|
@@ -360,7 +358,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       call = exp.block_call
       block_args = exp.block_args
 
-      if call? call and [:each, :map].include? call.method and all_literals? call.target and block_args.length == 2 and block_args.last.is_a? Symbol
+      if call? call and %i[each map].include? call.method and all_literals? call.target and block_args.length == 2 and block_args.last.is_a? Symbol
         # Iterating over an array of all literal values
         local = Sexp.new(:lvar, block_args.last)
         env.current[local] = safe_literal(exp.line)
@@ -423,7 +421,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
   end
 
   def meth_env
-    begin
+    
       env.scope do
         set_env_defaults
         @meth_env = env.current
@@ -431,7 +429,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       end
     ensure
       @meth_env = nil
-    end
+    
   end
 
   #Process a method definition on self.
@@ -657,11 +655,11 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
     if exp[3] == :"||"
       unless env[match]
-        if request_value? target
-          env[match] = match.combine(value)
+        env[match] = if request_value? target
+          match.combine(value)
         else
-          env[match] = value
-        end
+          value
+                     end
       end
     else
       new_value = process s(:call, s(:call, target_var, :[], index), exp[3], value)
@@ -712,11 +710,11 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
                             :method => @current_method
     end
 
-    if exp.lhs.is_a? Symbol
-      match = Sexp.new(:const, exp.lhs)
+    match = if exp.lhs.is_a? Symbol
+      Sexp.new(:const, exp.lhs)
     else
-      match = exp.lhs
-    end
+      exp.lhs
+            end
 
     env[match] = get_rhs(exp)
 
@@ -736,7 +734,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
   def array_detect_all_literals? exp
     call? exp and
-      [:detect, :find].include? exp.method and
+      %i[detect find].include? exp.method and
       exp.first_arg.nil? and
       all_literals? exp.target
   end
@@ -813,11 +811,11 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
   def early_return? exp
     return true if node_type? exp, :return
-    return true if call? exp and [:fail, :raise].include? exp.method
+    return true if call? exp and %i[fail raise].include? exp.method
 
     if node_type? exp, :block, :rlist
       node_type? exp.last, :return or
-        (call? exp and [:fail, :raise].include? exp.method)
+        (call? exp and %i[fail raise].include? exp.method)
     else
       false
     end
@@ -825,7 +823,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
   def simple_when? exp
     node_type? exp[1], :array and
-      not node_type? exp[1][1], :splat, :array and
+      !node_type? exp[1][1], :splat, :array and
       (exp[1].length == 2 or
        exp[1].all? { |e| e.is_a? Symbol or node_type? e, :lit, :str })
   end
@@ -851,22 +849,21 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
                  end
 
     exp.each_sexp do |e|
-      if node_type? e, :when
-        scope do
-          @branch_env = env.current
+      next unless node_type? e, :when
+      scope do
+        @branch_env = env.current
 
-          # set value of case var if possible
-          if case_value and simple_when? e
-            @branch_env[case_value] = e[1][1]
-          end
-
-          # when blocks aren't blocks, they are lists of expressions
-          process_default e
-
-          branch_scopes << env.current
-
-          @branch_env = nil
+        # set value of case var if possible
+        if case_value and simple_when? e
+          @branch_env[case_value] = e[1][1]
         end
+
+        # when blocks aren't blocks, they are lists of expressions
+        process_default e
+
+        branch_scopes << env.current
+
+        @branch_env = nil
       end
     end
 
@@ -910,12 +907,12 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
       if current_val
         unless same_value?(current_val, v)
-          if too_deep? current_val
+          env[k] = if too_deep? current_val
             # Give up branching, start over with latest value
-            env[k] = v
+            v
           else
-            env[k] = current_val.combine(v, k.line)
-          end
+            current_val.combine(v, k.line)
+                   end
         end
       else
         env[k] = v
@@ -955,15 +952,15 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
 
     if include_request_vars
       lenv.all.each do |k, v|
-        #TODO Why would this have nil values?
-        if (k.node_type == :ivar or request_value? k) and not v.nil?
+        #TODO: Why would this have nil values?
+        if (k.node_type == :ivar or request_value? k) and !v.nil?
           res[k] = v.dup
         end
       end
     else
       lenv.all.each do |k, v|
-        #TODO Why would this have nil values?
-        if k.node_type == :ivar and not v.nil?
+        #TODO: Why would this have nil values?
+        if k.node_type == :ivar and !v.nil?
           res[k] = v.dup
         end
       end
@@ -976,7 +973,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
     res = SexpProcessor::Environment.new
 
     env.all.each do |k, v|
-      if request_value? k and not v.nil?
+      if request_value? k and !v.nil?
         res[k] = v.dup
       end
     end
@@ -994,7 +991,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       if sexp? helper
         value = process_helper_method helper, call.args
         value.line(call.line)
-        return value
+        value
       else
         raise "Unexpected value for method: #{found_method}"
       end
@@ -1012,11 +1009,11 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
     #If method uses instance variables, then include those and request
     #variables (params, etc) in the method environment. Otherwise,
     #only include request variables.
-    if info[:uses_ivars]
-      meth_env = only_ivars(:include_request_vars)
+    meth_env = if info[:uses_ivars]
+      only_ivars(:include_request_vars)
     else
-      meth_env = only_request_vars
-    end
+      only_request_vars
+               end
 
     #Add arguments to method environment
     assign_args method_exp, args, meth_env
@@ -1054,7 +1051,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
         ivars[var] = val
       end
 
-      if not frv.uses_ivars? and args.length == 0
+      if !frv.uses_ivars? and args.length == 0
         #Store return value without ivars and args if they are not used
         @helper_method_cache[method_exp.method_name] = { :return_value => value, :ivar_values => ivars }
       else
@@ -1186,7 +1183,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       if c.nil?
         e
       elsif node_type? e, :if
-        c.combine(value_from_if e)
+        c.combine(value_from_if(e))
       elsif raise? e
         c # ignore exceptions
       elsif e
@@ -1219,7 +1216,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
       value = value_from_case(value)
     end
 
-    if @ignore_ifs or not @inside_if
+    if @ignore_ifs or !@inside_if
       if @meth_env and node_type? var, :ivar and env[var].nil?
         @meth_env[var] = value
       else
@@ -1262,8 +1259,6 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
         exp.target.rhs = rhs
         exp.target
       end
-    else
-      nil
     end
   end
 

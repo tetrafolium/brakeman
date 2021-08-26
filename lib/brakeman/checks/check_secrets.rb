@@ -16,20 +16,18 @@ class Brakeman::CheckSecrets < Brakeman::BaseCheck
       name = constant.name_array.last
       value = constant.value
 
-      if string? value and not value.value.empty? and looks_like_secret? name
-        match = [name, value, value.line]
+      next unless string? value and !value.value.empty? and looks_like_secret? name
+      match = [name, value, value.line]
 
-        unless @warned.include? match
-          @warned << match
+      next if @warned.include? match
+      @warned << match
 
-          warn :warning_code => :secret_in_source,
-            :warning_type => "Authentication",
-            :message => msg("Hardcoded value for ", msg_code(name), " in source code"),
-            :confidence => :medium,
-            :file => constant.file,
-            :line => constant.line
-        end
-      end
+      warn :warning_code => :secret_in_source,
+        :warning_type => "Authentication",
+        :message => msg("Hardcoded value for ", msg_code(name), " in source code"),
+        :confidence => :medium,
+        :file => constant.file,
+        :line => constant.line
     end
   end
 

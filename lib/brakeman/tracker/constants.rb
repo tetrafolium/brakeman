@@ -31,11 +31,11 @@ module Brakeman
 
     def match? name
       if name == @name
-        return true
+        true
       elsif name.is_a? Sexp and name.node_type == :const and name.value == @name
-        return true
+        true
       elsif name.is_a? Symbol and name.value == @name
-        return true
+        true
       elsif name.class == Array
         name == @name_array or
           @name_array.reverse.zip(name.reverse).reduce(true) { |m, a| a[1] ? a[0] == a[1] && m : m }
@@ -63,8 +63,6 @@ module Brakeman
 
       if match
         match.value
-      else
-        nil
       end
     end
 
@@ -108,7 +106,7 @@ module Brakeman
       @constants[base_name] << Constant.new(name, value, context)
     end
 
-    LITERALS = [:lit, :false, :str, :true, :array, :hash]
+    LITERALS = %i[lit false str true array hash].freeze
     def literal? exp
       exp.is_a? Sexp and LITERALS.include? exp.node_type
     end
@@ -116,8 +114,6 @@ module Brakeman
     def get_literal name
       if x = self[name] and literal? x
         x
-      else
-        nil
       end
     end
 

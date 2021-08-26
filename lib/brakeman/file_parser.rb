@@ -34,7 +34,7 @@ module Brakeman
     end
 
     def parse_ruby input, path
-      begin
+      
         Brakeman.debug "Parsing #{path}"
         RubyParser.new.parse input, path, @timeout
       rescue Racc::ParseError => e
@@ -43,10 +43,10 @@ module Brakeman
       rescue Timeout::Error => e
         @tracker.error Exception.new("Parsing #{path} took too long (> #{@timeout} seconds). Try increasing the limit with --parser-timeout"), caller
         nil
-      rescue => e
+      rescue StandardError => e
         @tracker.error e.exception(e.message + "\nWhile processing #{path}"), e.backtrace
         nil
-      end
+      
     end
   end
 end

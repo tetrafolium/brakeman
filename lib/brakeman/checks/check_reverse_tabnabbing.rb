@@ -38,11 +38,11 @@ class Brakeman::CheckReverseTabnabbing < Brakeman::BaseCheck
     rel = hash_access html_opts, :rel
     confidence = :medium
 
-    if rel && string?(rel) then
+    if rel && string?(rel)
       rel_opt = rel.value
       return if rel_opt.include?("noopener") && rel_opt.include?("noreferrer")
 
-      if rel_opt.include?("noopener") ^ rel_opt.include?("noreferrer") then
+      if rel_opt.include?("noopener") ^ rel_opt.include?("noreferrer")
         confidence = :weak
       end
     end

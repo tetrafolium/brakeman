@@ -35,11 +35,11 @@ class Brakeman::CheckRender < Brakeman::BaseCheck
     if sexp? view and original? result
 
       if input = has_immediate_user_input?(view)
-        if string_interp? view
-          confidence = :medium
+        confidence = if string_interp? view
+          :medium
         else
-          confidence = :high
-        end
+          :high
+                     end
       elsif input = include_user_input?(view)
         confidence = :weak
       else
@@ -66,7 +66,7 @@ class Brakeman::CheckRender < Brakeman::BaseCheck
                   version_between? "4.2.0", "4.2.5"
 
     view = result[:call][2]
-    if sexp? view and not duplicate? result
+    if sexp? view and !duplicate? result
       if params? view
         add_result result
         return if safe_param? view
@@ -87,7 +87,7 @@ class Brakeman::CheckRender < Brakeman::BaseCheck
 
       if method_name == :[]
         arg = exp.first_arg
-        symbol? arg and [:controller, :action].include? arg.value
+        symbol? arg and %i[controller action].include? arg.value
       else
         boolean_method? method_name
       end

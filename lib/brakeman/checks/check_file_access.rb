@@ -9,9 +9,9 @@ class Brakeman::CheckFileAccess < Brakeman::BaseCheck
 
   def run_check
     Brakeman.debug "Finding possible file access"
-    methods = tracker.find_call :targets => [:Dir, :File, :IO, :Kernel, :"Net::FTP", :"Net::HTTP", :PStore, :Pathname, :Shell], :methods => [:[], :chdir, :chroot, :delete, :entries, :foreach, :glob, :install, :lchmod, :lchown, :link, :load, :load_file, :makedirs, :move, :new, :open, :read, :readlines, :rename, :rmdir, :safe_unlink, :symlink, :syscopy, :sysopen, :truncate, :unlink]
+    methods = tracker.find_call :targets => %i[Dir File IO Kernel Net::FTP Net::HTTP PStore Pathname Shell], :methods => %i[\[\] chdir chroot delete entries foreach glob install lchmod lchown link load load_file makedirs move new open read readlines rename rmdir safe_unlink symlink syscopy sysopen truncate unlink]
 
-    methods.concat tracker.find_call :target => :YAML, :methods => [:load_file, :parse_file]
+    methods.concat tracker.find_call :target => :YAML, :methods => %i[load_file parse_file]
     methods.concat tracker.find_call :target => nil, :method => [:open]
 
     Brakeman.debug "Finding calls to load()"
@@ -44,14 +44,14 @@ class Brakeman::CheckFileAccess < Brakeman::BaseCheck
           match = include_user_input?(file_name)
 
       #Check for string building in file name
-      if call?(file_name) and (file_name.method == :+ or file_name.method == :<<)
-        confidence = :high
+      confidence = if call?(file_name) and (file_name.method == :+ or file_name.method == :<<)
+        :high
       else
-        confidence = :weak
-      end
+        :weak
+                   end
     end
 
-    if match and not temp_file_method? match.match
+    if match and !temp_file_method? match.match
 
       message = msg(msg_input(match), " used in file name")
 

@@ -2,7 +2,7 @@ require './lib/brakeman/version'
 require './gem_common'
 
 Gem::Specification.new do |s|
-  s.name = %q{brakeman-lib}
+  s.name = 'brakeman-lib'
   s.version = Brakeman::Version
   s.authors = ["Justin Collins"]
   s.email = "gem@brakeman.org"

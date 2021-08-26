@@ -5,8 +5,8 @@ module Brakeman
       filter = self
       compiler.instance_eval do
         text = unescape_interpolation(text).gsub(/(\\+)n/) do |s|
-          escapes = $1.size
-          next s if escapes % 2 == 0
+          escapes = Regexp.last_match(1).size
+          next s if escapes.even?
 
           ("\\" * (escapes - 1)) + "\n"
         end

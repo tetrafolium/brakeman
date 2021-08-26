@@ -35,18 +35,18 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
     return [] if models.empty?
 
     Brakeman.debug "Finding possible mass assignment calls on #{models.length} models"
-    @mass_assign_calls = tracker.find_call :chained => true, :targets => models, :methods => [:new,
-                                                                                              :attributes=,
-                                                                                              :update_attributes,
-                                                                                              :update_attributes!,
-                                                                                              :create,
-                                                                                              :create!,
-                                                                                              :build,
-                                                                                              :first_or_create,
-                                                                                              :first_or_create!,
-                                                                                              :first_or_initialize!,
-                                                                                              :assign_attributes,
-                                                                                              :update]
+    @mass_assign_calls = tracker.find_call :chained => true, :targets => models, :methods => %i[new
+                                                                                              attributes=
+                                                                                              update_attributes
+                                                                                              update_attributes!
+                                                                                              create
+                                                                                              create!
+                                                                                              build
+                                                                                              first_or_create
+                                                                                              first_or_create!
+                                                                                              first_or_initialize!
+                                                                                              assign_attributes
+                                                                                              update]
   end
 
   def check_mass_assignment
@@ -77,12 +77,12 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
 
         if call? first_arg and (first_arg.method == :slice or first_arg.method == :only)
           return
-        elsif not node_type? first_arg, :hash
-          if attr_protected
-            confidence = :medium
+        elsif !node_type? first_arg, :hash
+          confidence = if attr_protected
+            :medium
           else
-            confidence = :high
-          end
+            :high
+                       end
         else
           return
         end
@@ -109,15 +109,15 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
   def check_call call
     process_call_args call
 
-    if call.method == :update
-      arg = call.second_arg
+    arg = if call.method == :update
+      call.second_arg
     else
-      arg = call.first_arg
-    end
+      call.first_arg
+          end
 
     if arg.nil? #empty new()
       false
-    elsif hash? arg and not include_user_input? arg
+    elsif hash? arg and !include_user_input? arg
       false
     elsif all_literal_args? call
       false
@@ -157,7 +157,7 @@ class Brakeman::CheckMassAssignment < Brakeman::BaseCheck
   # Look for and warn about uses of Parameters#permit! for mass assignment
   def check_permit!
     tracker.find_call(:method => :permit!, :nested => true).each do |result|
-      if params? result[:call].target and not result[:chain].include? :slice
+      if params? result[:call].target and !result[:chain].include? :slice
         warn_on_permit! result
       end
     end

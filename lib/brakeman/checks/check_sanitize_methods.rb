@@ -8,14 +8,13 @@ class Brakeman::CheckSanitizeMethods < Brakeman::BaseCheck
   @description = "Checks for versions with vulnerable sanitize and sanitize_css"
 
   def run_check
-    @fix_version = case
-                   when version_between?('2.0.0', '2.3.17')
+    @fix_version = if version_between?('2.0.0', '2.3.17')
                      '2.3.18'
-                   when version_between?('3.0.0', '3.0.99')
+                   elsif version_between?('3.0.0', '3.0.99')
                      '3.2.13'
-                   when version_between?('3.1.0', '3.1.11')
+                   elsif version_between?('3.1.0', '3.1.11')
                      '3.1.12'
-                   when version_between?('3.2.0', '3.2.12')
+                   elsif version_between?('3.2.0', '3.2.12')
                      '3.2.13'
                    end
 
@@ -73,11 +72,11 @@ class Brakeman::CheckSanitizeMethods < Brakeman::BaseCheck
     if loofah_vulnerable_cve_2018_8048?
       message = msg(msg_version(tracker.config.gem_version(:loofah), "loofah gem"), " is vulnerable (CVE-2018-8048). Upgrade to 2.2.1")
 
-      if tracker.find_call(:target => false, :method => :sanitize).any?
-        confidence = :high
+      confidence = if tracker.find_call(:target => false, :method => :sanitize).any?
+        :high
       else
-        confidence = :medium
-      end
+        :medium
+                   end
 
       warn :warning_type => "Cross-Site Scripting",
         :warning_code => :CVE_2018_8048,
@@ -97,11 +96,11 @@ class Brakeman::CheckSanitizeMethods < Brakeman::BaseCheck
   def warn_sanitizer_cve cve, link, upgrade_version
     message = msg(msg_version(tracker.config.gem_version(:'rails-html-sanitizer'), "rails-html-sanitizer"), " is vulnerable ", msg_cve(cve), ". Upgrade to ", msg_version(upgrade_version, "rails-html-sanitizer"))
 
-    if tracker.find_call(:target => false, :method => :sanitize).any?
-      confidence = :high
+    confidence = if tracker.find_call(:target => false, :method => :sanitize).any?
+      :high
     else
-      confidence = :medium
-    end
+      :medium
+                 end
 
     warn :warning_type => "Cross-Site Scripting",
       :warning_code => cve.tr('-', '_').to_sym,

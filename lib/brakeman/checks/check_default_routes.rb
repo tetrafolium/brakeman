@@ -37,21 +37,20 @@ class Brakeman::CheckDefaultRoutes < Brakeman::BaseCheck
     Brakeman.debug "Checking each controller for default routes"
 
     tracker.routes.each do |name, actions|
-      if actions.is_a? Array and actions[0] == :allow_all_actions
-        @actions_allowed_on_controller = true
-        if actions[1].is_a? Hash and actions[1][:allow_verb]
-          verb = actions[1][:allow_verb]
-        else
-          verb = "any"
-        end
-        warn :controller => name,
-          :warning_type => "Default Routes",
-          :warning_code => :controller_default_routes,
-          :message => msg("Any public method in ", msg_code(name), " can be used as an action for ", msg_code(verb), " requests."),
-          :line => actions[2],
-          :confidence => :medium,
-          :file => "#{tracker.app_path}/config/routes.rb"
-      end
+      next unless actions.is_a? Array and actions[0] == :allow_all_actions
+      @actions_allowed_on_controller = true
+      verb = if actions[1].is_a? Hash and actions[1][:allow_verb]
+        actions[1][:allow_verb]
+      else
+        "any"
+             end
+      warn :controller => name,
+        :warning_type => "Default Routes",
+        :warning_code => :controller_default_routes,
+        :message => msg("Any public method in ", msg_code(name), " can be used as an action for ", msg_code(verb), " requests."),
+        :line => actions[2],
+        :confidence => :medium,
+        :file => "#{tracker.app_path}/config/routes.rb"
     end
   end
 
@@ -72,11 +71,11 @@ class Brakeman::CheckDefaultRoutes < Brakeman::BaseCheck
       return
     end
 
-    if allow_all_actions? or @actions_allowed_on_controller
-      confidence = :high
+    confidence = if allow_all_actions? or @actions_allowed_on_controller
+      :high
     else
-      confidence = :medium
-    end
+      :medium
+                 end
 
     warn :warning_type => "Remote Code Execution",
       :warning_code => :CVE_2014_0130,

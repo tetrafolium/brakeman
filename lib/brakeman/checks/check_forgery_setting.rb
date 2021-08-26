@@ -15,7 +15,7 @@ class Brakeman::CheckForgerySetting < Brakeman::BaseCheck
     tracker.controllers
            .select { |_, controller| controller.parent == :"ActionController::Base" }
            .each do |name, controller|
-      if controller and not controller.protect_from_forgery?
+      if controller and !controller.protect_from_forgery?
         csrf_warning :controller => name,
           :warning_code => :csrf_protection_missing,
           :message => msg(msg_code("protect_from_forgery"), " should be called in ", msg_code(name)),

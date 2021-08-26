@@ -30,7 +30,7 @@ module Brakeman::Options
         options[:comparison_output_file] = options[:output_files].shift
       end
 
-      return options, parser
+      [options, parser]
     end
 
     def create_option_parser options
@@ -250,11 +250,11 @@ module Brakeman::Options
         end
 
         opts.on "--[no-]color", "Use ANSI colors in report (Default)" do |color|
-          if color
-            options[:output_color] = :force
+          options[:output_color] = if color
+            :force
           else
-            options[:output_color] = color
-          end
+            color
+                                   end
         end
 
         opts.on "-m", "--routes", "Report controller information" do
@@ -283,11 +283,11 @@ module Brakeman::Options
         end
 
         opts.on "--[no-]summary", "Only output summary of warnings" do |summary_only|
-          if summary_only
-            options[:summary_only] = :summary_only
+          options[:summary_only] = if summary_only
+            :summary_only
           else
-            options[:summary_only] = :no_summary
-          end
+            :no_summary
+                                   end
         end
 
         opts.on "--absolute-paths", "Output absolute file paths in reports" do
@@ -317,11 +317,7 @@ module Brakeman::Options
         end
 
         opts.on "-C", "--create-config [FILE]", "Output configuration file based on options" do |file|
-          if file
-            options[:create_config] = file
-          else
-            options[:create_config] = true
-          end
+          options[:create_config] = (file || true)
         end
 
         opts.on "--allow-check-paths-in-config", "Allow loading checks from configuration file (Unsafe)" do

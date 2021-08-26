@@ -7,7 +7,7 @@ class Brakeman::CheckSend < Brakeman::BaseCheck
   @description = "Check for unsafe use of Object#send"
 
   def run_check
-    @send_methods = [:send, :try, :__send__, :public_send]
+    @send_methods = %i[send try __send__ public_send]
     Brakeman.debug("Finding instances of #send")
     calls = tracker.find_call :methods => @send_methods, :nested => true
 
@@ -37,7 +37,7 @@ class Brakeman::CheckSend < Brakeman::BaseCheck
   def get_send exp
     if call? exp
       if @send_methods.include? exp.method
-        return exp
+        exp
       else
         get_send exp.target
       end

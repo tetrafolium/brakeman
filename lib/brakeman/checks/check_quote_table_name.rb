@@ -8,14 +8,14 @@ class Brakeman::CheckQuoteTableName < Brakeman::BaseCheck
   @description = "Checks for quote_table_name vulnerability in versions before 2.3.14 and 3.0.10"
 
   def run_check
-    if (version_between?('2.0.0', '2.3.13') or
-        version_between?('3.0.0', '3.0.9'))
+    if version_between?('2.0.0', '2.3.13') or
+        version_between?('3.0.0', '3.0.9')
 
-      if uses_quote_table_name?
-        confidence = :high
+      confidence = if uses_quote_table_name?
+        :high
       else
-        confidence = :medium
-      end
+        :medium
+                   end
 
       if rails_version =~ /^3/
         message = msg("Rails versions before 3.0.10 have a vulnerability in ", msg_code("quote_table_name"), " ", msg_cve("CVE-2011-2930"))
@@ -35,6 +35,6 @@ class Brakeman::CheckQuoteTableName < Brakeman::BaseCheck
   def uses_quote_table_name?
     Brakeman.debug "Finding calls to quote_table_name()"
 
-    not tracker.find_call(:target => false, :method => :quote_table_name).empty?
+    !tracker.find_call(:target => false, :method => :quote_table_name).empty?
   end
 end

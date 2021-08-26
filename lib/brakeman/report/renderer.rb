@@ -12,9 +12,9 @@ class Brakeman::Report
 
       # There are last, so as to make overwriting these using locals impossible.
       singleton.send(:define_method, 'template_file') { template_file }
-      singleton.send(:define_method, 'template') {
+      singleton.send(:define_method, 'template') do
         File.read(File.expand_path("templates/#{template_file}.html.erb", File.dirname(__FILE__)))
-      }
+      end
     end
 
     def render

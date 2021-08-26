@@ -43,11 +43,11 @@ module Brakeman::ProcessorHelper
     module_name = class_name(exp.class_name).to_s
     prev_module = @current_module
 
-    if prev_module
-      @current_module = "#{prev_module}::#{module_name}"
+    @current_module = if prev_module
+      "#{prev_module}::#{module_name}"
     else
-      @current_module = module_name
-    end
+      module_name
+                      end
 
     if block_given?
       yield
@@ -62,7 +62,7 @@ module Brakeman::ProcessorHelper
 
   # e.g. private defn
   def process_call_defn? exp
-    if call? exp and exp.target.nil? and node_type? exp.first_arg, :defn, :defs and [:private, :public, :protected].include? exp.method
+    if call? exp and exp.target.nil? and node_type? exp.first_arg, :defn, :defs and %i[private public protected].include? exp.method
       prev_visibility = @visibility
       @visibility = exp.method
       process exp.first_arg
@@ -74,15 +74,12 @@ module Brakeman::ProcessorHelper
   end
 
   def current_file
-    case
-    when @current_file
+    if @current_file
       @current_file
-    when @current_class.is_a?(Brakeman::Collection)
+    elsif @current_class.is_a?(Brakeman::Collection)
       @current_class.file
-    when @current_module.is_a?(Brakeman::Collection)
+    elsif @current_module.is_a?(Brakeman::Collection)
       @current_module.file
-    else
-      nil
     end
   end
 end

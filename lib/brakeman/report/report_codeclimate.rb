@@ -3,8 +3,8 @@ require "yaml"
 require "pathname"
 
 class Brakeman::Report::CodeClimate < Brakeman::Report::Base
-  DOCUMENTATION_PATH = File.expand_path("../../../../docs/warning_types", __FILE__)
-  REMEDIATION_POINTS_CONFIG_PATH = File.expand_path("../config/remediation.yml", __FILE__)
+  DOCUMENTATION_PATH = File.expand_path('../../../docs/warning_types', __dir__)
+  REMEDIATION_POINTS_CONFIG_PATH = File.expand_path('config/remediation.yml', __dir__)
   REMEDIATION_POINTS_DEFAULT = 300_000
 
   def generate_report
@@ -28,7 +28,7 @@ class Brakeman::Report::CodeClimate < Brakeman::Report::Base
         path: file_path(warning),
         lines: {
           begin: warning.line || 1,
-          end: warning.line || 1,
+          end: warning.line || 1
         }
       },
       content: {

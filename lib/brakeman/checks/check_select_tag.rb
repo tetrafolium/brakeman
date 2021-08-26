@@ -42,7 +42,7 @@ class Brakeman::CheckSelectTag < Brakeman::BaseCheck
       prompt_option = hash_access last_arg, :prompt
 
       if call? prompt_option and @ignore_methods.include? prompt_option.method
-        return
+        nil
       elsif sexp? prompt_option and input = include_user_input?(prompt_option)
 
         warn :warning_type => "Cross-Site Scripting",

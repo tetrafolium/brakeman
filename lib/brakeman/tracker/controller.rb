@@ -62,7 +62,6 @@ module Brakeman
       @skip_filter_cache.each do |f|
         if filter_includes_method? f, method
           filters.concat f[:methods]
-        else
         end
       end
 
@@ -73,7 +72,7 @@ module Brakeman
       controller = self
 
       while controller
-        filters = filters - controller.get_skipped_filters(processor, method)
+        filters -= controller.get_skipped_filters(processor, method)
 
         controller = tracker.controllers[controller.parent] ||
                      tracker.libs[controller.parent]
@@ -144,7 +143,7 @@ module Brakeman
         (filter_rule[:only] == method_name) or
         (filter_rule[:only].is_a? Array and filter_rule[:only].include? method_name) or
         (filter_rule[:except].is_a? Symbol and filter_rule[:except] != method_name) or
-        (filter_rule[:except].is_a? Array and not filter_rule[:except].include? method_name)
+        (filter_rule[:except].is_a? Array and !filter_rule[:except].include? method_name)
     end
   end
 

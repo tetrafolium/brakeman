@@ -28,11 +28,11 @@ class Brakeman::Rails2XSSPluginErubis < ::Erubis::Eruby
     end
   end
 
-  BLOCK_EXPR = /\s+(do|\{)(\s*\|[^|]*\|)?\s*\Z/
+  BLOCK_EXPR = /\s+(do|\{)(\s*\|[^|]*\|)?\s*\Z/.freeze
 
   def add_expr_literal(src, code)
     if code =~ BLOCK_EXPR
-      src << "@output_buffer.safe_concat((" << $1 << ").to_s);"
+      src << "@output_buffer.safe_concat((" << Regexp.last_match(1) << ").to_s);"
     else
       src << '@output_buffer << ((' << code << ').to_s);'
     end

@@ -77,11 +77,11 @@ class Brakeman::Report::Base
   end
 
   def all_warnings
-    if @ignore_filter
-      @all_warnings ||= @ignore_filter.shown_warnings
+    @all_warnings ||= if @ignore_filter
+      @ignore_filter.shown_warnings
     else
-      @all_warnings ||= tracker.checks.all_warnings
-    end
+      tracker.checks.all_warnings
+                      end
   end
 
   def filter_warnings warnings
@@ -169,12 +169,11 @@ class Brakeman::Report::Base
   end
 
   def rails_version
-    case
-    when tracker.config.rails_version
+    if tracker.config.rails_version
       tracker.config.rails_version
-    when tracker.options[:rails4]
+    elsif tracker.options[:rails4]
       "4.x"
-    when tracker.options[:rails3]
+    elsif tracker.options[:rails3]
       "3.x"
     else
       "Unknown"
@@ -185,8 +184,6 @@ class Brakeman::Report::Base
     if repo_url = @tracker.options[:github_url] and file
       url = "#{repo_url}/#{file.relative}"
       url << "#L#{line}" if line
-    else
-      nil
     end
   end
 end

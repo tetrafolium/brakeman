@@ -6,13 +6,10 @@ class Brakeman::CheckModelSerialize < Brakeman::BaseCheck
   @description = "Report uses of serialize in versions vulnerable to CVE-2013-0277"
 
   def run_check
-    @upgrade_version = case
-                       when version_between?("2.0.0", "2.3.16")
+    @upgrade_version = if version_between?("2.0.0", "2.3.16")
                          "2.3.17"
-                       when version_between?("3.0.0", "3.0.99")
+                       elsif version_between?("3.0.0", "3.0.99")
                          "3.2.11"
-                       else
-                         nil
                        end
 
     return unless @upgrade_version
@@ -35,7 +32,7 @@ class Brakeman::CheckModelSerialize < Brakeman::BaseCheck
       end
 
       if unsafe_attrs = model.attr_accessible
-        attrs.delete_if { |attr| not unsafe_attrs.include? attr.value }
+        attrs.delete_if { |attr| !unsafe_attrs.include? attr.value }
       elsif protected_attrs = model.attr_protected
         safe_attrs = Set.new
 
@@ -48,11 +45,11 @@ class Brakeman::CheckModelSerialize < Brakeman::BaseCheck
         attrs.delete_if { |attr| safe_attrs.include? attr }
       end
 
-      if attrs.empty?
-        confidence = :medium
+      confidence = if attrs.empty?
+        :medium
       else
-        confidence = :high
-      end
+        :high
+                   end
 
       warn :model => model,
         :warning_type => "Remote Code Execution",

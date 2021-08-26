@@ -17,11 +17,11 @@ class Brakeman::CheckSessionManipulation < Brakeman::BaseCheck
     index = result[:call].first_arg
 
     if input = has_immediate_user_input?(index)
-      if params? index
-        confidence = :high
+      confidence = if params? index
+        :high
       else
-        confidence = :medium
-      end
+        :medium
+                   end
 
       warn :result => result,
         :warning_type => "Session Manipulation",

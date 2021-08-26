@@ -23,15 +23,15 @@ class Brakeman::OutputProcessor < Ruby2Ruby
   alias process_safely format
 
   def process exp
-    begin
+    
       if @user_input and @user_input == exp
         @user_input_block.call(exp, super(exp))
       else
-        super exp if sexp? exp and not exp.empty?
+        super exp if sexp? exp and !exp.empty?
       end
-    rescue => e
+    rescue StandardError => e
       Brakeman.debug "While formatting #{exp}: #{e}\n#{e.backtrace.join("\n")}"
-    end
+    
   end
 
   def process_ignore _exp
@@ -75,15 +75,13 @@ class Brakeman::OutputProcessor < Ruby2Ruby
     exp.shift if exp == s(s(:nil)) # empty it out of a default nil expression
 
     body = []
-    until exp.empty? do
-      body << indent(process(exp.shift))
-    end
+    body << indent(process(exp.shift)) until exp.empty?
 
     body << indent("# do nothing") if body.empty?
 
     body = body.join("\n")
 
-    return "def #{name}#{args}\n#{body}\nend".gsub(/\n\s*\n+/, "\n")
+    "def #{name}#{args}\n#{body}\nend".gsub(/\n\s*\n+/, "\n")
   end
 
   def process_iter exp

@@ -15,7 +15,7 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
     def render
       super.split("\n")[1...-1].join("\n")
     end
-    alias :to_s :render
+    alias to_s render
   end
 
   def initialize *args
@@ -69,7 +69,7 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
                   rails_version,
                   Brakeman::Version,
                   tracker.start_time,
-                  "#{tracker.duration} seconds",
+                  "#{tracker.duration} seconds"
                 ])
     end
   end

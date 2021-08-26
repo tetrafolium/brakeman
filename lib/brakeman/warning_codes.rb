@@ -113,8 +113,8 @@ module Brakeman::WarningCodes
     :force_ssl_disabled => 109,
     :unsafe_cookie_serialization => 110,
     :reverse_tabnabbing => 111,
-    :custom_check => 9090,
-  }
+    :custom_check => 9090
+  }.freeze
 
   def self.code name
     Codes[name]

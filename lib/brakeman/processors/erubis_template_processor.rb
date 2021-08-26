@@ -31,7 +31,7 @@ class Brakeman::ErubisTemplateProcessor < Brakeman::TemplateProcessor
       else
         abort "Unrecognized action on buffer: #{method}"
       end
-    elsif target == nil and method == :render
+    elsif target.nil? and method == :render
       make_render_in_view exp
     else
       exp

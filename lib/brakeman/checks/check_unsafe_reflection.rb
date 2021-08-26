@@ -10,7 +10,7 @@ class Brakeman::CheckUnsafeReflection < Brakeman::BaseCheck
   @description = "Checks for unsafe reflection"
 
   def run_check
-    reflection_methods = [:constantize, :safe_constantize, :const_get, :qualified_const_get]
+    reflection_methods = %i[constantize safe_constantize const_get qualified_const_get]
 
     tracker.find_call(:methods => reflection_methods, :nested => true).each do |result|
       check_unsafe_reflection result

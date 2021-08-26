@@ -5,11 +5,11 @@ class Brakeman::CheckRegexDoS < Brakeman::BaseCheck
   Brakeman::Checks.add self
 
   ESCAPES = {
-    s(:const, :Regexp) => [
-      :escape,
-      :quote
+    s(:const, :Regexp) => %i[
+      escape
+      quote
     ]
-  }
+  }.freeze
 
   @description = "Searches regexes including user input"
 

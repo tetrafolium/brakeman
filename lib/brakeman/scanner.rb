@@ -8,8 +8,8 @@ begin
   require 'brakeman/file_parser'
   require 'brakeman/parsers/template_parser'
 rescue LoadError => e
-  $stderr.puts e.message
-  $stderr.puts "Please install the appropriate dependency."
+  warn e.message
+  warn "Please install the appropriate dependency."
   exit(-1)
 end
 
@@ -120,7 +120,7 @@ class Brakeman::Scanner
     if path.exists?
       @processor.process_config(parse_ruby_file(path), path)
     end
-  rescue => e
+  rescue StandardError => e
     Brakeman.notify "[Notice] Error while processing #{path}"
     tracker.error e.exception(e.message + "\nwhile processing #{path}"), e.backtrace
   end
@@ -151,10 +151,10 @@ class Brakeman::Scanner
       gem_files[:gemspec] = { :src => parse_ruby_file(@app_tree.gemspec), :file => @app_tree.gemspec }
     end
 
-    if not gem_files.empty?
+    unless gem_files.empty?
       @processor.process_gems gem_files
     end
-  rescue => e
+  rescue StandardError => e
     Brakeman.notify "[Notice] Error while processing Gemfile."
     tracker.error e.exception(e.message + "\nWhile processing Gemfile"), e.backtrace
   end
@@ -170,7 +170,7 @@ class Brakeman::Scanner
         tracker.options[:rails4] = true
         tracker.options[:rails5] = true
         Brakeman.notify "[Notice] Detected Rails 5 application"
-      elsif not @app_tree.exists?("script")
+      elsif !@app_tree.exists?("script")
         tracker.options[:rails3] = true
         tracker.options[:rails4] = true
         Brakeman.notify "[Notice] Detected Rails 4 application"
@@ -255,11 +255,11 @@ class Brakeman::Scanner
   end
 
   def process_controller astfile
-    begin
+    
       @processor.process_controller(astfile.ast, astfile.path)
-    rescue => e
+    rescue StandardError => e
       tracker.error e.exception(e.message + "\nWhile processing #{astfile.path}"), e.backtrace
-    end
+    
   end
 
   #Process all views and partials in views/

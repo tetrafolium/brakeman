@@ -39,12 +39,12 @@ module Brakeman
     end
 
     def escape_html_entities_in_json?
-      #TODO add version-specific information here
+      #TODO: add version-specific information here
       true? @rails.dig(:active_support, :escape_html_entities_in_json)
     end
 
     def escape_filter_interpolations?
-      # TODO see if app is actually turning this off itself
+      # TODO: see if app is actually turning this off itself
       has_gem?(:haml) and
         version_between? "5.0.0", "5.99", gem_version(:haml)
     end
@@ -114,11 +114,7 @@ module Brakeman
       end
     end
 
-    def rails_version
-      # This needs to be here because Util#rails_version calls Tracker::Config#rails_version
-      # but Tracker::Config includes Util...
-      @rails_version
-    end
+    attr_reader :rails_version
 
     def set_ruby_version version
       @ruby_version = extract_version(version)

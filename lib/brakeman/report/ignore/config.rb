@@ -63,11 +63,11 @@ module Brakeman
     # Retrieve note for warning if it exists. Returns nil if no
     # note is found
     def note_for warning
-      if warning.is_a? Warning
-        fingerprint = warning.fingerprint
+      fingerprint = if warning.is_a? Warning
+        warning.fingerprint
       else
-        fingerprint = warning[:fingerprint]
-      end
+        warning[:fingerprint]
+                    end
 
       @already_ignored.each do |w|
         if fingerprint == w[:fingerprint]
@@ -99,7 +99,7 @@ module Brakeman
       if File.exist? file
         begin
           @already_ignored = JSON.parse(File.read(file), :symbolize_names => true)[:ignored_warnings]
-        rescue => e
+        rescue StandardError => e
           raise e, "\nError[#{e.class}] while reading brakeman ignore file: #{file}\n"
         end
       else
