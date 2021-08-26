@@ -34,19 +34,19 @@ class Brakeman::OutputProcessor < Ruby2Ruby
     end
   end
 
-  def process_ignore exp
+  def process_ignore _exp
     "[ignored]"
   end
 
-  def process_params exp
+  def process_params _exp
     "params"
   end
 
-  def process_session exp
+  def process_session _exp
     "session"
   end
 
-  def process_cookies exp
+  def process_cookies _exp
     "cookies"
   end
 

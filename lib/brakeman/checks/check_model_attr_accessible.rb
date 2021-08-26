@@ -19,7 +19,7 @@ class Brakeman::CheckModelAttrAccessible < Brakeman::BaseCheck
   ]
 
   def run_check
-    check_models do |name, model|
+    check_models do |_name, model|
       model.attr_accessible.each do |attribute|
         next if role_limited? model, attribute
 

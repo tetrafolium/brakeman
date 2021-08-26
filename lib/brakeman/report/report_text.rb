@@ -82,7 +82,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
     warning_types = warnings_summary
     warning_types.delete :high_confidence
 
-    warning_types.sort_by { |t, c| t }.map do |type, count|
+    warning_types.sort_by { |t, _c| t }.map do |type, count|
       label(type, count)
     end.unshift(header('Warning Types'))
   end
@@ -139,7 +139,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
       end
     end
 
-    double_space "Template Output", template_rows.sort_by { |name, value| name.to_s }.map { |template|
+    double_space "Template Output", template_rows.sort_by { |name, _value| name.to_s }.map { |template|
       [HighLine.new.color("#{template.first}\n", :cyan)] + template[1]
     }.compact
   end
@@ -172,7 +172,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
 
   def format_code w
     if @highlight_user_input and w.user_input
-      w.format_with_user_input do |exp, text|
+      w.format_with_user_input do |_exp, text|
         HighLine.new.color(text, :yellow)
       end
     else
@@ -200,7 +200,7 @@ class Brakeman::Report::Text < Brakeman::Report::Base
   end
 
   # ONLY used for generate_controllers to avoid duplication
-  def render_array name, cols, values, locals
+  def render_array _name, _cols, values, _locals
     controllers = values.map do |controller_name, parent, includes, routes|
       c = [ label("Controller", controller_name) ]
       c << label("Parent", parent) unless parent.empty?

@@ -247,7 +247,7 @@ class Brakeman::Warning
 
   def fingerprint
     loc = self.location
-    location_string = loc && loc.sort_by { |k, v| k.to_s }.inspect
+    location_string = loc && loc.sort_by { |k, _v| k.to_s }.inspect
     warning_code_string = sprintf("%03d", @warning_code)
     code_string = @code.inspect
 
@@ -298,7 +298,7 @@ class Brakeman::Warning
     }
   end
 
-  def to_json
+  def to_json(*_args)
     JSON.generate self.to_hash
   end
 

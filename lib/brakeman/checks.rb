@@ -1,4 +1,3 @@
-require 'thread'
 require 'brakeman/differ'
 
 #Collects up results from running different checks.
@@ -159,7 +158,6 @@ class Brakeman::Checks
     check_runner
   end
 
-  private
 
   def self.get_check_name check_class
     check_class.to_s.split("::").last

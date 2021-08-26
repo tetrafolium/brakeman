@@ -109,7 +109,7 @@ module Brakeman
       self.to_s.to_sym
     end
 
-    def to_json *args
+    def to_json *_args
       require 'json'
       JSON.generate(@path)
     end

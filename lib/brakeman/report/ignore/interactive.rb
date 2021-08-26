@@ -248,7 +248,7 @@ q - Quit, do not update ignored warnings
       @ignore_config.unignore warning
     end
 
-    def skip_rest warning
+    def skip_rest _warning
       @skip_rest = true
     end
 
@@ -356,7 +356,7 @@ q - Quit, do not update ignored warnings
         q.in = ["y", "n", "yes", "no"]
       end
 
-      answer.match /^y/i
+      answer.match(/^y/i)
     end
   end
 end

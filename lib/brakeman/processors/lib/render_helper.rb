@@ -153,7 +153,7 @@ module Brakeman::RenderHelper
   end
 
   #Override to process name, such as adding the controller name.
-  def template_name name
+  def template_name _name
     raise "RenderHelper#template_name should be overridden."
   end
 

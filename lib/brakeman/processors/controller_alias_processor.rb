@@ -171,7 +171,7 @@ class Brakeman::ControllerAliasProcessor < Brakeman::AliasProcessor
   end
 
   #Processes the default template for the current action
-  def process_default_render exp
+  def process_default_render _exp
     process_layout
     process_template template_name, nil, nil, nil
   end

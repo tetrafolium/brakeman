@@ -114,7 +114,7 @@ module Brakeman::Util
   #Insert value into Hash Sexp
   def hash_insert hash, key, value
     index = 1
-    hash_iterate hash.dup do |k,v|
+    hash_iterate hash.dup do |k,_v|
       if k == key
         hash[index + 1] = value
         return hash

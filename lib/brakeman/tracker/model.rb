@@ -11,7 +11,7 @@ module Brakeman
     end
 
     def association? method_name
-      @associations.each do |name, args|
+      @associations.each do |_name, args|
         args.each do |arg|
           if symbol? arg and arg.value == method_name
             return true

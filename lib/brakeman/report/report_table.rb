@@ -164,7 +164,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
       end
     end
 
-    template_rows = template_rows.sort_by{|name, value| name.to_s}
+    template_rows = template_rows.sort_by{|name, _value| name.to_s}
 
     output = ''
     template_rows.each do |template|
@@ -216,7 +216,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
     end
   end
 
-  def render_array template, headings, value_array, locals
+  def render_array _template, headings, value_array, _locals
     return if value_array.empty?
 
     @table.new(:headings => headings) do |t|
@@ -240,7 +240,7 @@ class Brakeman::Report::Table < Brakeman::Report::Base
 
     if warning.code
       if @highlight_user_input and warning.user_input
-        code = warning.format_with_user_input do |user_input, user_input_string|
+        code = warning.format_with_user_input do |_user_input, user_input_string|
           "+#{user_input_string}+"
         end
       else

@@ -59,7 +59,7 @@ class Brakeman::Report
     require "brakeman/report/report_#{type}"
   end
 
-  def to_json
+  def to_json(*_args)
     require_report 'json'
     generate Brakeman::Report::JSON
   end

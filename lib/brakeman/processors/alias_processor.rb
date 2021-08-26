@@ -64,11 +64,11 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
           e
         end
       end
-    rescue => err
+    rescue => e
       if @tracker
-        @tracker.error err
+        @tracker.error e
       else
-        raise err
+        raise e
       end
     end
 
@@ -1099,7 +1099,7 @@ class Brakeman::AliasProcessor < Brakeman::SexpProcessor
     false
   end
 
-  def find_method *args
+  def find_method *_args
     nil
   end
 

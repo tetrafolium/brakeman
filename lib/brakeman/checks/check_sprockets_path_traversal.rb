@@ -34,6 +34,6 @@ class Brakeman::CheckSprocketsPathTraversal < Brakeman::BaseCheck
   end
 
   def has_workaround?
-    false? (tracker.config.rails[:assets] and tracker.config.rails[:assets][:compile])
+    false?(tracker.config.rails[:assets] and tracker.config.rails[:assets][:compile])
   end
 end

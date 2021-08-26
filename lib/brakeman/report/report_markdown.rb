@@ -59,7 +59,7 @@ class Brakeman::Report::Markdown < Brakeman::Report::Table
   def output_table title, result, output
     return unless result
 
-    output << "### #{title}\n\n#{result.to_s}\n\n"
+    output << "### #{title}\n\n#{result}\n\n"
   end
 
   def generate_metadata

@@ -55,12 +55,12 @@ class Brakeman::Report::HTML < Brakeman::Report::Table
       end
     end
 
-    template_rows = template_rows.sort_by{|name, value| name.to_s}
+    template_rows = template_rows.sort_by{|name, _value| name.to_s}
 
       Brakeman::Report::Renderer.new('template_overview', :locals => {:template_rows => template_rows}).render
   end
 
-  def render_array template, headings, value_array, locals
+  def render_array template, _headings, value_array, locals
     return if value_array.empty?
 
     Brakeman::Report::Renderer.new(template, :locals => locals).render

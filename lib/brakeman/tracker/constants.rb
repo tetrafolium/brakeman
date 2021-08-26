@@ -24,7 +24,7 @@ module Brakeman
       end
     end
 
-    def set_name name, context
+    def set_name name, _context
       @name = name
       @name_array = Constants.constant_as_array(name)
     end
@@ -121,7 +121,7 @@ module Brakeman
     end
 
     def each
-      @constants.each do |name, values|
+      @constants.each do |_name, values|
         values.each do |constant|
           yield constant
         end

@@ -15,7 +15,7 @@ class Brakeman::CheckModelAttributes < Brakeman::BaseCheck
       Brakeman.notify "[Notice] The `collapse_mass_assignment` option has been removed."
     end
 
-    check_models do |name, model|
+    check_models do |_name, model|
       if model.attr_protected.nil?
         warn :model => model,
           :file => model.file,

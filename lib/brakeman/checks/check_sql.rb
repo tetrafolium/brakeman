@@ -96,8 +96,8 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     scope_calls
   end
 
-  def ar_scope_calls(symbol_name, &block)
-    active_record_models.each do |name, model|
+  def ar_scope_calls(symbol_name)
+    active_record_models.each do |_name, model|
       model_args = model.options[symbol_name]
       if model_args
         model_args.each do |args|
@@ -107,7 +107,7 @@ class Brakeman::CheckSQL < Brakeman::BaseCheck
     end
   end
 
-  def scope_call_hash(call, model, method)
+  def scope_call_hash(call, model, _method)
     { :call => call, :location => { :type => :class, :class => model.name, :file => model.file }, :method => :named_scope }
   end
 

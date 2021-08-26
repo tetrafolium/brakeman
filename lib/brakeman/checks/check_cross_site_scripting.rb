@@ -359,7 +359,7 @@ class Brakeman::CheckCrossSiteScripting < Brakeman::BaseCheck
        IGNORE_MODEL_METHODS.include? method
   end
 
-  def ignored_method? target, method
+  def ignored_method? _target, method
     @ignore_methods.include? method or method.to_s =~ IGNORE_LIKE
   end
 

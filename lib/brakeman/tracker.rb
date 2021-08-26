@@ -163,7 +163,7 @@ class Brakeman::Tracker
   def check_initializers target, method
     finder = Brakeman::FindCall.new target, method, self
 
-    initializers.sort.each do |name, initializer|
+    initializers.sort.each do |_name, initializer|
       finder.process_source initializer
     end
 
@@ -265,7 +265,7 @@ class Brakeman::Tracker
     end
 
     if locations.include? :initializers
-      self.initializers.each do |file_name, src|
+      self.initializers.each do |file_name, _src|
         @call_index.remove_indexes_by_file file_name
       end
     end
@@ -381,7 +381,7 @@ class Brakeman::Tracker
   end
 
   def reset_initializer path
-    @initializers.delete_if do |file, src|
+    @initializers.delete_if do |file, _src|
       path.relative.include? file
     end
 
