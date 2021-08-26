@@ -9,24 +9,24 @@ Pull requests are welcome!
 
 Please follow the typical GitHub flow:
 
-* Fork Brakeman
-* Clone locally `git clone your_new_fork`
-* Create a new branch `git checkout -b fix_some_broken_stuff`
-* Add new tests
-* Make fixes, follow coding conventions of project
-* Run tests with `ruby test/test.rb` or just `rake` 
-* Push your changes `git push origin fix_some_broken_stuff`
-* Go to *your* fork, click "Submit pull request"
-* Provide a description of the bug and fix
-* Submit!
+- Fork Brakeman
+- Clone locally `git clone your_new_fork`
+- Create a new branch `git checkout -b fix_some_broken_stuff`
+- Add new tests
+- Make fixes, follow coding conventions of project
+- Run tests with `ruby test/test.rb` or just `rake`
+- Push your changes `git push origin fix_some_broken_stuff`
+- Go to _your_ fork, click "Submit pull request"
+- Provide a description of the bug and fix
+- Submit!
 
 ### Code Conventions
 
 These are some code conventions to follow so your code fits into the rest of Brakeman.
 
-* Must use typical Ruby 2 space indentation
-* Must work with Ruby 2.3.0
-* Prefer to wrap lines near 80 characters but it's not a hard rule
+- Must use typical Ruby 2 space indentation
+- Must work with Ruby 2.3.0
+- Prefer to wrap lines near 80 characters but it's not a hard rule
 
 ### Preparing Tests
 
@@ -66,7 +66,7 @@ will generate some boilerplate and then a set of methods:
 
 ```ruby
 #...
- 
+
   def test_command_injection_1
     assert_warning :type => :warning,
       :warning_type => "Command Injection",

@@ -4,10 +4,10 @@
 
 The following versions are supported for security updates.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| >= 4.4.0 | :white_check_mark:|
-| < 4.4.0 | :x:                |
+| Version  | Supported          |
+| -------- | ------------------ |
+| >= 4.4.0 | :white_check_mark: |
+| < 4.4.0  | :x:                |
 
 ## Reporting a Vulnerability
 

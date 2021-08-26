@@ -50,7 +50,7 @@ If Brakeman is running a bit slow, try
 
     brakeman --faster
 
-This will disable some features, but will probably be much faster (currently it is the same as `--skip-libs --no-branching`). *WARNING*: This may cause Brakeman to miss some vulnerabilities.
+This will disable some features, but will probably be much faster (currently it is the same as `--skip-libs --no-branching`). _WARNING_: This may cause Brakeman to miss some vulnerabilities.
 
 To disable flow sensitivity in `if` expressions:
 
@@ -68,9 +68,9 @@ To skip certain files or directories use:
 
 Directories are matched relative to the root path of your application and must end in a path separator for your platform (ex. `/`). The above invocation would match and skip the following:
 
-* Any file named `file1`. Any file that has `file1` as a path component would still be scanned.
-* Any file within `/path1`. Because of the leading `/`, only directories from the application's root directory will match. For example, `/lib/path1/some_path1_file.rb` would still be scanned.
-* Any directory named `path2`. Because there is no leading `/`, any directory with `path2` as a path component will be skipped. For example, `/lib/path2/some_lib_for_testing.rb` would not be scanned.
+- Any file named `file1`. Any file that has `file1` as a path component would still be scanned.
+- Any file within `/path1`. Because of the leading `/`, only directories from the application's root directory will match. For example, `/lib/path1/some_path1_file.rb` would still be scanned.
+- Any directory named `path2`. Because there is no leading `/`, any directory with `path2` as a path component will be skipped. For example, `/lib/path2/some_lib_for_testing.rb` would not be scanned.
 
 Note Brakeman does "whole program" analysis, therefore skipping a file may affect warning results from more than just that one file.
 
@@ -221,9 +221,9 @@ Brakeman assigns a confidence level to each warning. This provides a rough estim
 
 There are three levels of confidence:
 
- + High - Either this is a simple warning (boolean value) or user input is very likely being used in unsafe ways.
- + Medium - This generally indicates an unsafe use of a variable, but the variable may or may not be user input.
- + Weak - Typically means user input was indirectly used in a potentially unsafe manner.
+- High - Either this is a simple warning (boolean value) or user input is very likely being used in unsafe ways.
+- Medium - This generally indicates an unsafe use of a variable, but the variable may or may not be user input.
+- Weak - Typically means user input was indirectly used in a potentially unsafe manner.
 
 To only get warnings above a given confidence level:
 

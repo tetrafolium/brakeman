@@ -106,7 +106,7 @@ If Brakeman is running a bit slow, try
 
     brakeman --faster
 
-This will disable some features, but will probably be much faster (currently it is the same as `--skip-libs --no-branching`). *WARNING*: This may cause Brakeman to miss some vulnerabilities.
+This will disable some features, but will probably be much faster (currently it is the same as `--skip-libs --no-branching`). _WARNING_: This may cause Brakeman to miss some vulnerabilities.
 
 By default, Brakeman will return a non-zero exit code if any security warnings are found or scanning errors are encountered. To disable this:
 
@@ -129,7 +129,7 @@ To create and manage this file, use:
 
 # Warning information
 
-See [warning\_types](docs/warning_types) for more information on the warnings reported by this tool.
+See [warning_types](docs/warning_types) for more information on the warnings reported by this tool.
 
 # Warning context
 
@@ -141,9 +141,9 @@ Brakeman assigns a confidence level to each warning. This provides a rough estim
 
 There are three levels of confidence:
 
- + High - Either this is a simple warning (boolean value) or user input is very likely being used in unsafe ways.
- + Medium - This generally indicates an unsafe use of a variable, but the variable may or may not be user input.
- + Weak - Typically means user input was indirectly used in a potentially unsafe manner.
+- High - Either this is a simple warning (boolean value) or user input is very likely being used in unsafe ways.
+- Medium - This generally indicates an unsafe use of a variable, but the variable may or may not be user input.
+- Weak - Typically means user input was indirectly used in a potentially unsafe manner.
 
 To only get warnings above a given confidence level:
 
@@ -176,11 +176,11 @@ For even more continuous testing, try the [Guard plugin](https://github.com/guar
 
 # Who is Using Brakeman?
 
-* [Code Climate](https://codeclimate.com/)
-* [GitHub](https://github.com/)
-* [Groupon](http://www.groupon.com/)
-* [New Relic](http://newrelic.com)
-* [Twitter](https://twitter.com/)
+- [Code Climate](https://codeclimate.com/)
+- [GitHub](https://github.com/)
+- [Groupon](http://www.groupon.com/)
+- [New Relic](http://newrelic.com)
+- [Twitter](https://twitter.com/)
 
 [..and more!](http://brakemanscanner.org/brakeman_users)
 

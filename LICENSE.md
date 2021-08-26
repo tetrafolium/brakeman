@@ -4,7 +4,7 @@
 
 Synopsys, Inc. is willing to authorize use of the Software pursuant to the terms and conditions of this License by Licensee only upon the condition that Licensee accepts that the Agreement governs Licensee's use of the Software. By accepting this Agreement or installing or using the Software (directly or through the actions of an authorized representative), Licensee confirms its acceptance of the License and the Agreement and its agreement to comply with the License terms.
 
-The Brakeman software (the "***Software***") is licensed for use by third parties according to the terms and conditions set forth in this license agreement (the "***Agreement***"). The copyright to the Software and this license agreement is owned by Synopsys, Inc. and its global affiliates ("***Synopsys***").
+The Brakeman software (the "**_Software_**") is licensed for use by third parties according to the terms and conditions set forth in this license agreement (the "**_Agreement_**"). The copyright to the Software and this license agreement is owned by Synopsys, Inc. and its global affiliates ("**_Synopsys_**").
 
 **Copyright 2019 Synopsys, Inc. All rights not granted in this Agreement are expressly reserved.**
 
@@ -12,30 +12,30 @@ Commercial Uses (as defined below) of the Software for commercial purposes requi
 
 ## 1. Definitions
 
-1.1 "***License***" means this Agreement.
+1.1 "**_License_**" means this Agreement.
 
-1.2 "***Licensee***" means you, the end user of the Software.
+1.2 "**_Licensee_**" means you, the end user of the Software.
 
-1.3 "***Contributor***" means each individual or legal entity that creates, contributes to the creation of, or owns the Software.
+1.3 "**_Contributor_**" means each individual or legal entity that creates, contributes to the creation of, or owns the Software.
 
-1.4 "***Contribution***" means the creation of and/or contribution to the development of the Software
+1.4 "**_Contribution_**" means the creation of and/or contribution to the development of the Software
 
-1.5 "***Software***" has the meaning set forth in the recital to this Agreement.
+1.5 "**_Software_**" has the meaning set forth in the recital to this Agreement.
 
 ## 2. Commercial Uses
 
-A "***Commercial Use***" of the Software is one intended for commercial advantage or monetary compensation.
+A "**_Commercial Use_**" of the Software is one intended for commercial advantage or monetary compensation.
 
 Examples of Commercial Uses include (but are not limited to):
 
-* Using the Software to provide commercial managed/Software-as-a-Service services.
-* Distributing the Software as a commercial product or as part of one.
-* Using the Software as a component of a value-added service/product.
+- Using the Software to provide commercial managed/Software-as-a-Service services.
+- Distributing the Software as a commercial product or as part of one.
+- Using the Software as a component of a value-added service/product.
 
 Example of uses that are not Commercial Uses, and are subject to the terms of this License, include (but are not limited to):
 
-* Using the Software to analyze Licensee's software.
-* Any non-commercial use of the Software.
+- Using the Software to analyze Licensee's software.
+- Any non-commercial use of the Software.
 
 To purchase a license to the Software for Commercial Use, or if Licensee is unsure whether it needs to purchase a Commercial Use license, contact Synopsys at \[sig-sales-ww@synopsys.com\].
 Synopsys may grant commercial licenses at no monetary cost at its own discretion if the commercial usage is deemed by Synopsys to significantly benefit the development of the Software.
@@ -46,11 +46,11 @@ Synopsys grants Licensee a nonexclusive, nontransferable (except as permitted in
 
 As a condition to the grant of the foregoing License, Licensee agrees not to do or undertake to do the following:
 
-* Use the Software for any Commercial Use;
+- Use the Software for any Commercial Use;
 
-* Remove or modify any trademarks or any copyright notice in the Software; or
+- Remove or modify any trademarks or any copyright notice in the Software; or
 
-* Assign the License or the Agreement, or distribute, give, or transfer the Software to any third party, except as expressly permitted in this Agreement.
+- Assign the License or the Agreement, or distribute, give, or transfer the Software to any third party, except as expressly permitted in this Agreement.
 
 All rights not expressly granted in this Agreement are reserved by Synopsys. Synopsys or its licensors retain all ownership and intellectual property rights to the Software.
 
@@ -58,9 +58,9 @@ All rights not expressly granted in this Agreement are reserved by Synopsys. Syn
 
 Redistribution is permitted solely under the following conditions:
 
-* A copy of this License, without modification, is provided with the Software.
-* All Copyright notices to the Software and this Agreement are provided with the Software.
-* Redistribution and subsequent use does not conflict with the Commercial Uses clause above.
+- A copy of this License, without modification, is provided with the Software.
+- All Copyright notices to the Software and this Agreement are provided with the Software.
+- Redistribution and subsequent use does not conflict with the Commercial Uses clause above.
 
 ## 4. Copying
 
@@ -92,14 +92,14 @@ To the extent permitted under law, the Software is provided under an AS-IS basis
 
 ## 11. Export Controls
 
-Export laws and regulations of the United States and any other relevant local export laws and regulations apply to the Software. Licensee agrees that United States export control laws govern the use of the Software (including any corresponding documentation).  Licensee also agrees to comply with all United States export laws and regulations (including "deemed export" and "deemed re-export" regulations). Licensee agrees that no results of analysis created or derived from the use of the Software will be exported, directly or indirectly, in violation of these laws, or will be used for any purpose prohibited by these laws including, without limitation, nuclear, chemical, or biological weapons proliferation, or development of missile technologies. 
+Export laws and regulations of the United States and any other relevant local export laws and regulations apply to the Software. Licensee agrees that United States export control laws govern the use of the Software (including any corresponding documentation). Licensee also agrees to comply with all United States export laws and regulations (including "deemed export" and "deemed re-export" regulations). Licensee agrees that no results of analysis created or derived from the use of the Software will be exported, directly or indirectly, in violation of these laws, or will be used for any purpose prohibited by these laws including, without limitation, nuclear, chemical, or biological weapons proliferation, or development of missile technologies.
 
 Licensee confirms and agrees:
 
-* Licensee will not download, provide, make available or otherwise export or re-export the Software, directly or indirectly, to countries prohibited by applicable laws and regulations nor to citizens, nationals or residents of those countries.
-* Licensee is not listed on the United States Department of Treasury lists of Specially Designated Nationals and Blocked Persons, Specially Designated Terrorists, and Specially Designated Narcotic Traffickers, nor is Licensee listed on the United States Department of Commerce Table of Denial Orders.
-* Licensee will not export or re-export the Software, directly or indirectly, to persons on the above mentioned lists.
-* Licensee will not use or allow the Software to be used for, any purposes prohibited by applicable law, including, without limitation, for the development, design, manufacture or production of nuclear, chemical or biological weapons of mass destruction.
+- Licensee will not download, provide, make available or otherwise export or re-export the Software, directly or indirectly, to countries prohibited by applicable laws and regulations nor to citizens, nationals or residents of those countries.
+- Licensee is not listed on the United States Department of Treasury lists of Specially Designated Nationals and Blocked Persons, Specially Designated Terrorists, and Specially Designated Narcotic Traffickers, nor is Licensee listed on the United States Department of Commerce Table of Denial Orders.
+- Licensee will not export or re-export the Software, directly or indirectly, to persons on the above mentioned lists.
+- Licensee will not use or allow the Software to be used for, any purposes prohibited by applicable law, including, without limitation, for the development, design, manufacture or production of nuclear, chemical or biological weapons of mass destruction.
 
 ## 12. Relationship Between the Parties
 
@@ -109,17 +109,16 @@ Licensee is an independent contractor and hereby agrees that no partnership, joi
 
 The Agreement is the complete agreement for the Software. The Agreement supersedes all prior or contemporaneous agreements or representations, including any license agreements for prior versions of the Software.
 
-This Agreement may not be modified and the rights and restrictions may not be altered or waived except in a writing signed by authorized representatives of the parties.  If any term of the License or the Agreement is found to be invalid or unenforceable, the remaining provisions will remain effective.
+This Agreement may not be modified and the rights and restrictions may not be altered or waived except in a writing signed by authorized representatives of the parties. If any term of the License or the Agreement is found to be invalid or unenforceable, the remaining provisions will remain effective.
 
-The Agreement is governed by California law.  The parties agree to submit to the exclusive jurisdiction of, and venue in, the courts of Santa Clara county, California with respect to any action arising out of or relating to the License or the Agreement.
+The Agreement is governed by California law. The parties agree to submit to the exclusive jurisdiction of, and venue in, the courts of Santa Clara county, California with respect to any action arising out of or relating to the License or the Agreement.
 
 ## 14. Notices
 
 Any questions concerning the License and/or the Agreement and any notices to Synopsys under this agreement shall be directed to:
 
-  Synopsys, Inc.  
-  800 E. Middlefield Road  
-  Mountain View, CA 94045
-
+Synopsys, Inc.  
+ 800 E. Middlefield Road  
+ Mountain View, CA 94045
 
 End of Agreement
